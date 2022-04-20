@@ -56,7 +56,7 @@ local function getEnvCreatureManager()
     return envCreature
 end
 
--- Get Quest State [ 0 = Lobby, 1 = Ready/Loading, 2 = Quest, 3 = End ]
+-- Get Quest State [ 0 = Lobby, 1 = Ready/Loading, 2 = Quest, 3 = End, 5 = Abandoned, 7 = Returned ]
 local function getQuestStatus()
     local questManager = sdk.get_managed_singleton("snow.QuestManager")
     if not questManager then return end
@@ -106,9 +106,9 @@ re.on_pre_application_entry("UpdateBehavior", function()
             spawnBird("all")
             autospawn.spawned = true
         end
-    end
+    
     -- If the quest status is not active, clear the spawned birds, and set autospawned.spawned to false
-    if getQuestStatus == 3 and getLength(spawnBird) > 0 then
+    elseif getQuestStatus() ~= 2 and getLength(spawnedBirds) > 0 then
         log.debug("Clearing spawned birds")
         autospawn.spawned = false
         for i, bird in pairs(spawnedBirds) do
@@ -117,6 +117,16 @@ re.on_pre_application_entry("UpdateBehavior", function()
         end
         spawnedBirds = {}
     end
+end)
+
+-- Remove any spawned birds on on script reset
+re.on_script_reset(function()
+    log.debug("Script Resetting")
+    for i, bird in pairs(spawnedBirds) do
+        log.debug("Destroying bird")
+        bird:call("destroy", bird)
+    end
+    spawnedBirds = {}
 end)
 
 -- Draw a window to the REFramework Script Generated UI
