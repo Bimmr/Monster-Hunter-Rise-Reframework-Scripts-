@@ -116,7 +116,7 @@ data[1] = {
         }
     },
     [3] = {
-        title = "Unlimited Sharpness",
+        title = "White Sharpness",
         type = "checkbox",
         value = false,
         hook = {
@@ -125,14 +125,11 @@ data[1] = {
             pre = nothing(),
             post = function(args)
                 if data[1][3].value then
-                    
                     local playerManager = sdk.get_managed_singleton("snow.player.PlayerManager")
                     local playerbase = playerManager:call("findMasterPlayer")
-                    -- TODO: Add Sharpness options to match below fields
-                    -- now.sharpness_lv = player:get_field("<SharpnessLv>k__BackingField") 0-5 (0:Red 1:Orange 2:Yellow 3:Green 4:Blue 5:White)
-                    -- now.sharpness = player:get_field("<SharpnessGauge>k__BackingField") 1-400
-                    -- now.sharpness_max = player:get_field("<SharpnessGaugeMax>k__BackingField")1-400
-                    -- now.sharpness_boost_timer = player:get_field("_SharpnessGaugeBoostTimer") 1-5000
+                    -- playerbase:set_field("<SharpnessLv>k__BackingField", 5) -- Sharpness Level
+                    playerbase:set_field("<SharpnessGauge>k__BackingField", 400) -- Sharpness Value
+                    playerbase:set_field("<SharpnessGaugeMax>k__BackingField", 400)
                 end
             end
         }
