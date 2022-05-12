@@ -329,7 +329,7 @@ data[2] = {
             func = "update",
             pre = function(args)
                 local managed = sdk.to_managed_object(args[2])
-                if data[2][1].value then
+                if data[2][1].value >=0 then
                     managed:set_field("_TameLv", data[2][1].value)
                 end
             end,
