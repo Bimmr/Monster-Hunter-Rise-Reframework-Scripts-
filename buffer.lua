@@ -440,7 +440,7 @@ data[10] = {
             pre = function(args)
                 local managed = sdk.to_managed_object(args[2])
                 if data[10][1].value then
-                    axe:set_field("_BottleGauge", 100)
+                    managed:set_field("_BottleGauge", 100)
                 end
             end,
             post = nothing()
@@ -456,7 +456,7 @@ data[10] = {
             pre = function(args)
                 local managed = sdk.to_managed_object(args[2])
                 if data[10][2].value then
-                    axe:set_field("_BottleAwakeGauge", 150)
+                    managed:set_field("_BottleAwakeGauge", 150)
                 end
             end,
             post = nothing()
