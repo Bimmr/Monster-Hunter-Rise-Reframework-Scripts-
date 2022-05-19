@@ -315,7 +315,7 @@ data[1] = {
         }
     }
 }
--- Grat Sword Modifications
+-- Great Sword Modifications
 data[2] = {
     title = "Great Sword",
     [1] = {
@@ -391,10 +391,11 @@ data[3] = {
             post = nothing()
         }
     }
-
 }
--- Nothing Yet
-data[4] = {}
+-- Sword & Shield ... Can't find anything useful...
+data[4] = {
+    -- title = "Sword & Shield",
+}
 -- Dual Blade Modifications
 data[5] = {
     title = "Dual Blades",
@@ -417,15 +418,57 @@ data[5] = {
     }
 
 }
--- Nothing Yet
-data[6] = {}
--- Nothing Yet
-data[7] = {}
--- Nothing Yet
-data[8] = {}
--- Nothing Yet
-data[9] = {}
+-- Nothing Yet - Lance
+data[6] = {
+    -- title = "Lance",
+}
+-- Nothing Yet - Gunlance
+data[7] = {
+    -- title = "Gunlance",
+}
+-- Hammer Modifications
+data[8] = {
+    title = "Hammer",
 
+    [1] = {
+        title = "Charge Level",
+        type = "slider",
+        value = -1,
+        min = -1,
+        max = 2,
+        hook = {
+            path = "snow.player.Hammer",
+            func = "update",
+            pre = function(args)
+                local managed = sdk.to_managed_object(args[2])
+                if data[8][1].value >= 0 then
+                    managed:set_field("<NowChargeLevel>k__BackingField", data[8][1].value)
+                end
+            end,
+            post = nothing()
+        }
+    }
+}
+-- Hunting Horn Modifications
+data[9] = {
+    title = "Hunting Horn",
+    [1] = {
+        title = "Infernal Mode",
+        type = "checkbox",
+        value = false,
+        hook = {
+            path = "snow.player.HuntingHorn",
+            func = "update",
+            pre = function(args)
+                local managed = sdk.to_managed_object(args[2])
+                if data[9][1].value then
+                    managed:set_field("<RevoltGuage>k__BackingField", 100)
+                end
+            end,
+            post = nothing()
+        }
+    }
+}
 -- Switch Axe Modifications... why is it called a SlashAxe...
 data[10] = {
     title = "Switch Axe",
@@ -602,7 +645,7 @@ data[12] = {
         }
     }
 }
--- Nothing Yet
+-- Nothing Yet - Light Bowgun
 data[13] = {}
 -- Heavy Bowgun Modifications
 data[14] = {
