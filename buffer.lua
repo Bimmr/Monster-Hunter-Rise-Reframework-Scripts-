@@ -457,7 +457,7 @@ data[9] = {
         type = "checkbox",
         value = false,
         hook = {
-            path = "snow.player.HuntingHorn",
+            path = "snow.player.Horn",
             func = "update",
             pre = function(args)
                 local managed = sdk.to_managed_object(args[2])
@@ -748,11 +748,11 @@ local function initHooks(table)
     for k, v in pairs(table) do
         if type(v) == "table" then
             if v.path then
-                -- log.debug("          " .. v.path)
+                log.debug("          " .. v.path)
                 sdk.hook(sdk.find_type_definition(v.path):get_method(v.func), v.pre, v.post)
 
             elseif v.title then
-                -- log.debug("Checking hooks for " .. v.title)
+                log.debug("Checking hooks for " .. v.title)
             end
             initHooks(v)
         end
