@@ -638,7 +638,7 @@ data[12] = {
             pre = function(args)
                 local managed = sdk.to_managed_object(args[2])
                 if data[12][5].value then
-                    igb:set_field("<_Stamina>k__BackingField", 100)
+                    managed:set_field("<_Stamina>k__BackingField", 100)
                 end
             end,
             post = nothing()
