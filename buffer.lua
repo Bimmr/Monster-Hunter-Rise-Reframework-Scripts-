@@ -70,35 +70,55 @@ end
 data[1] = {
     title = "Miscellaneous",
     [1] = {
-        title = "Unlimited Ammo",
-        type = "checkbox",
-        value = false,
-        hook = {
-            [1] = {
+        title = "Ammo & Coating Options",
+        [1] = {
+            title = "Unlimited Coatings (Arrows)",
+            type = "checkbox",
+            value = false,
+            hook = {
                 path = "snow.data.bulletSlider.BottleSliderFunc",
                 func = "consumeItem",
                 pre = function(args)
-                    if data[1][1].value then
+                    if data[1][1][1].value then
                         return sdk.PreHookResult.SKIP_ORIGINAL
                     end
                 end,
                 post = nothing()
             },
-            [2] = {
+            onChange = function()
+                data[15][3].value = data[1][1][1].value -- Bow
+            end
+        },
+        [2] = {
+            title = "Unlimited Ammo (Bowguns)",
+            type = "checkbox",
+            value = false,
+            hook = {
                 path = "snow.data.bulletSlider.BulletSliderFunc",
                 func = "consumeItem",
                 pre = function(args)
-                    if data[1][1].value then
+                    if data[1][1][2].value then
                         return sdk.PreHookResult.SKIP_ORIGINAL
                     end
                 end,
                 post = nothing()
-            }
+            },
+            onChange = function()
+                data[13][1].value = data[1][1][2].value -- Light Bowgun
+                data[14][2].value = data[1][1][2].value -- Heavy Bowgun
+            end
         },
-        onChange = function()
-            data[14][2].value = data[1][1].value
-            data[15][3].value = data[1][1].value
-        end
+        [3] = {
+            title = "Auto Reload (Bowguns)",
+            type = "checkbox",
+            value = false,
+
+            -- No hook as this is called per weapon
+            onChange = function()
+                data[13][2].value = data[1][1][3].value -- Light bow gun
+                data[14][3].value = data[1][1][3].value -- Heavy bow gun
+            end
+        }
     },
     [2] = {
         title = "Unlimited Consumables",
@@ -218,10 +238,10 @@ data[1] = {
                         local playerbase = playerManager:call("findMasterPlayer")
                         local playerData = playerbase:call("get_PlayerData")
                         local max = playerData:get_field("_vitalMax")
-						local maxFloat = max + .0
-                        
+                        local maxFloat = max + .0
+
                         playerData:set_field("_r_Vital", max)
-						playerData:call("set__vital", maxFloat)
+                        playerData:call("set__vital", maxFloat)
                     end
                 end,
                 post = nothing()
@@ -330,7 +350,7 @@ data[2] = {
             func = "update",
             pre = function(args)
                 local managed = sdk.to_managed_object(args[2])
-                if data[2][1].value >=0 then
+                if data[2][1].value >= 0 then
                     managed:set_field("_TameLv", data[2][1].value)
                 end
             end,
@@ -647,7 +667,42 @@ data[12] = {
     }
 }
 -- Nothing Yet - Light Bowgun
-data[13] = {}
+data[13] = {
+    title = "Light Bowgun",
+    [1] = {
+        title = "Unlimited Ammo",
+        type = "checkbox",
+        value = false,
+        dontSave = true,
+        onChange = function()
+            -- Change and update Miscellaneous/Ammo Options/Unlimited Bullets (Bowguns)
+            data[1][1][2].value = data[13][1].value
+            data[1][1][2].onChange()
+        end
+    },
+    [2] = {
+        title = "Auto Reload",
+        type = "checkbox",
+        value = false,
+        dontSave = true,
+        hook = {
+            path = "snow.player.LightBowgun",
+            func = "update",
+            pre = function(args)
+                local managed = sdk.to_managed_object(args[2])
+                if data[14][3].value == true then
+                    managed:call("resetBulletNum")
+                end
+            end,
+            post = nothing()
+        },
+        onChange = function()
+            -- Change and update Miscellaneous/Ammo & Coating Options/Auto Reload
+            data[1][1][3].value = data[13][2].value
+            data[1][1][3].onChange() 
+        end
+    }
+}
 -- Heavy Bowgun Modifications
 data[14] = {
     title = "Heavy Bowgun",
@@ -677,8 +732,31 @@ data[14] = {
         value = false,
         dontSave = true,
         onChange = function()
-            data[1][1].value = data[14][2].value
-            data[1][1].onChange()
+            -- Change and update Miscellaneous/Ammo & Coating Options/Unlimited Ammo (Bowguns)
+            data[1][1][2].value = data[14][2].value
+            data[1][1][2].onChange()
+        end
+    },
+    [3] = {
+        title = "Auto Reload",
+        type = "checkbox",
+        value = false,
+        dontSave = true,
+        hook = {
+            path = "snow.player.HeavyBowgun",
+            func = "update",
+            pre = function(args)
+                local managed = sdk.to_managed_object(args[2])
+                if data[14][3].value == true then
+                    managed:call("resetBulletNum")
+                end
+            end,
+            post = nothing()
+        },
+        onChange = function()
+            -- Change and update Miscellaneous/Ammo & Coating Options/Dont't Consume Ammo
+            data[1][1][3].value = data[14][3].value
+            data[1][1][3].onChange()
         end
     }
 }
@@ -723,13 +801,14 @@ data[15] = {
         }
     },
     [3] = {
-        title = "Unlimited Ammo",
+        title = "Unlimited Coatings",
         type = "checkbox",
         value = false,
         dontSave = true,
         onChange = function()
-            data[1][1].value = data[15][3].value
-            data[1][1].onChange()
+            -- Change and update Miscellaneous/Ammo & Coating Options/Dont't Consume Ammo
+            data[1][1][1].value = data[15][3].value
+            data[1][1][1].onChange()
         end
     }
 }
@@ -815,7 +894,9 @@ initHooks()
 initUpdates()
 
 -- Update items that have multiple triggers
-data[1][1].onChange()
+data[1][1][1].onChange()
+data[1][1][2].onChange()
+data[1][1][3].onChange()
 
 -- Add a button to the REFramework Script Generated UI
 re.on_draw_ui(function()
