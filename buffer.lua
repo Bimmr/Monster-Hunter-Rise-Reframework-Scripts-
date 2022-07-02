@@ -218,9 +218,10 @@ data[1] = {
                         local playerbase = playerManager:call("findMasterPlayer")
                         local playerData = playerbase:call("get_PlayerData")
                         local max = playerData:get_field("_vitalMax")
-
+						local maxFloat = max + .0
+                        
                         playerData:set_field("_r_Vital", max)
-                        playerData:call("set__vital", max)
+						playerData:call("set__vital", maxFloat)
                     end
                 end,
                 post = nothing()
