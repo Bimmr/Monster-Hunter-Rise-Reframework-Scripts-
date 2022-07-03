@@ -147,6 +147,7 @@ data[1] = {
                 if data[1][3].value then
                     local playerManager = sdk.get_managed_singleton("snow.player.PlayerManager")
                     local playerbase = playerManager:call("findMasterPlayer")
+                    if not playerbase then return end
                     -- playerbase:set_field("<SharpnessLv>k__BackingField", 5) -- Sharpness Level
                     playerbase:set_field("<SharpnessGauge>k__BackingField", 400) -- Sharpness Value
                     playerbase:set_field("<SharpnessGaugeMax>k__BackingField", 400)
@@ -167,6 +168,7 @@ data[1] = {
 
                     local playerManager = sdk.get_managed_singleton("snow.player.PlayerManager")
                     local playerbase = playerManager:call("findMasterPlayer")
+                    if not playerbase then return end
                     local wireGuages = playerbase:get_field("_HunterWireGauge")
 
                     if not wireGuages then
@@ -194,6 +196,7 @@ data[1] = {
                 if data[1][5].value then
                     local playerManager = sdk.get_managed_singleton("snow.player.PlayerManager")
                     local playerbase = playerManager:call("findMasterPlayer")
+                    if not playerbase then return end
                     local playerData = playerbase:call("get_PlayerData")
 
                     local maxStamina = playerData:get_field("_staminaMax")
@@ -216,6 +219,7 @@ data[1] = {
                     if data[1][6][1].value then
                         local playerManager = sdk.get_managed_singleton("snow.player.PlayerManager")
                         local playerbase = playerManager:call("findMasterPlayer")
+                        if not playerbase then return end
                         local playerData = playerbase:call("get_PlayerData")
                         local max = playerData:get_field("_vitalMax")
 
@@ -236,6 +240,7 @@ data[1] = {
                     if data[1][6][2].value then
                         local playerManager = sdk.get_managed_singleton("snow.player.PlayerManager")
                         local playerbase = playerManager:call("findMasterPlayer")
+                        if not playerbase then return end
                         local playerData = playerbase:call("get_PlayerData")
                         local max = playerData:get_field("_vitalMax")
                         local maxFloat = max + .0
