@@ -373,6 +373,8 @@ data[1] = {
             data = {
                 value = 0
             },
+
+            -- This probably isn't the best way, but it's a way I found
             hook = {
                 path = "snow.player.PlayerManager",
                 func = "update",
@@ -418,6 +420,7 @@ data[1] = {
             data = {
                 value = 0
             },
+            -- This probably isn't the best way, but it's a way I found
             hook = {
                 path = "snow.player.PlayerManager",
                 func = "update",
@@ -1150,15 +1153,15 @@ local function drawMenu(table)
                     local steppedVal = 0
                     if obj.step then
                         sliderMax = math.ceil(obj.max / obj.step)
-                        -- If the slider value is less than 0 (Off), then don't touch the value
-                        if (obj.value >= 0) then
+                        -- If the slider value is greater than -1 (Off), adjust the value by step as well
+                        if (obj.value > -1) then
                             -- Divide the value by the step to get the reduced value
                             sliderVal = math.floor(obj.value / obj.step)
                         end
                     end
                     changed, steppedVal = imgui.slider_int(obj.title, sliderVal, obj.min, sliderMax, sliderValue)
-                    -- If there is a step, then multiply the stepped value by the step to get the real total
-                    if obj.step then
+                    -- If there is a step and the slider isn't off, then multiply the stepped value by the step to get the real total
+                    if obj.step and obj.value > -1 then
                         steppedVal = steppedVal * obj.step
                     end
                     -- Update the table's value with the new value
@@ -1210,4 +1213,22 @@ re.on_draw_ui(function()
     imgui.begin_window("Modifiers & Settings", nil, ImGuiWindowFlags_AlwaysAutoResize)
     drawMenu()
     imgui.end_window()
+end)
+
+-- On script reset, reset anything that needs to be reset
+re.on_script_reset(function()
+
+    -- Until I find a better way of increase attack, I have to reset this on script reset
+    if data[1][8][1].value >= 0 then
+        local playerData = getPlayerData()
+        if not playerData then return end
+        playerData:set_field("_AtkUpAlive", 0)
+    end
+    
+    -- Until I find a better way of increase defence, I have to reset this on script reset
+    if data[1][8][2].value >= 0 then
+        local playerData = getPlayerData()
+        if not playerData then return end
+        playerData:set_field("_DefUpAlive", 0)
+    end
 end)
