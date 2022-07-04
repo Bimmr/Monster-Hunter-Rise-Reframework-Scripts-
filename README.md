@@ -8,21 +8,26 @@
 	- Change Icon type
 ## Buffer
 - Buffs for Misc
-	- Wirebugs
-	- Dango Skills
+	- Unlimited Wirebugs
+	- 100% Dango Skills
 	- Healing
 	- Stamina
-	- Unlimited Ammo & Consumables
-	- Sharpness
+	- Unlimited Ammo & Coatings
+	- Unlimited Consumables
+	- Auto Reloading
+	- White Sharpness
 - Buffs for weapons
-	- Bow
-	- Chargeblade
-	- Dual Blades
 	- Great Sword
-	- Heavy Bowgun
-	- Insect Glaive
 	- Long Sword
+	- Dual Blades
+	- Hammer
+	- Hunting Horn
 	- Switch Axe
+	- Charge Blade
+	- Insect Glaive
+	- Light Bowgun
+	- Heavy Bowgun
+	- Bow
 
 ## DevTester
 - For personal use to play around and see values
@@ -37,4 +42,4 @@
 	- Stamina
 	- Prism
 	- Golden
-- Automatically spawn a Prisim at the start of a quest
+- Automatically spawn a Prism at the start of a quest
