@@ -309,6 +309,7 @@ data[1] = {
                     end
                 end,
                 post = function(retval)
+                    -- Restore the original value
                     if data[1][7][1].value and data[1][7][1].data.managed then
                         data[1][7][1].data.managed:get_field("_Param"):set_field("_SkillActiveRate",
                             data[1][7][1].data.chance)
@@ -349,6 +350,7 @@ data[1] = {
                     end
                 end,
                 post = function(retval)
+                    -- Restore the original value
                     if data[1][7][2].value and data[1][7][2].data.managed then
                         data[1][7][2].data.managed:get_field("_Param"):set_field("_SkillActiveRate",
                             data[1][7][2].data.chance)
@@ -382,18 +384,24 @@ data[1] = {
                     end
 
                     if data[1][8][1].value >= 0 then
+                        -- Set the original attack value
                         if data[1][8][1].data.value == 0 then
                             data[1][8][1].data.value = playerData:get_field("_Attack")
                         end
+
+                        -- Setup variables to determine how much extra attack needs to be added to get to the set value
                         local attack = data[1][8][1].data.value
                         local attackTarget = data[1][8][1].value
                         local attackMod = attackTarget - attack
+
+                        -- Add the extra attack
                         playerData:set_field("_AtkUpAlive", attackMod)
-                    else
-                        if data[1][8][1].data.value ~= 0 then
-                            playerData:set_field("_AtkUpAlive", 0)
-                            data[1][8][1].data.value = 0
-                        end
+
+                        
+                    -- Restore the original attack value if disabled    
+                    elseif data[1][8][1].data.value ~= 0 then
+                        playerData:set_field("_AtkUpAlive", 0)
+                        data[1][8][1].data.value = 0
                     end
                 end,
                 post = nothing()
@@ -421,18 +429,20 @@ data[1] = {
                     end
 
                     if data[1][8][2].value >= 0 then
+                        -- Set the original defence value
                         if data[1][8][2].data.value == 0 then
                             data[1][8][2].data.value = playerData:get_field("_Defence")
                         end
+                        -- Setup variables to determine how much extra defence needs to be added to get to the set value
                         local defence = data[1][8][2].data.value
                         local defenceTarget = data[1][8][2].value
                         local defenceMod = defenceTarget - defence
                         playerData:set_field("_DefUpAlive", defenceMod)
-                    else
-                        if data[1][8][2].data.value ~= 0 then
-                            playerData:set_field("_DefUpAlive", 0)
-                            data[1][8][2].data.value = 0
-                        end
+                    
+                    -- Restore the original defence value if disabled
+                    elseif data[1][8][2].data.value ~= 0 then
+                        playerData:set_field("_DefUpAlive", 0)
+                        data[1][8][2].data.value = 0
                     end
                 end,
                 post = nothing()
@@ -826,7 +836,7 @@ data[12] = {
         }
     }
 }
--- Nothing Yet - Light Bowgun
+-- Light Bowgun
 data[13] = {
     title = "Light Bowgun",
     [1] = {
@@ -835,7 +845,7 @@ data[13] = {
         value = false,
         dontSave = true,
         onChange = function()
-            -- Change and update Miscellaneous/Ammo Options/Unlimited Bullets (Bowguns)
+            -- Change and update Miscellaneous/Ammo Options/Unlimited Ammo (Bowguns)
             data[1][1][2].value = data[13][1].value
             data[1][1][2].onChange()
         end
@@ -857,7 +867,7 @@ data[13] = {
             post = nothing()
         },
         onChange = function()
-            -- Change and update Miscellaneous/Ammo & Coating Options/Auto Reload
+            -- Change and update Miscellaneous/Ammo & Coating Options/Auto Reload (Bowguns)
             data[1][1][3].value = data[13][2].value
             data[1][1][3].onChange()
         end
@@ -887,7 +897,6 @@ data[13] = {
 -- Heavy Bowgun Modifications
 data[14] = {
     title = "Heavy Bowgun",
-
     [1] = {
         title = "Charge Level",
         type = "slider",
@@ -935,7 +944,7 @@ data[14] = {
             post = nothing()
         },
         onChange = function()
-            -- Change and update Miscellaneous/Ammo & Coating Options/Dont't Consume Ammo
+            -- Change and update Miscellaneous/Ammo & Coating Options/Auto Reload (Bowguns)
             data[1][1][3].value = data[14][3].value
             data[1][1][3].onChange()
         end
@@ -977,6 +986,26 @@ data[14] = {
                     end
                     playerData:set_field("_HeavyBowgunWyvernMachineGunBullet", 50)
                     playerData:set_field("_HeavyBowgunWyvernMachineGunTimer", 0)
+                end
+            end,
+            post = nothing()
+        }
+    },
+    [6] = {
+        title = "Prevent Overheat",
+        type = "checkbox",
+        value = false,
+        hook = {
+            path = "snow.player.PlayerManager",
+            func = "update",
+            pre = function(args)
+                if data[14][5].value then
+
+                    local playerData = getPlayerData()
+                    if not playerData then
+                        return
+                    end
+                    -- Figure out how overheat works and reset playerData fields
                 end
             end,
             post = nothing()
@@ -1029,7 +1058,7 @@ data[15] = {
         value = false,
         dontSave = true,
         onChange = function()
-            -- Change and update Miscellaneous/Ammo & Coating Options/Dont't Consume Ammo
+            -- Change and update Miscellaneous/Ammo & Coating Options/Unlimited Coatings (Arrows)
             data[1][1][1].value = data[15][3].value
             data[1][1][1].onChange()
         end
@@ -1039,6 +1068,8 @@ data[15] = {
 -- Function to get length of table
 local function getLength(obj)
     local count = 0
+
+    -- Count the items in the table
     for _ in pairs(obj) do
         count = count + 1
     end
@@ -1048,15 +1079,21 @@ end
 -- Initialize the hooks
 local function initHooks(table)
     table = table or data
+    -- Loop through the table
     for k, v in pairs(table) do
+
+        -- If the value is a table, recursively call initHooks
         if type(v) == "table" then
+            -- If the table has a path, then it's a hook
             if v.path then
                 log.debug("          " .. v.path)
                 sdk.hook(sdk.find_type_definition(v.path):get_method(v.func), v.pre, v.post)
 
+                -- If the table has a title but no path, then you'll have to dig deeper
             elseif v.title then
                 log.debug("Checking hooks for " .. v.title)
             end
+            -- Check deeper hooks
             initHooks(v)
         end
     end
@@ -1065,11 +1102,18 @@ end
 -- Initialize the updates
 local function initUpdates(table)
     table = table or data
+    -- Loop through the table
     for k, v in pairs(table) do
+
+        -- If the value is a table, recursively call initHooks
         if type(v) == "table" then
+
+            -- If the table has an update, then it needs to be updated
             if v.update then
                 -- log.debug("Initializing updates for " .. v.title)
                 re.on_pre_application_entry("UpdateBehavior", v.update)
+
+                -- If there is no update, then dig deeper to see if the next level has one
             else
                 initUpdates(v)
             end
@@ -1080,46 +1124,69 @@ end
 -- Draw the menu
 local function drawMenu(table)
     table = table or data
+    -- Loop through the table
     for i = 1, getLength(table) + 1 do
         local obj = table[i]
+        -- If it's a table with a title, draw the title
         if type(obj) == "table" and obj.title then
+            -- If the table has a value or type is text draw the table item
             if obj.value ~= nil or obj.type == "text" then
                 local changed = false
+
+                -- If the table has a type of checkbox
                 if obj.type == "checkbox" then
                     changed, obj.value = imgui.checkbox(obj.title, obj.value)
+
+                    -- If the table has a type of slider
                 elseif obj.type == "slider" then
                     local sliderValue = "Off"
+                    -- Add a Lvl prefix to the slider's value
                     if (obj.value >= 0) then
                         sliderValue = "Lvl " .. obj.value
                     end
+                    -- To allow for steps we need to set these and divide them by the steps
                     local sliderMax = obj.max
                     local sliderVal = obj.value
                     local steppedVal = 0
                     if obj.step then
                         sliderMax = math.ceil(obj.max / obj.step)
-                        sliderVal = math.ceil(obj.value / obj.step)
+                        -- If the slider value is less than 0 (Off), then don't touch the value
+                        if (obj.value >= 0) then
+                            -- Divide the value by the step to get the reduced value
+                            sliderVal = math.floor(obj.value / obj.step)
+                        end
                     end
                     changed, steppedVal = imgui.slider_int(obj.title, sliderVal, obj.min, sliderMax, sliderValue)
+                    -- If there is a step, then multiply the stepped value by the step to get the real total
                     if obj.step then
                         steppedVal = steppedVal * obj.step
                     end
+                    -- Update the table's value with the new value
                     obj.value = steppedVal
+
+                    -- If the table has a type of drag, not yet used for anything
                 elseif obj.type == "drag" then
                     local dragValue = "Off"
                     if (obj.value >= 0) then
                         dragValue = obj.value
                     end
                     changed, obj.value = imgui.drag_int(obj.title, obj.value, obj.speed, obj.min, obj.max, dragValue)
+                    -- If the table has a type of text, draw the text
                 elseif obj.type == "text" then
                     imgui.text(obj.title)
                 end
+
+                -- If anything changed, save the config
                 if changed then
                     saveConfig()
                 end
+
+                -- If anything changed, and the table has a onChange function, call it
                 if changed and obj.onChange then
                     obj.onChange()
                 end
 
+                -- If the table doesn't have a value and isn't text, go deeper and see if the next level table has to be drawn
             elseif imgui.tree_node(obj.title) then
                 drawMenu(obj)
                 imgui.tree_pop()
