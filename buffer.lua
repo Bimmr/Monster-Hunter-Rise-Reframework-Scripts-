@@ -1101,9 +1101,9 @@ local function drawMenu(table)
                     end
                     changed, steppedVal = imgui.slider_int(obj.title, sliderVal, obj.min, sliderMax, sliderValue)
                     if obj.step then
-                        sliderValue = steppedVal * obj.step
+                        steppedVal = steppedVal * obj.step
                     end
-                    obj.value = sliderValue
+                    obj.value = steppedVal
                 elseif obj.type == "drag" then
                     local dragValue = "Off"
                     if (obj.value >= 0) then
