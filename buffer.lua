@@ -1,8 +1,27 @@
 local configPath = "Buffer.json"
+local playerBase, playerData
 local data = {}
 
 local function nothing(retval)
     return retval
+end
+
+local function getPlayerBase()
+    if not playerBase or playerData then
+        local playerManager = sdk.get_managed_singleton("snow.player.PlayerManager")
+        playerBase = playerManager:call("findMasterPlayer")
+    end
+    return playerBase
+end
+local function getPlayerData()
+    if not playerData then
+        local playerBase = getPlayerBase()
+        if not playerBase then
+            return
+        end
+        playerData = playerBase:call("get_PlayerData")
+    end
+    return playerData
 end
 
 -- Load the config
@@ -145,12 +164,13 @@ data[1] = {
             pre = nothing(),
             post = function(args)
                 if data[1][3].value then
-                    local playerManager = sdk.get_managed_singleton("snow.player.PlayerManager")
-                    local playerbase = playerManager:call("findMasterPlayer")
-                    if not playerbase then return end
-                    -- playerbase:set_field("<SharpnessLv>k__BackingField", 5) -- Sharpness Level
-                    playerbase:set_field("<SharpnessGauge>k__BackingField", 400) -- Sharpness Value
-                    playerbase:set_field("<SharpnessGaugeMax>k__BackingField", 400)
+                    local playerBase = getPlayerBase()
+                    if not playerBase then
+                        return
+                    end
+                    -- playerBase:set_field("<SharpnessLv>k__BackingField", 5) -- Sharpness Level
+                    playerBase:set_field("<SharpnessGauge>k__BackingField", 400) -- Sharpness Value
+                    playerBase:set_field("<SharpnessGaugeMax>k__BackingField", 400)
                 end
             end
         }
@@ -165,17 +185,15 @@ data[1] = {
             pre = nothing(),
             post = function(retval)
                 if data[1][4].value then
-
-                    local playerManager = sdk.get_managed_singleton("snow.player.PlayerManager")
-                    local playerbase = playerManager:call("findMasterPlayer")
-                    if not playerbase then return end
-                    local wireGuages = playerbase:get_field("_HunterWireGauge")
-
+                    local playerBase = getPlayerBase()
+                    if not playerBase then
+                        return
+                    end
+                    local wireGuages = playerBase:get_field("_HunterWireGauge")
                     if not wireGuages then
                         return
                     end
                     wireGuages = wireGuages:get_elements()
-
                     for i, gauge in ipairs(wireGuages) do
                         gauge:set_field("_RecastTimer", 0)
                         gauge:set_field("_RecoverWaitTimer", 0)
@@ -194,11 +212,10 @@ data[1] = {
             func = "update",
             pre = function()
                 if data[1][5].value then
-                    local playerManager = sdk.get_managed_singleton("snow.player.PlayerManager")
-                    local playerbase = playerManager:call("findMasterPlayer")
-                    if not playerbase then return end
-                    local playerData = playerbase:call("get_PlayerData")
-
+                    local playerData = getPlayerData()
+                    if not playerData then
+                        return
+                    end
                     local maxStamina = playerData:get_field("_staminaMax")
                     playerData:set_field("_stamina", maxStamina)
                 end
@@ -217,10 +234,10 @@ data[1] = {
                 func = "update",
                 pre = function(args)
                     if data[1][6][1].value then
-                        local playerManager = sdk.get_managed_singleton("snow.player.PlayerManager")
-                        local playerbase = playerManager:call("findMasterPlayer")
-                        if not playerbase then return end
-                        local playerData = playerbase:call("get_PlayerData")
+                        local playerData = getPlayerData()
+                        if not playerData then
+                            return
+                        end
                         local max = playerData:get_field("_vitalMax")
 
                         playerData:set_field("_r_Vital", max)
@@ -238,10 +255,11 @@ data[1] = {
                 func = "update",
                 pre = function(args)
                     if data[1][6][2].value then
-                        local playerManager = sdk.get_managed_singleton("snow.player.PlayerManager")
-                        local playerbase = playerManager:call("findMasterPlayer")
-                        if not playerbase then return end
-                        local playerData = playerbase:call("get_PlayerData")
+
+                        local playerData = getPlayerData()
+                        if not playerData then
+                            return
+                        end
                         local max = playerData:get_field("_vitalMax")
                         local maxFloat = max + .0
 
@@ -338,6 +356,91 @@ data[1] = {
                     return retval
                 end
             }
+        }
+    },
+    [8] = {
+        title = "Stat Modifiers (Cheater)",
+        [1] = {
+            title = "Attack Modifier",
+            type = "slider",
+            value = -1,
+            min = -1,
+            step = 10,
+            max = 2600,
+            dontSave = true,
+            data = {
+                value = 0
+            },
+            hook = {
+                path = "snow.player.PlayerManager",
+                func = "update",
+                pre = function(args)
+
+                    local playerData = getPlayerData()
+                    if not playerData then
+                        return
+                    end
+
+                    if data[1][8][1].value >= 0 then
+                        if data[1][8][1].data.value == 0 then
+                            data[1][8][1].data.value = playerData:get_field("_Attack")
+                        end
+                        local attack = data[1][8][1].data.value
+                        local attackTarget = data[1][8][1].value
+                        local attackMod = attackTarget - attack
+                        playerData:set_field("_AtkUpAlive", attackMod)
+                    else
+                        if data[1][8][1].data.value ~= 0 then
+                            playerData:set_field("_AtkUpAlive", 0)
+                            data[1][8][1].data.value = 0
+                        end
+                    end
+                end,
+                post = nothing()
+            }
+        },
+        [2] = {
+            title = "Defence Modifier",
+            type = "slider",
+            value = -1,
+            min = -1,
+            step = 10,
+            max = 3100,
+            dontSave = true,
+            data = {
+                value = 0
+            },
+            hook = {
+                path = "snow.player.PlayerManager",
+                func = "update",
+                pre = function(args)
+
+                    local playerData = getPlayerData()
+                    if not playerData then
+                        return
+                    end
+
+                    if data[1][8][2].value >= 0 then
+                        if data[1][8][2].data.value == 0 then
+                            data[1][8][2].data.value = playerData:get_field("_Defence")
+                        end
+                        local defence = data[1][8][2].data.value
+                        local defenceTarget = data[1][8][2].value
+                        local defenceMod = defenceTarget - defence
+                        playerData:set_field("_DefUpAlive", defenceMod)
+                    else
+                        if data[1][8][2].data.value ~= 0 then
+                            playerData:set_field("_DefUpAlive", 0)
+                            data[1][8][2].data.value = 0
+                        end
+                    end
+                end,
+                post = nothing()
+            }
+        },
+        [3] = {
+            title = "Drag sliders to the left to reset if the stats break",
+            type = "text"
         }
     }
 }
@@ -450,7 +553,59 @@ data[6] = {
 }
 -- Nothing Yet - Gunlance
 data[7] = {
-    -- title = "Gunlance",
+    title = "Gunlance",
+    [1] = {
+        title = "Unlimited Dragon Cannon",
+        type = "checkbox",
+        value = false,
+        hook = {
+            path = "snow.player.PlayerManager",
+            func = "update",
+            pre = function(args)
+                if data[7][1].value then
+
+                    local playerData = getPlayerData()
+                    if not playerData then
+                        return
+                    end
+                    playerData:set_field("_ChargeDragonSlayCannonTime", 0)
+                end
+            end,
+            post = nothing()
+        }
+    },
+    [2] = {
+        title = "Unlimited Aerials",
+        type = "checkbox",
+        value = false,
+        hook = {
+            path = "snow.player.GunLance",
+            func = "update",
+            pre = function(args)
+                if data[7][2].value then
+                    local managed = sdk.to_managed_object(args[2])
+                    managed:set_field("_ArialCount", 0)
+                end
+            end,
+            post = nothing()
+        }
+    },
+    [3] = {
+        title = "Auto Reload",
+        type = "checkbox",
+        value = false,
+        hook = {
+            path = "snow.player.GunLance",
+            func = "update",
+            pre = function(args)
+                if data[7][3].value then
+                    local managed = sdk.to_managed_object(args[2])
+                    managed:call("reloadBullet")
+                end
+            end,
+            post = nothing()
+        }
+    }
 }
 -- Hammer Modifications
 data[8] = {
@@ -704,8 +859,29 @@ data[13] = {
         onChange = function()
             -- Change and update Miscellaneous/Ammo & Coating Options/Auto Reload
             data[1][1][3].value = data[13][2].value
-            data[1][1][3].onChange() 
+            data[1][1][3].onChange()
         end
+    },
+    [3] = {
+        title = "Unlimited Wyvern Blast",
+        type = "checkbox",
+        value = false,
+        hook = {
+            path = "snow.player.PlayerManager",
+            func = "update",
+            pre = function(args)
+                if data[13][3].value then
+
+                    local playerData = getPlayerData()
+                    if not playerData then
+                        return
+                    end
+                    playerData:set_field("_WyvernBlastGauge", 3)
+                    playerData:set_field("_WyvernBlastReloadTimer", 0)
+                end
+            end,
+            post = nothing()
+        }
     }
 }
 -- Heavy Bowgun Modifications
@@ -763,6 +939,48 @@ data[14] = {
             data[1][1][3].value = data[14][3].value
             data[1][1][3].onChange()
         end
+    },
+    [4] = {
+        title = "Unlimited Wyvern Sniper",
+        type = "checkbox",
+        value = false,
+        hook = {
+            path = "snow.player.PlayerManager",
+            func = "update",
+            pre = function(args)
+                if data[14][4].value then
+
+                    local playerData = getPlayerData()
+                    if not playerData then
+                        return
+                    end
+                    playerData:set_field("_HeavyBowgunWyvernSnipeBullet", 1)
+                    playerData:set_field("_HeavyBowgunWyvernSnipeTimer", 0)
+                end
+            end,
+            post = nothing()
+        }
+    },
+    [5] = {
+        title = "Unlimited Wyvern Machine Gun",
+        type = "checkbox",
+        value = false,
+        hook = {
+            path = "snow.player.PlayerManager",
+            func = "update",
+            pre = function(args)
+                if data[14][5].value then
+
+                    local playerData = getPlayerData()
+                    if not playerData then
+                        return
+                    end
+                    playerData:set_field("_HeavyBowgunWyvernMachineGunBullet", 50)
+                    playerData:set_field("_HeavyBowgunWyvernMachineGunTimer", 0)
+                end
+            end,
+            post = nothing()
+        }
     }
 }
 -- Bow Modifications
@@ -865,18 +1083,35 @@ local function drawMenu(table)
     for i = 1, getLength(table) + 1 do
         local obj = table[i]
         if type(obj) == "table" and obj.title then
-            if obj.value ~= nil then
+            if obj.value ~= nil or obj.type == "text" then
                 local changed = false
                 if obj.type == "checkbox" then
                     changed, obj.value = imgui.checkbox(obj.title, obj.value)
-                else
-                    if obj.type == "slider" then
-                        local sliderValue = "Off"
-                        if (obj.value >= 0) then
-                            sliderValue = "Lvl " .. obj.value
-                        end
-                        changed, obj.value = imgui.slider_int(obj.title, obj.value, obj.min, obj.max, sliderValue)
+                elseif obj.type == "slider" then
+                    local sliderValue = "Off"
+                    if (obj.value >= 0) then
+                        sliderValue = "Lvl " .. obj.value
                     end
+                    local sliderMax = obj.max
+                    local sliderVal = obj.value
+                    local steppedVal = 0
+                    if obj.step then
+                        sliderMax = math.ceil(obj.max / obj.step)
+                        sliderVal = math.ceil(obj.value / obj.step)
+                    end
+                    changed, steppedVal = imgui.slider_int(obj.title, sliderVal, obj.min, sliderMax, sliderValue)
+                    if obj.step then
+                        sliderValue = steppedVal * obj.step
+                    end
+                    obj.value = sliderValue
+                elseif obj.type == "drag" then
+                    local dragValue = "Off"
+                    if (obj.value >= 0) then
+                        dragValue = obj.value
+                    end
+                    changed, obj.value = imgui.drag_int(obj.title, obj.value, obj.speed, obj.min, obj.max, dragValue)
+                elseif obj.type == "text" then
+                    imgui.text(obj.title)
                 end
                 if changed then
                     saveConfig()
