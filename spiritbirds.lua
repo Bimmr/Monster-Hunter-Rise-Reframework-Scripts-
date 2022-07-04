@@ -97,7 +97,7 @@ local function spawnBird(type)
     end
 end
 
--- Watch for Auto-Spawn of Prisim and clear spawned birds after quest ends
+-- Watch for Auto-Spawn of Prism and clear spawned birds after quest ends
 re.on_pre_application_entry("UpdateBehavior", function()
     -- If Auto spawn is enabled and quest status says it's active
     if getQuestStatus() == 2 and autospawn.enabled and not autospawn.spawned then
@@ -153,7 +153,7 @@ re.on_draw_ui(function()
         spawnBird("gold")
     end
     local changed = false
-    changed, autospawn.enabled = imgui.checkbox("Auto-Spawn Prisim", autospawn.enabled)
+    changed, autospawn.enabled = imgui.checkbox("Auto-Spawn Prism", autospawn.enabled)
     if changed then
         saveConfig()
     end
