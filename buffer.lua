@@ -155,7 +155,7 @@ data[1] = {
         }
     },
     [3] = {
-        title = "White Sharpness",
+        title = "Purple Sharpness",
         type = "checkbox",
         value = false,
         hook = {
@@ -168,9 +168,10 @@ data[1] = {
                     if not playerBase then
                         return
                     end
-                    -- playerBase:set_field("<SharpnessLv>k__BackingField", 5) -- Sharpness Level
-                    playerBase:set_field("<SharpnessGauge>k__BackingField", 400) -- Sharpness Value
-                    playerBase:set_field("<SharpnessGaugeMax>k__BackingField", 400)
+                    -- 0=Red | 1=Orange | 2=Yellow | 3=Green | 4=Blue | 5=White | 6=Purple
+                    playerBase:set_field("<SharpnessLv>k__BackingField", 6) -- Sharpness Level of Purple
+                    -- playerBase:set_field("<SharpnessGauge>k__BackingField", 400) -- Sharpness Value
+                    -- playerBase:set_field("<SharpnessGaugeMax>k__BackingField", 400) -- Max Sharpness
                 end
             end
         }
@@ -374,7 +375,47 @@ data[1] = {
                 value = 0
             },
 
-            -- This probably isn't the best way, but it's a way I found
+            --This code doesn't work, but I'm leaving it here just incase. The Attack seems to randomly jump around
+            -- hook ={
+            --     path = "snow.player.PlayerBase",
+            --     func = "calcTotalAttack",
+            --     pre = function(args)
+            --         if data[1][8][1].value >= 0 then
+            --             local playerData = getPlayerData()
+            --             if not playerData then
+            --                 return
+            --             end
+            --             local attack = playerData:get_field("_Attack")
+
+            --             log.debug("Attack: " .. attack)
+            --             local attackTarget = data[1][8][1].value
+            --             log.debug("Attack Target: " .. attackTarget)
+            --             local attackMod = attackTarget - attack
+            --             log.debug("Attack Mod: " .. attackMod)
+
+            --             -- Add the extra attack, keeping track of what the buff was before
+            --             data[1][8][1].data.value = playerData:get_field("_AtkUpAlive")
+            --             log.debug("Saving Old _AtkUpAlive: " .. data[1][8][1].data.value)
+            --             playerData:set_field("_AtkUpAlive", attackMod)
+            --             log.debug("Setting _AtkUpAlive: " .. playerData:get_field("_AtkUpAlive"))
+            --         end
+            --     end,
+            --     post = function(retval)
+            --         local playerData = getPlayerData()
+            --         if not playerData then
+            --             return
+            --         end
+            --         -- playerData:set_field("_AtkUpAlive", 0)
+            --         if data[1][8][1].value >= 0 then
+            --             log.debug("Resetting _AtkUpAlive to ".. data[1][8][1].data.value)
+            --             playerData:set_field("_AtkUpAlive", data[1][8][1].data.value)
+            --             log.debug("Reset _AtkUpAlive")
+            --         end
+            --         return retval
+            --     end
+            -- }
+            
+            -- This probably isn't the best way, but it's a way I found without causing nay crashes
             hook = {
                 path = "snow.player.PlayerManager",
                 func = "update",
