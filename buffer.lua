@@ -1035,26 +1035,26 @@ data[14] = {
             post = nothing()
         }
     },
-    -- [6] = {
-    --     title = "Prevent Overheat",
-    --     type = "checkbox",
-    --     value = false,
-    --     hook = {
-    --         path = "snow.player.PlayerManager",
-    --         func = "update",
-    --         pre = function(args)
-    --             if data[14][5].value then
+    [6] = {
+        title = "Prevent Overheat",
+        type = "checkbox",
+        value = false,
+        hook = {
+            path = "snow.player.PlayerManager",
+            func = "update",
+            pre = function(args)
+                if data[14][6].value then
 
-    --                 local playerData = getPlayerData()
-    --                 if not playerData then
-    --                     return
-    --                 end
-    --                 -- Figure out how overheat works and reset playerData fields
-    --             end
-    --         end,
-    --         post = nothing()
-    --     }
-    -- }
+                    local playerData = getPlayerData()
+                    if not playerData then
+                        return
+                    end
+                    playerData:set_field("_HeavyBowgunHeatGauge", 0)
+                end
+            end,
+            post = nothing()
+        }
+    }
 }
 -- Bow Modifications
 data[15] = {
