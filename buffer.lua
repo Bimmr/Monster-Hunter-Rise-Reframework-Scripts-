@@ -273,93 +273,111 @@ data[1] = {
         }
     },
     [7] = {
-        title = "100% Dango Skills",
-        [1] = {
-            title = "With Ticket",
-            type = "checkbox",
-            value = false,
-            data = {
-                managed = nil,
-                chance = 0
-            },
-            hook = {
-                path = "snow.data.DangoData",
-                func = "get_SkillActiveRate",
-                pre = function(args)
-                    if data[1][7][1].value then
-                        local managed = sdk.to_managed_object(args[2])
-                        local facilityDataManager = sdk.get_managed_singleton("snow.data.FacilityDataManager")
-                        if not facilityDataManager then
-                            return
-                        end
-                        local kitchen = facilityDataManager:get_field("_Kitchen")
-                        if not kitchen then
-                            return
-                        end
-                        local mealFunc = kitchen:get_field("_MealFunc")
-                        if not mealFunc then
-                            return
-                        end
-                        local isUsingTicket = mealFunc:call("getMealTicketFlag")
+        -- title = "Kitchen Modifiations",
+        -- [1] = {
+            title = "100% Dango Skills",
+            [1] = {
+                title = "With Ticket",
+                type = "checkbox",
+                value = false,
+                data = {
+                    managed = nil,
+                    chance = 0
+                },
+                hook = {
+                    path = "snow.data.DangoData",
+                    func = "get_SkillActiveRate",
+                    pre = function(args)
+                        if data[1][7][1].value then
+                            local managed = sdk.to_managed_object(args[2])
+                            local facilityDataManager = sdk.get_managed_singleton("snow.data.FacilityDataManager")
+                            if not facilityDataManager then
+                                return
+                            end
+                            local kitchen = facilityDataManager:get_field("_Kitchen")
+                            if not kitchen then
+                                return
+                            end
+                            local mealFunc = kitchen:get_field("_MealFunc")
+                            if not mealFunc then
+                                return
+                            end
+                            local isUsingTicket = mealFunc:call("getMealTicketFlag")
 
-                        if isUsingTicket then
-                            data[1][7][1].data.managed = managed
-                            data[1][7][1].data.chance = managed:get_field("_Param"):get_field("_SkillActiveRate")
+                            if isUsingTicket then
+                                data[1][7][1].data.managed = managed
+                                data[1][7][1].data.chance = managed:get_field("_Param"):get_field("_SkillActiveRate")
+                                managed:get_field("_Param"):set_field("_SkillActiveRate", 100)
+                            end
+                        end
+                    end,
+                    post = function(retval)
+                        -- Restore the original value
+                        if data[1][7][1].value and data[1][7][1].data.managed then
+                            data[1][7][1].data.managed:get_field("_Param"):set_field("_SkillActiveRate",
+                                data[1][7][1].data.chance)
+                        end
+                        return retval
+                    end
+                }
+            },
+            [2] = {
+                title = "Without Ticket (Cheater)",
+                type = "checkbox",
+                value = false,
+                data = {
+                    managed = nil,
+                    chance = 0
+                },
+                hook = {
+                    path = "snow.data.DangoData",
+                    func = "get_SkillActiveRate",
+                    pre = function(args)
+                        if data[1][7][2].value then
+                            local managed = sdk.to_managed_object(args[2])
+
+                            data[1][7][2].data.managed = managed
+                            data[1][7][2].data.chance = managed:get_field("_Param"):get_field("_SkillActiveRate")
                             managed:get_field("_Param"):set_field("_SkillActiveRate", 100)
                         end
+                    end,
+                    post = function(retval)
+                        -- Restore the original value
+                        if data[1][7][2].value and data[1][7][2].data.managed then
+                            data[1][7][2].data.managed:get_field("_Param"):set_field("_SkillActiveRate",
+                                data[1][7][2].data.chance)
+                        end
+                        return retval
                     end
-                end,
-                post = function(retval)
-                    -- Restore the original value
-                    if data[1][7][1].value and data[1][7][1].data.managed then
-                        data[1][7][1].data.managed:get_field("_Param"):set_field("_SkillActiveRate",
-                            data[1][7][1].data.chance)
-                    end
-                    return retval
-                end
+                }
             }
-        },
-        [2] = {
-            title = "Without Ticket (Cheater)",
-            type = "checkbox",
-            value = false,
-            data = {
-                managed = nil,
-                chance = 0
-            },
-            hook = {
-                path = "snow.data.DangoData",
-                func = "get_SkillActiveRate",
-                pre = function(args)
-                    if data[1][7][2].value then
-                        local managed = sdk.to_managed_object(args[2])
-                        local facilityDataManager = sdk.get_managed_singleton("snow.data.FacilityDataManager")
-                        if not facilityDataManager then
-                            return
-                        end
-                        local kitchen = facilityDataManager:get_field("_Kitchen")
-                        if not kitchen then
-                            return
-                        end
-                        local mealFunc = kitchen:get_field("_MealFunc")
-                        if not mealFunc then
-                            return
-                        end
-                        data[1][7][2].data.managed = managed
-                        data[1][7][2].data.chance = managed:get_field("_Param"):get_field("_SkillActiveRate")
-                        managed:get_field("_Param"):set_field("_SkillActiveRate", 100)
-                    end
-                end,
-                post = function(retval)
-                    -- Restore the original value
-                    if data[1][7][2].value and data[1][7][2].data.managed then
-                        data[1][7][2].data.managed:get_field("_Param"):set_field("_SkillActiveRate",
-                            data[1][7][2].data.chance)
-                    end
-                    return retval
-                end
-            }
-        }
+        -- },
+        -- [2] = {
+        --     title = "Level 4 Dangos",
+        --     type = "checkbox",
+        --     value = false,
+        --     hook = {
+        --             path = "snow.data.DangoData",
+        --             func = "get_SkillActiveRate",
+        --         pre = function(args)
+        --             local managed = sdk.to_managed_object(args[2])
+        --             local facilityDataManager = sdk.get_managed_singleton("snow.data.FacilityDataManager")
+        --             if not facilityDataManager then
+        --                 return
+        --             end
+        --             local kitchen = facilityDataManager:get_field("_Kitchen")
+        --             if not kitchen then
+        --                 return
+        --             end
+        --             local mealFunc = kitchen:get_field("_MealFunc")
+        --             if not mealFunc then
+        --                 return
+        --             end
+        --             mealFunc:set_field("NormalSkewerDangoLv", 4) -- Static field; only thing I've been able to find regarding dango levels
+        --         end,
+        --         post = nothing()
+        --     }
+        -- }
     },
     [8] = {
         title = "Stat Modifiers (Cheater)",
@@ -375,7 +393,7 @@ data[1] = {
                 value = 0
             },
 
-            --This code doesn't work, but I'm leaving it here just incase. The Attack seems to randomly jump around
+            -- This code doesn't work, but I'm leaving it here just incase. The Attack seems to randomly jump around
             -- hook ={
             --     path = "snow.player.PlayerBase",
             --     func = "calcTotalAttack",
@@ -414,7 +432,7 @@ data[1] = {
             --         return retval
             --     end
             -- }
-            
+
             -- This probably isn't the best way, but it's a way I found without causing nay crashes
             hook = {
                 path = "snow.player.PlayerManager",
@@ -440,8 +458,7 @@ data[1] = {
                         -- Add the extra attack
                         playerData:set_field("_AtkUpAlive", attackMod)
 
-                        
-                    -- Restore the original attack value if disabled    
+                        -- Restore the original attack value if disabled    
                     elseif data[1][8][1].data.value ~= 0 then
                         playerData:set_field("_AtkUpAlive", 0)
                         data[1][8][1].data.value = 0
@@ -482,8 +499,8 @@ data[1] = {
                         local defenceTarget = data[1][8][2].value
                         local defenceMod = defenceTarget - defence
                         playerData:set_field("_DefUpAlive", defenceMod)
-                    
-                    -- Restore the original defence value if disabled
+
+                        -- Restore the original defence value if disabled
                     elseif data[1][8][2].data.value ~= 0 then
                         playerData:set_field("_DefUpAlive", 0)
                         data[1][8][2].data.value = 0
@@ -1262,14 +1279,18 @@ re.on_script_reset(function()
     -- Until I find a better way of increase attack, I have to reset this on script reset
     if data[1][8][1].value >= 0 then
         local playerData = getPlayerData()
-        if not playerData then return end
+        if not playerData then
+            return
+        end
         playerData:set_field("_AtkUpAlive", 0)
     end
-    
+
     -- Until I find a better way of increase defence, I have to reset this on script reset
     if data[1][8][2].value >= 0 then
         local playerData = getPlayerData()
-        if not playerData then return end
+        if not playerData then
+            return
+        end
         playerData:set_field("_DefUpAlive", 0)
     end
 end)
