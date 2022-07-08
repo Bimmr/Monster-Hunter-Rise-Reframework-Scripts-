@@ -21,7 +21,7 @@ local function loadConfig()
     if json ~= nil then
         local file = json.load_file(configPath)
         if file then
-            autospawn.enabled = file
+            autospawn.enabled = file.autospawn
         end
     end
 end
@@ -157,6 +157,5 @@ re.on_draw_ui(function()
     if changed then
         saveConfig()
     end
-    imgui.new_line()
     imgui.end_window()
 end)
