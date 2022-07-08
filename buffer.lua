@@ -273,8 +273,8 @@ data[1] = {
         }
     },
     [7] = {
-        -- title = "Kitchen Modifiations",
-        -- [1] = {
+        title = "Kitchen Modifiations",
+        [1] = {
             title = "100% Dango Skills",
             [1] = {
                 title = "With Ticket",
@@ -288,7 +288,7 @@ data[1] = {
                     path = "snow.data.DangoData",
                     func = "get_SkillActiveRate",
                     pre = function(args)
-                        if data[1][7][1].value then
+                        if data[1][7][1][1].value then
                             local managed = sdk.to_managed_object(args[2])
                             local facilityDataManager = sdk.get_managed_singleton("snow.data.FacilityDataManager")
                             if not facilityDataManager then
@@ -305,17 +305,17 @@ data[1] = {
                             local isUsingTicket = mealFunc:call("getMealTicketFlag")
 
                             if isUsingTicket then
-                                data[1][7][1].data.managed = managed
-                                data[1][7][1].data.chance = managed:get_field("_Param"):get_field("_SkillActiveRate")
+                                data[1][7][1][1].data.managed = managed
+                                data[1][7][1][1].data.chance = managed:get_field("_Param"):get_field("_SkillActiveRate")
                                 managed:get_field("_Param"):set_field("_SkillActiveRate", 100)
                             end
                         end
                     end,
                     post = function(retval)
                         -- Restore the original value
-                        if data[1][7][1].value and data[1][7][1].data.managed then
-                            data[1][7][1].data.managed:get_field("_Param"):set_field("_SkillActiveRate",
-                                data[1][7][1].data.chance)
+                        if data[1][7][1][1].value and data[1][7][2][1].data.managed then
+                            data[1][7][1][1].data.managed:get_field("_Param"):set_field("_SkillActiveRate",
+                                data[1][7][1][1].data.chance)
                         end
                         return retval
                     end
@@ -333,26 +333,114 @@ data[1] = {
                     path = "snow.data.DangoData",
                     func = "get_SkillActiveRate",
                     pre = function(args)
-                        if data[1][7][2].value then
+                        if data[1][7][1][2].value then
                             local managed = sdk.to_managed_object(args[2])
 
-                            data[1][7][2].data.managed = managed
-                            data[1][7][2].data.chance = managed:get_field("_Param"):get_field("_SkillActiveRate")
+                            data[1][7][1][2].data.managed = managed
+                            data[1][7][1][2].data.chance = managed:get_field("_Param"):get_field("_SkillActiveRate")
                             managed:get_field("_Param"):set_field("_SkillActiveRate", 100)
                         end
                     end,
                     post = function(retval)
                         -- Restore the original value
-                        if data[1][7][2].value and data[1][7][2].data.managed then
-                            data[1][7][2].data.managed:get_field("_Param"):set_field("_SkillActiveRate",
-                                data[1][7][2].data.chance)
+                        if data[1][7][1][2].value and data[1][7][2].data.managed then
+                            data[1][7][1][2].data.managed:get_field("_Param"):set_field("_SkillActiveRate",
+                                data[1][7][1][2].data.chance)
                         end
                         return retval
                     end
                 }
             }
-        -- },
-        -- [2] = {
+        },
+        [2] = {
+            title = "All Dangos Available",
+            type = "checkbox",
+            value = false,
+            data = {
+                origData = nil,
+                mealFunc = nil
+            },
+            -- On checkbox change, refresh dango list
+            onChange = function()
+                if not data[1][7][2].data.mealFunc then
+                    local facilityDataManager = sdk.get_managed_singleton("snow.data.FacilityDataManager")
+                    if not facilityDataManager then
+                        return
+                    end
+                    local kitchen = facilityDataManager:get_field("_Kitchen")
+                    if not kitchen then
+                        return
+                    end
+                    local mealFunc = kitchen:get_field("_MealFunc")
+                    if not mealFunc then
+                        return
+                    end
+                    data[1][7][2].data.mealFunc = mealFunc
+                end
+                data[1][7][2].data.mealFunc:call("get_AvailableDangoList", nil)
+            end,
+            hook = {
+                path = "snow.facility.kitchen.MealFunc",
+                func = "get_AvailableDangoList",
+                pre = function(args)
+                    return sdk.PreHookResult.SKIP_ORIGINAL
+                end,
+                post = function(args)
+                    if data[1][7][2].value then
+                        if not data[1][7][2].data.mealFunc then
+                            local facilityDataManager = sdk.get_managed_singleton("snow.data.FacilityDataManager")
+                            if not facilityDataManager then
+                                return
+                            end
+                            local kitchen = facilityDataManager:get_field("_Kitchen")
+                            if not kitchen then
+                                return
+                            end
+                            local mealFunc = kitchen:get_field("_MealFunc")
+                            if not mealFunc then
+                                return
+                            end
+                            data[1][7][2].data.mealFunc = mealFunc
+                        end
+
+                        -- Get list of dangos
+                        local dangoList = data[1][7][2].data.mealFunc:get_field("<DangoDataList>k__BackingField")
+                            :get_field("mItems")
+
+                        -- Create a backup of the unlock and daily rate
+                        data[1][7][2].data.origData = {}
+                        for i, dango in ipairs(dangoList) do
+                            local dangoParam = dango:get_field("_Param")
+                            data[1][7][2].data.origData[dangoParam:get_field("_Id")] = {
+                                [1] = dangoParam:get_field("_UnlockFlag"),
+                                [2] = dangoParam:get_field("_DailyRate")
+                            }
+                            -- Set unlock Flag to Village_1 and Dailyrate to 0
+                            dangoParam:set_field("_UnlockFlag", 5)
+                            dangoParam:set_field("_DailyRate", 0)
+                        end
+                        -- Return the new list. By only changing the All Dango list and not the available it allows us to not have to save it
+                        return dangoList
+
+                    -- If all dangos was just turned off
+                    elseif not data[1][7][2].value and data[1][7][2].data.origData then
+                        -- Get a list of all dangos
+                        local dangoList = data[1][7][2].data.mealFunc:get_field("<DangoDataList>k__BackingField")
+                            :get_field("mItems")
+                        -- Reset the dango's unlock and daily from the backed up data
+                        for i, dango in ipairs(dangoList) do
+                            local dangoParam = dango:get_field("_Param")
+                            local dangoOrigParam = data[1][7][2].data.origData[dangoParam:get_field("_Id")]
+                            dangoParam:set_field("_UnlockFlag", dangoOrigParam[1])
+                            dangoParam:set_field("_DailyRate", dangoOrigParam[2])
+                        end
+                        data[1][7][2].data.origData = nil
+                    end
+                end
+            }
+        }
+
+        -- [3] = {
         --     title = "Level 4 Dangos",
         --     type = "checkbox",
         --     value = false,
@@ -1292,5 +1380,15 @@ re.on_script_reset(function()
             return
         end
         playerData:set_field("_DefUpAlive", 0)
+    end
+
+    if data[1][7][2].data.origData then
+        local dangoList = data[1][7][2].data.mealFunc:get_field("<DangoDataList>k__BackingField"):get_field("mItems")
+        for i, dango in ipairs(dangoList) do
+            local dangoParam = dango:get_field("_Param")
+            local dangoOrigParam = data[1][7][2].data.origData[dangoParam:get_field("_Id")]
+            dangoParam:set_field("_UnlockFlag", dangoOrigParam[1])
+            dangoParam:set_field("_DailyRate", dangoOrigParam[2])
+        end
     end
 end)
