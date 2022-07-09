@@ -356,6 +356,8 @@ data[1] = {
             title = "All Dangos Available",
             type = "checkbox",
             value = false,
+            -- Set to not save until I figure out how to avoid crash on startup when enabled
+            dontSave = true,
             data = {
                 origData = nil,
                 mealFunc = nil
@@ -377,6 +379,7 @@ data[1] = {
                     end
                     data[1][7][2].data.mealFunc = mealFunc
                 end
+                -- TODO: Why isn't this calling now?
                 data[1][7][2].data.mealFunc:call("get_AvailableDangoList", nil)
             end,
             hook = {
@@ -403,26 +406,38 @@ data[1] = {
                             data[1][7][2].data.mealFunc = mealFunc
                         end
 
-                        -- Get list of dangos
+                        if not data[1][7][2].data.mealFunc then
+                            return
+                        end
+                        
                         local dangoList = data[1][7][2].data.mealFunc:get_field("<DangoDataList>k__BackingField")
                             :get_field("mItems")
 
-                        -- Create a backup of the unlock and daily rate
-                        data[1][7][2].data.origData = {}
-                        for i, dango in ipairs(dangoList) do
-                            local dangoParam = dango:get_field("_Param")
-                            data[1][7][2].data.origData[dangoParam:get_field("_Id")] = {
-                                [1] = dangoParam:get_field("_UnlockFlag"),
-                                [2] = dangoParam:get_field("_DailyRate")
-                            }
-                            -- Set unlock Flag to Village_1 and Dailyrate to 0
-                            dangoParam:set_field("_UnlockFlag", 5)
-                            dangoParam:set_field("_DailyRate", 0)
+                        if not dangoList then
+                            return
+                        end
+
+                        if not data[1][7][2].data.origData then
+                            -- Get list of dangos
+
+                            log.debug("Creating backup of dango list")
+                            -- Create a backup of the unlock and daily rate
+                            data[1][7][2].data.origData = {}
+                            for i, dango in ipairs(dangoList) do
+                                local dangoParam = dango:get_field("_Param")
+                                data[1][7][2].data.origData[dangoParam:get_field("_Id")] = {
+                                    [1] = dangoParam:get_field("_UnlockFlag"),
+                                    [2] = dangoParam:get_field("_DailyRate")
+                                }
+                                -- Set unlock Flag to Village_1 and Dailyrate to 0
+                                dangoParam:set_field("_UnlockFlag", 5)
+                                dangoParam:set_field("_DailyRate", 0)
+                            end
                         end
                         -- Return the new list. By only changing the All Dango list and not the available it allows us to not have to save it
                         return dangoList
 
-                    -- If all dangos was just turned off
+                        -- If all dangos was just turned off
                     elseif not data[1][7][2].value and data[1][7][2].data.origData then
                         -- Get a list of all dangos
                         local dangoList = data[1][7][2].data.mealFunc:get_field("<DangoDataList>k__BackingField")
@@ -710,7 +725,7 @@ data[5] = {
 data[6] = {
     -- title = "Lance",
 }
--- Nothing Yet - Gunlance
+-- Gunlance
 data[7] = {
     title = "Gunlance",
     [1] = {
@@ -743,7 +758,7 @@ data[7] = {
             pre = function(args)
                 if data[7][2].value then
                     local managed = sdk.to_managed_object(args[2])
-                    managed:set_field("_ArialCount", 0)
+                    managed:set_field("_AerialCount", 0)
                 end
             end,
             post = nothing()
