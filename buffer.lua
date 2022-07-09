@@ -352,108 +352,115 @@ data[1] = {
                 }
             }
         },
-        [2] = {
-            title = "All Dangos Available",
-            type = "checkbox",
-            value = false,
-            -- Set to not save until I figure out how to avoid crash on startup when enabled
-            dontSave = true,
-            data = {
-                origData = nil,
-                mealFunc = nil
-            },
-            -- On checkbox change, refresh dango list
-            onChange = function()
-                if not data[1][7][2].data.mealFunc then
-                    local facilityDataManager = sdk.get_managed_singleton("snow.data.FacilityDataManager")
-                    if not facilityDataManager then
-                        return
-                    end
-                    local kitchen = facilityDataManager:get_field("_Kitchen")
-                    if not kitchen then
-                        return
-                    end
-                    local mealFunc = kitchen:get_field("_MealFunc")
-                    if not mealFunc then
-                        return
-                    end
-                    data[1][7][2].data.mealFunc = mealFunc
-                end
-                -- TODO: Why isn't this calling now?
-                data[1][7][2].data.mealFunc:call("get_AvailableDangoList", nil)
-            end,
-            hook = {
-                path = "snow.facility.kitchen.MealFunc",
-                func = "get_AvailableDangoList",
-                pre = function(args)
-                    return sdk.PreHookResult.SKIP_ORIGINAL
-                end,
-                post = function(args)
-                    if data[1][7][2].value then
-                        if not data[1][7][2].data.mealFunc then
-                            local facilityDataManager = sdk.get_managed_singleton("snow.data.FacilityDataManager")
-                            if not facilityDataManager then
-                                return
-                            end
-                            local kitchen = facilityDataManager:get_field("_Kitchen")
-                            if not kitchen then
-                                return
-                            end
-                            local mealFunc = kitchen:get_field("_MealFunc")
-                            if not mealFunc then
-                                return
-                            end
-                            data[1][7][2].data.mealFunc = mealFunc
-                        end
+        
+    -- All Dangos Available is currently disabled as it's crashing on some systems
+        -- [2] = {
+        --     title = "All Dangos Available",
+        --     type = "checkbox",
+        --     value = false,
+        --     data = {
+        --         origData = nil
+        --     },
+        --     -- On checkbox change, refresh dango list
+        --     onChange = function()
+        --         local facilityDataManager = sdk.get_managed_singleton("snow.data.FacilityDataManager")
+        --         if not facilityDataManager then
+        --             return
+        --         end
+        --         local kitchen = facilityDataManager:get_field("_Kitchen")
+        --         if not kitchen then
+        --             return
+        --         end
+        --         local mealFunc = kitchen:get_field("_MealFunc")
+        --         if not mealFunc then
+        --             return
+        --         end
+        --         -- TODO: Why isn't this calling now? It says it's calling but it's not.
+        --         log.debug("Calling refreshDangoList")
+        --         mealFunc:call("get_AvailableDangoList", nil)
+        --     end
+        --     -- hook = {
+        --     --     path = "snow.facility.kitchen.MealFunc",
+        --     --     func = "get_AvailableDangoList",
+        --     --     pre = function(args)
+        --     --         log.debug("Pre")
+        --     --     end,
+        --     --     post = function(retval)
+        --     --         log.debug("Post")
+        --     --         if data[1][7][2].value then
+        --     --             local facilityDataManager = sdk.get_managed_singleton("snow.data.FacilityDataManager")
+        --     --             if not facilityDataManager then
+        --     --                 return retval
+        --     --             end
+        --     --             local kitchen = facilityDataManager:get_field("_Kitchen")
+        --     --             if not kitchen then
+        --     --                 return retval
+        --     --             end
+        --     --             local mealFunc = kitchen:get_field("_MealFunc")
+        --     --             if not mealFunc then
+        --     --                 return retval
+        --     --             end
 
-                        if not data[1][7][2].data.mealFunc then
-                            return
-                        end
-                        
-                        local dangoList = data[1][7][2].data.mealFunc:get_field("<DangoDataList>k__BackingField")
-                            :get_field("mItems")
+        --     --             local dangoList = mealFunc:get_field("<DangoDataList>k__BackingField")
 
-                        if not dangoList then
-                            return
-                        end
+        --     --             if not dangoList then
+        --     --                 return retval
+        --     --             end
+        --     --             dangoList = dangoList:get_field("mItems")
 
-                        if not data[1][7][2].data.origData then
-                            -- Get list of dangos
+        --     --             if not data[1][7][2].data.origData then
+        --     --                 -- Get list of dangos
 
-                            log.debug("Creating backup of dango list")
-                            -- Create a backup of the unlock and daily rate
-                            data[1][7][2].data.origData = {}
-                            for i, dango in ipairs(dangoList) do
-                                local dangoParam = dango:get_field("_Param")
-                                data[1][7][2].data.origData[dangoParam:get_field("_Id")] = {
-                                    [1] = dangoParam:get_field("_UnlockFlag"),
-                                    [2] = dangoParam:get_field("_DailyRate")
-                                }
-                                -- Set unlock Flag to Village_1 and Dailyrate to 0
-                                dangoParam:set_field("_UnlockFlag", 5)
-                                dangoParam:set_field("_DailyRate", 0)
-                            end
-                        end
-                        -- Return the new list. By only changing the All Dango list and not the available it allows us to not have to save it
-                        return dangoList
+        --     --                 log.debug("Creating backup of dango list")
+        --     --                 -- Create a backup of the unlock and daily rate
+        --     --                 data[1][7][2].data.origData = {}
+        --     --                 for i, dango in ipairs(dangoList) do
+        --     --                     local dangoParam = dango:get_field("_Param")
+        --     --                     data[1][7][2].data.origData[dangoParam:get_field("_Id")] = {
+        --     --                         [1] = dangoParam:get_field("_UnlockFlag"),
+        --     --                         [2] = dangoParam:get_field("_DailyRate")
+        --     --                     }
+        --     --                     -- Set unlock Flag to Village_1 and Dailyrate to 0
+        --     --                     dangoParam:set_field("_UnlockFlag", 5)
+        --     --                     dangoParam:set_field("_DailyRate", 0)
+        --     --                 end
+        --     --             end
+        --     --             -- Return the new list. By only changing the All Dango list and not the available it allows us to not have to save it
+        --     --             log.debug("Returning new dango list")
+        --     --             return dangoList
 
-                        -- If all dangos was just turned off
-                    elseif not data[1][7][2].value and data[1][7][2].data.origData then
-                        -- Get a list of all dangos
-                        local dangoList = data[1][7][2].data.mealFunc:get_field("<DangoDataList>k__BackingField")
-                            :get_field("mItems")
-                        -- Reset the dango's unlock and daily from the backed up data
-                        for i, dango in ipairs(dangoList) do
-                            local dangoParam = dango:get_field("_Param")
-                            local dangoOrigParam = data[1][7][2].data.origData[dangoParam:get_field("_Id")]
-                            dangoParam:set_field("_UnlockFlag", dangoOrigParam[1])
-                            dangoParam:set_field("_DailyRate", dangoOrigParam[2])
-                        end
-                        data[1][7][2].data.origData = nil
-                    end
-                end
-            }
-        }
+        --     --             -- If all dangos was just turned off
+        --     --         elseif not data[1][7][2].value and data[1][7][2].data.origData then
+
+        --     --             local facilityDataManager = sdk.get_managed_singleton("snow.data.FacilityDataManager")
+        --     --             if not facilityDataManager then
+        --     --                 return retval
+        --     --             end
+        --     --             local kitchen = facilityDataManager:get_field("_Kitchen")
+        --     --             if not kitchen then
+        --     --                 return retval
+        --     --             end
+        --     --             local mealFunc = kitchen:get_field("_MealFunc")
+        --     --             if not mealFunc then
+        --     --                 return retval
+        --     --             end
+
+        --     --             -- Get a list of all dangos
+        --     --             local dangoList = mealFunc:get_field("<DangoDataList>k__BackingField")
+        --     --                 :get_field("mItems")
+        --     --             -- Reset the dango's unlock and daily from the backed up data
+        --     --             for i, dango in ipairs(dangoList) do
+        --     --                 local dangoParam = dango:get_field("_Param")
+        --     --                 local dangoOrigParam = data[1][7][2].data.origData[dangoParam:get_field("_Id")]
+        --     --                 dangoParam:set_field("_UnlockFlag", dangoOrigParam[1])
+        --     --                 dangoParam:set_field("_DailyRate", dangoOrigParam[2])
+        --     --             end
+        --     --             data[1][7][2].data.origData = nil
+        --     --         end
+        --     --         return retval
+        --     --     end
+        --     -- }
+        -- }
 
         -- [3] = {
         --     title = "Level 4 Dangos",
@@ -1397,13 +1404,14 @@ re.on_script_reset(function()
         playerData:set_field("_DefUpAlive", 0)
     end
 
-    if data[1][7][2].data.origData then
-        local dangoList = data[1][7][2].data.mealFunc:get_field("<DangoDataList>k__BackingField"):get_field("mItems")
-        for i, dango in ipairs(dangoList) do
-            local dangoParam = dango:get_field("_Param")
-            local dangoOrigParam = data[1][7][2].data.origData[dangoParam:get_field("_Id")]
-            dangoParam:set_field("_UnlockFlag", dangoOrigParam[1])
-            dangoParam:set_field("_DailyRate", dangoOrigParam[2])
-        end
-    end
+    -- All Dangos Available is currently disabled as it's crashing on some systems
+    -- if data[1][7][2].data.origData then
+    --     local dangoList = data[1][7][2].data.mealFunc:get_field("<DangoDataList>k__BackingField"):get_field("mItems")
+    --     for i, dango in ipairs(dangoList) do
+    --         local dangoParam = dango:get_field("_Param")
+    --         local dangoOrigParam = data[1][7][2].data.origData[dangoParam:get_field("_Id")]
+    --         dangoParam:set_field("_UnlockFlag", dangoOrigParam[1])
+    --         dangoParam:set_field("_DailyRate", dangoOrigParam[2])
+    --     end
+    -- end
 end)
