@@ -304,8 +304,8 @@ data[1] = {
                 post = function(retval)
                     -- Restore the original value
                     if (data[1][7][1].value or data[1][7][2].value) and data[1][7].data.managed then
-                        data[1][7].data.managed:get_field("_Param"):set_field("_SkillActiveRate",
-                                                                                 data[1][7].data.chance)
+                        data[1][7].data.managed:get_field("_Param")
+                            :set_field("_SkillActiveRate", data[1][7].data.chance)
                         data[1][7].data.managed = nil
                     end
                     return retval
@@ -422,8 +422,10 @@ data[2] = {
             path = "snow.player.GreatSword",
             func = "update",
             pre = function(args)
-                local managed = sdk.to_managed_object(args[2])
-                if data[2][1].value >= 0 then managed:set_field("_TameLv", data[2][1].value) end
+                if data[2][1].value >= 0 then
+                    local managed = sdk.to_managed_object(args[2])
+                    managed:set_field("_TameLv", data[2][1].value)
+                end
             end,
             post = nothing()
         }
@@ -457,8 +459,10 @@ data[3] = {
             path = "snow.player.LongSword",
             func = "update",
             pre = function(args)
-                local managed = sdk.to_managed_object(args[2])
-                if data[3][1].value then managed:set_field("_LongSwordGauge", 100) end
+                if data[3][1].value then
+                    local managed = sdk.to_managed_object(args[2])
+                    managed:set_field("_LongSwordGauge", 100)
+                end
             end,
             post = nothing()
         }
@@ -473,8 +477,10 @@ data[3] = {
             path = "snow.player.LongSword",
             func = "update",
             pre = function(args)
-                local managed = sdk.to_managed_object(args[2])
-                if data[3][2].value >= 0 then managed:set_field("_LongSwordGaugeLv", data[3][2].value) end
+                if data[3][2].value >= 0 then
+                    local managed = sdk.to_managed_object(args[2])
+                    managed:set_field("_LongSwordGaugeLv", data[3][2].value)
+                end
             end,
             post = nothing()
         }
@@ -578,8 +584,8 @@ data[8] = {
             path = "snow.player.Hammer",
             func = "update",
             pre = function(args)
-                local managed = sdk.to_managed_object(args[2])
                 if data[8][1].value >= 0 then
+                    local managed = sdk.to_managed_object(args[2])
                     managed:set_field("<NowChargeLevel>k__BackingField", data[8][1].value)
                 end
             end,
@@ -598,8 +604,10 @@ data[9] = {
             path = "snow.player.Horn",
             func = "update",
             pre = function(args)
-                local managed = sdk.to_managed_object(args[2])
-                if data[9][1].value then managed:set_field("<RevoltGuage>k__BackingField", 100) end
+                if data[9][1].value then
+                    local managed = sdk.to_managed_object(args[2])
+                    managed:set_field("<RevoltGuage>k__BackingField", 100)
+                end
             end,
             post = nothing()
         }
@@ -617,8 +625,10 @@ data[10] = {
             path = "snow.player.SlashAxe",
             func = "update",
             pre = function(args)
-                local managed = sdk.to_managed_object(args[2])
-                if data[10][1].value then managed:set_field("_BottleGauge", 100) end
+                if data[10][1].value then
+                    local managed = sdk.to_managed_object(args[2])
+                    managed:set_field("_BottleGauge", 100)
+                end
             end,
             post = nothing()
         }
@@ -631,8 +641,10 @@ data[10] = {
             path = "snow.player.SlashAxe",
             func = "update",
             pre = function(args)
-                local managed = sdk.to_managed_object(args[2])
-                if data[10][2].value then managed:set_field("_BottleAwakeGauge", 150) end
+                if data[10][2].value then
+                    local managed = sdk.to_managed_object(args[2])
+                    managed:set_field("_BottleAwakeGauge", 150)
+                end
             end,
             post = nothing()
         }
@@ -650,8 +662,8 @@ data[11] = {
             path = "snow.player.ChargeAxe",
             func = "update",
             pre = function(args)
-                local managed = sdk.to_managed_object(args[2])
                 if data[11][1].value then
+                    local managed = sdk.to_managed_object(args[2])
                     managed:set_field("<ChargedBottleNum>k__BackingField", 5)
                     managed:set_field("_ChargeGauge", 50)
                 end
@@ -667,8 +679,10 @@ data[11] = {
             path = "snow.player.ChargeAxe",
             func = "update",
             pre = function(args)
-                local managed = sdk.to_managed_object(args[2])
-                if data[11][2].value then managed:set_field("_SwordBuffTimer", 500) end
+                if data[11][2].value then
+                    local managed = sdk.to_managed_object(args[2])
+                    managed:set_field("_SwordBuffTimer", 500)
+                end
             end,
             post = nothing()
         }
@@ -681,8 +695,10 @@ data[11] = {
             path = "snow.player.ChargeAxe",
             func = "update",
             pre = function(args)
-                local managed = sdk.to_managed_object(args[2])
-                if data[11][3].value then managed:set_field("_ShieldBuffTimer", 1000) end
+                if data[11][3].value then
+                    local managed = sdk.to_managed_object(args[2])
+                    managed:set_field("_ShieldBuffTimer", 1000)
+                end
             end,
             post = nothing()
         }
@@ -700,8 +716,10 @@ data[12] = {
             path = "snow.player.InsectGlaive",
             func = "update",
             pre = function(args)
-                local managed = sdk.to_managed_object(args[2])
-                if data[12][1].value then managed:set_field("_RedExtractiveTime", 8000) end
+                if data[12][1].value then
+                    local managed = sdk.to_managed_object(args[2])
+                    managed:set_field("_RedExtractiveTime", 8000)
+                end
             end,
             post = nothing()
         }
@@ -714,8 +732,10 @@ data[12] = {
             path = "snow.player.InsectGlaive",
             func = "update",
             pre = function(args)
-                local managed = sdk.to_managed_object(args[2])
-                if data[12][2].value then managed:set_field("_WhiteExtractiveTime", 8000) end
+                if data[12][2].value then
+                    local managed = sdk.to_managed_object(args[2])
+                    managed:set_field("_WhiteExtractiveTime", 8000)
+                end
             end,
             post = nothing()
         }
@@ -728,8 +748,10 @@ data[12] = {
             path = "snow.player.InsectGlaive",
             func = "update",
             pre = function(args)
-                local managed = sdk.to_managed_object(args[2])
-                if data[12][3].value then managed:set_field("_OrangeExtractiveTime", 8000) end
+                if data[12][3].value then
+                    local managed = sdk.to_managed_object(args[2])
+                    managed:set_field("_OrangeExtractiveTime", 8000)
+                end
             end,
             post = nothing()
         }
@@ -742,8 +764,10 @@ data[12] = {
             path = "snow.player.InsectGlaive",
             func = "update",
             pre = function(args)
-                local managed = sdk.to_managed_object(args[2])
-                if data[12][4].value then managed:set_field("_AerialCount", 2) end
+                if data[12][4].value then
+                    local managed = sdk.to_managed_object(args[2])
+                    managed:set_field("_AerialCount", 2)
+                end
             end,
             post = nothing()
         }
@@ -756,8 +780,10 @@ data[12] = {
             path = "snow.player.IG_Insect",
             func = "update",
             pre = function(args)
-                local managed = sdk.to_managed_object(args[2])
-                if data[12][5].value then managed:set_field("<_Stamina>k__BackingField", 100) end
+                if data[12][5].value then
+                    local managed = sdk.to_managed_object(args[2])
+                    managed:set_field("<_Stamina>k__BackingField", 100)
+                end
             end,
             post = nothing()
         }
@@ -786,8 +812,11 @@ data[13] = {
             path = "snow.player.LightBowgun",
             func = "update",
             pre = function(args)
-                local managed = sdk.to_managed_object(args[2])
-                if data[14][3].value == true then managed:call("resetBulletNum") end
+                if data[14][3].value == true then
+
+                    local managed = sdk.to_managed_object(args[2])
+                    managed:call("resetBulletNum")
+                end
             end,
             post = nothing()
         },
@@ -830,8 +859,8 @@ data[14] = {
             path = "snow.player.HeavyBowgun",
             func = "update",
             pre = function(args)
-                local managed = sdk.to_managed_object(args[2])
                 if data[14][1].value >= 0 then
+                    local managed = sdk.to_managed_object(args[2])
                     managed:set_field("_ShotChargeLv", data[14][1].value)
                     managed:set_field("_ShotChargeFrame", 30 * data[14][1].value)
                 end
@@ -859,8 +888,11 @@ data[14] = {
             path = "snow.player.HeavyBowgun",
             func = "update",
             pre = function(args)
-                local managed = sdk.to_managed_object(args[2])
-                if data[14][3].value == true then managed:call("resetBulletNum") end
+                if data[14][3].value == true then
+
+                    local managed = sdk.to_managed_object(args[2])
+                    managed:call("resetBulletNum")
+                end
             end,
             post = nothing()
         },
@@ -950,7 +982,7 @@ data[15] = {
         }
     },
     [2] = {
-        title = "Wirebug Buff",
+        title = "Herculean Draw",
         type = "checkbox",
         value = false,
         hook = {
