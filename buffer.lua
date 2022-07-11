@@ -1,11 +1,14 @@
 local configPath = "Buffer.json"
 local playerBase, playerData
+local kitchenFacility, mealFunc
 local data = {}
 
+-- Do nothing
 local function nothing(retval)
     return retval
 end
 
+-- Get Player Base
 local function getPlayerBase()
     if not playerBase or playerData then
         local playerManager = sdk.get_managed_singleton("snow.player.PlayerManager")
@@ -13,15 +16,35 @@ local function getPlayerBase()
     end
     return playerBase
 end
+
+-- Get Player Data from Player Base
 local function getPlayerData()
     if not playerData then
         local playerBase = getPlayerBase()
-        if not playerBase then
-            return
-        end
+        if not playerBase then return end
         playerData = playerBase:call("get_PlayerData")
     end
     return playerData
+end
+
+-- Get kitchen Facility
+local function getKitchenFacility()
+    if not kitchenFacility then
+        local facilityDataManager = sdk.get_managed_singleton("snow.data.FacilityDataManager")
+        if not facilityDataManager then return end
+        kitchenFacility = facilityDataManager:get_field("_Kitchen")
+    end
+    return kitchenFacility
+end
+
+-- Get MealFunct from Kitchen Facility
+local function getMealFunc()
+    if not mealFunc then
+        local kitchenFacility = getKitchenFacility()
+        if not kitchenFacility then return end
+        mealFunc = kitchenFacility:get_field("_MealFunc")
+    end
+    return mealFunc
 end
 
 -- Load the config
@@ -42,11 +65,7 @@ local function setConfig(key, value, table)
         end
     else
         -- log.debug("Checking for "..key)
-        for k, v in pairs(table) do
-            if v.title == key then
-                table[k].value = value
-            end
-        end
+        for k, v in pairs(table) do if v.title == key then table[k].value = value end end
     end
 
 end
@@ -54,9 +73,7 @@ local function loadConfig()
     if json ~= nil then
         local settings = json.load_file(configPath)
         if settings then
-            for settingsKey, settingsValue in pairs(settings) do
-                setConfig(settingsKey, settingsValue)
-            end
+            for settingsKey, settingsValue in pairs(settings) do setConfig(settingsKey, settingsValue) end
         end
     end
 end
@@ -98,9 +115,7 @@ data[1] = {
                 path = "snow.data.bulletSlider.BottleSliderFunc",
                 func = "consumeItem",
                 pre = function(args)
-                    if data[1][1][1].value then
-                        return sdk.PreHookResult.SKIP_ORIGINAL
-                    end
+                    if data[1][1][1].value then return sdk.PreHookResult.SKIP_ORIGINAL end
                 end,
                 post = nothing()
             },
@@ -116,9 +131,7 @@ data[1] = {
                 path = "snow.data.bulletSlider.BulletSliderFunc",
                 func = "consumeItem",
                 pre = function(args)
-                    if data[1][1][2].value then
-                        return sdk.PreHookResult.SKIP_ORIGINAL
-                    end
+                    if data[1][1][2].value then return sdk.PreHookResult.SKIP_ORIGINAL end
                 end,
                 post = nothing()
             },
@@ -147,9 +160,7 @@ data[1] = {
             path = "snow.data.ItemSlider",
             func = "notifyConsumeItem",
             pre = function(args)
-                if data[1][2].value then
-                    return sdk.PreHookResult.SKIP_ORIGINAL
-                end
+                if data[1][2].value then return sdk.PreHookResult.SKIP_ORIGINAL end
             end,
             post = nothing()
         }
@@ -165,9 +176,7 @@ data[1] = {
             post = function(args)
                 if data[1][3].value then
                     local playerBase = getPlayerBase()
-                    if not playerBase then
-                        return
-                    end
+                    if not playerBase then return end
                     -- 0=Red | 1=Orange | 2=Yellow | 3=Green | 4=Blue | 5=White | 6=Purple
                     playerBase:set_field("<SharpnessLv>k__BackingField", 6) -- Sharpness Level of Purple
                     -- playerBase:set_field("<SharpnessGauge>k__BackingField", 400) -- Sharpness Value
@@ -187,13 +196,9 @@ data[1] = {
             post = function(retval)
                 if data[1][4].value then
                     local playerBase = getPlayerBase()
-                    if not playerBase then
-                        return
-                    end
+                    if not playerBase then return end
                     local wireGuages = playerBase:get_field("_HunterWireGauge")
-                    if not wireGuages then
-                        return
-                    end
+                    if not wireGuages then return end
                     wireGuages = wireGuages:get_elements()
                     for i, gauge in ipairs(wireGuages) do
                         gauge:set_field("_RecastTimer", 0)
@@ -214,9 +219,7 @@ data[1] = {
             pre = function()
                 if data[1][5].value then
                     local playerData = getPlayerData()
-                    if not playerData then
-                        return
-                    end
+                    if not playerData then return end
                     local maxStamina = playerData:get_field("_staminaMax")
                     playerData:set_field("_stamina", maxStamina)
                 end
@@ -236,9 +239,7 @@ data[1] = {
                 pre = function(args)
                     if data[1][6][1].value then
                         local playerData = getPlayerData()
-                        if not playerData then
-                            return
-                        end
+                        if not playerData then return end
                         local max = playerData:get_field("_vitalMax")
 
                         playerData:set_field("_r_Vital", max)
@@ -258,9 +259,7 @@ data[1] = {
                     if data[1][6][2].value then
 
                         local playerData = getPlayerData()
-                        if not playerData then
-                            return
-                        end
+                        if not playerData then return end
                         local max = playerData:get_field("_vitalMax")
                         local maxFloat = max + .0
 
@@ -273,221 +272,51 @@ data[1] = {
         }
     },
     [7] = {
-        title = "Kitchen Modifiations",
+        title = "100% Dango Skills",
+        data = {
+            managed = nil,
+            chance = 0
+        },
         [1] = {
-            title = "100% Dango Skills",
-            [1] = {
-                title = "With Ticket",
-                type = "checkbox",
-                value = false,
-                data = {
-                    managed = nil,
-                    chance = 0
-                },
-                hook = {
-                    path = "snow.data.DangoData",
-                    func = "get_SkillActiveRate",
-                    pre = function(args)
-                        if data[1][7][1][1].value then
-                            local managed = sdk.to_managed_object(args[2])
-                            local facilityDataManager = sdk.get_managed_singleton("snow.data.FacilityDataManager")
-                            if not facilityDataManager then
-                                return
-                            end
-                            local kitchen = facilityDataManager:get_field("_Kitchen")
-                            if not kitchen then
-                                return
-                            end
-                            local mealFunc = kitchen:get_field("_MealFunc")
-                            if not mealFunc then
-                                return
-                            end
-                            local isUsingTicket = mealFunc:call("getMealTicketFlag")
-
-                            if isUsingTicket then
-                                data[1][7][1][1].data.managed = managed
-                                data[1][7][1][1].data.chance = managed:get_field("_Param"):get_field("_SkillActiveRate")
-                                managed:get_field("_Param"):set_field("_SkillActiveRate", 100)
-                            end
+            title = "With Ticket",
+            type = "checkbox",
+            value = false,
+            hook = {
+                path = "snow.data.DangoData",
+                func = "get_SkillActiveRate",
+                pre = function(args)
+                    if data[1][7][1][1].value or data[1][7][1][2].value then
+                        local managed = sdk.to_managed_object(args[2])
+                        if not managed then return end
+                        if not managed:get_type_definition():is_a("snow.data.DangoData") then
+                            return
                         end
-                    end,
-                    post = function(retval)
-                        -- Restore the original value
-                        if data[1][7][1][1].value and data[1][7][2][1].data.managed then
-                            data[1][7][1][1].data.managed:get_field("_Param"):set_field("_SkillActiveRate",
-                                data[1][7][1][1].data.chance)
-                        end
-                        return retval
-                    end
-                }
-            },
-            [2] = {
-                title = "Without Ticket (Cheater)",
-                type = "checkbox",
-                value = false,
-                data = {
-                    managed = nil,
-                    chance = 0
-                },
-                hook = {
-                    path = "snow.data.DangoData",
-                    func = "get_SkillActiveRate",
-                    pre = function(args)
-                        if data[1][7][1][2].value then
-                            local managed = sdk.to_managed_object(args[2])
 
-                            data[1][7][1][2].data.managed = managed
-                            data[1][7][1][2].data.chance = managed:get_field("_Param"):get_field("_SkillActiveRate")
+                        local isUsingTicket = getMealFunc():call("getMealTicketFlag")
+
+                        if isUsingTicket or data[1][7][1][2].value then
+                            data[1][7][1].data.managed = managed
+                            data[1][7][1].data.chance = managed:get_field("_Param"):get_field("_SkillActiveRate")
                             managed:get_field("_Param"):set_field("_SkillActiveRate", 100)
                         end
-                    end,
-                    post = function(retval)
-                        -- Restore the original value
-                        if data[1][7][1][2].value and data[1][7][2].data.managed then
-                            data[1][7][1][2].data.managed:get_field("_Param"):set_field("_SkillActiveRate",
-                                data[1][7][1][2].data.chance)
-                        end
-                        return retval
                     end
-                }
+                end,
+                post = function(retval)
+                    -- Restore the original value
+                    if (data[1][7][1][1].value or data[1][7][1][2].value) and data[1][7][1].data.managed then
+                        data[1][7][1].data.managed:get_field("_Param"):set_field("_SkillActiveRate",
+                                                                                 data[1][7][1].data.chance)
+                        data[1][7][1].data.managed = nil
+                    end
+                    return retval
+                end
             }
         },
-        
-    -- All Dangos Available is currently disabled as it's crashing on some systems
-        -- [2] = {
-        --     title = "All Dangos Available",
-        --     type = "checkbox",
-        --     value = false,
-        --     data = {
-        --         origData = nil
-        --     },
-        --     -- On checkbox change, refresh dango list
-        --     onChange = function()
-        --         local facilityDataManager = sdk.get_managed_singleton("snow.data.FacilityDataManager")
-        --         if not facilityDataManager then
-        --             return
-        --         end
-        --         local kitchen = facilityDataManager:get_field("_Kitchen")
-        --         if not kitchen then
-        --             return
-        --         end
-        --         local mealFunc = kitchen:get_field("_MealFunc")
-        --         if not mealFunc then
-        --             return
-        --         end
-        --         -- TODO: Why isn't this calling now? It says it's calling but it's not.
-        --         log.debug("Calling refreshDangoList")
-        --         mealFunc:call("get_AvailableDangoList", nil)
-        --     end
-        --     -- hook = {
-        --     --     path = "snow.facility.kitchen.MealFunc",
-        --     --     func = "get_AvailableDangoList",
-        --     --     pre = function(args)
-        --     --         log.debug("Pre")
-        --     --     end,
-        --     --     post = function(retval)
-        --     --         log.debug("Post")
-        --     --         if data[1][7][2].value then
-        --     --             local facilityDataManager = sdk.get_managed_singleton("snow.data.FacilityDataManager")
-        --     --             if not facilityDataManager then
-        --     --                 return retval
-        --     --             end
-        --     --             local kitchen = facilityDataManager:get_field("_Kitchen")
-        --     --             if not kitchen then
-        --     --                 return retval
-        --     --             end
-        --     --             local mealFunc = kitchen:get_field("_MealFunc")
-        --     --             if not mealFunc then
-        --     --                 return retval
-        --     --             end
-
-        --     --             local dangoList = mealFunc:get_field("<DangoDataList>k__BackingField")
-
-        --     --             if not dangoList then
-        --     --                 return retval
-        --     --             end
-        --     --             dangoList = dangoList:get_field("mItems")
-
-        --     --             if not data[1][7][2].data.origData then
-        --     --                 -- Get list of dangos
-
-        --     --                 log.debug("Creating backup of dango list")
-        --     --                 -- Create a backup of the unlock and daily rate
-        --     --                 data[1][7][2].data.origData = {}
-        --     --                 for i, dango in ipairs(dangoList) do
-        --     --                     local dangoParam = dango:get_field("_Param")
-        --     --                     data[1][7][2].data.origData[dangoParam:get_field("_Id")] = {
-        --     --                         [1] = dangoParam:get_field("_UnlockFlag"),
-        --     --                         [2] = dangoParam:get_field("_DailyRate")
-        --     --                     }
-        --     --                     -- Set unlock Flag to Village_1 and Dailyrate to 0
-        --     --                     dangoParam:set_field("_UnlockFlag", 5)
-        --     --                     dangoParam:set_field("_DailyRate", 0)
-        --     --                 end
-        --     --             end
-        --     --             -- Return the new list. By only changing the All Dango list and not the available it allows us to not have to save it
-        --     --             log.debug("Returning new dango list")
-        --     --             return dangoList
-
-        --     --             -- If all dangos was just turned off
-        --     --         elseif not data[1][7][2].value and data[1][7][2].data.origData then
-
-        --     --             local facilityDataManager = sdk.get_managed_singleton("snow.data.FacilityDataManager")
-        --     --             if not facilityDataManager then
-        --     --                 return retval
-        --     --             end
-        --     --             local kitchen = facilityDataManager:get_field("_Kitchen")
-        --     --             if not kitchen then
-        --     --                 return retval
-        --     --             end
-        --     --             local mealFunc = kitchen:get_field("_MealFunc")
-        --     --             if not mealFunc then
-        --     --                 return retval
-        --     --             end
-
-        --     --             -- Get a list of all dangos
-        --     --             local dangoList = mealFunc:get_field("<DangoDataList>k__BackingField")
-        --     --                 :get_field("mItems")
-        --     --             -- Reset the dango's unlock and daily from the backed up data
-        --     --             for i, dango in ipairs(dangoList) do
-        --     --                 local dangoParam = dango:get_field("_Param")
-        --     --                 local dangoOrigParam = data[1][7][2].data.origData[dangoParam:get_field("_Id")]
-        --     --                 dangoParam:set_field("_UnlockFlag", dangoOrigParam[1])
-        --     --                 dangoParam:set_field("_DailyRate", dangoOrigParam[2])
-        --     --             end
-        --     --             data[1][7][2].data.origData = nil
-        --     --         end
-        --     --         return retval
-        --     --     end
-        --     -- }
-        -- }
-
-        -- [3] = {
-        --     title = "Level 4 Dangos",
-        --     type = "checkbox",
-        --     value = false,
-        --     hook = {
-        --             path = "snow.data.DangoData",
-        --             func = "get_SkillActiveRate",
-        --         pre = function(args)
-        --             local managed = sdk.to_managed_object(args[2])
-        --             local facilityDataManager = sdk.get_managed_singleton("snow.data.FacilityDataManager")
-        --             if not facilityDataManager then
-        --                 return
-        --             end
-        --             local kitchen = facilityDataManager:get_field("_Kitchen")
-        --             if not kitchen then
-        --                 return
-        --             end
-        --             local mealFunc = kitchen:get_field("_MealFunc")
-        --             if not mealFunc then
-        --                 return
-        --             end
-        --             mealFunc:set_field("NormalSkewerDangoLv", 4) -- Static field; only thing I've been able to find regarding dango levels
-        --         end,
-        --         post = nothing()
-        --     }
-        -- }
+        [2] = {
+            title = "Without Ticket (Cheater)",
+            type = "checkbox",
+            value = false
+        }
     },
     [8] = {
         title = "Stat Modifiers (Cheater)",
@@ -502,57 +331,14 @@ data[1] = {
             data = {
                 value = 0
             },
-
-            -- This code doesn't work, but I'm leaving it here just incase. The Attack seems to randomly jump around
-            -- hook ={
-            --     path = "snow.player.PlayerBase",
-            --     func = "calcTotalAttack",
-            --     pre = function(args)
-            --         if data[1][8][1].value >= 0 then
-            --             local playerData = getPlayerData()
-            --             if not playerData then
-            --                 return
-            --             end
-            --             local attack = playerData:get_field("_Attack")
-
-            --             log.debug("Attack: " .. attack)
-            --             local attackTarget = data[1][8][1].value
-            --             log.debug("Attack Target: " .. attackTarget)
-            --             local attackMod = attackTarget - attack
-            --             log.debug("Attack Mod: " .. attackMod)
-
-            --             -- Add the extra attack, keeping track of what the buff was before
-            --             data[1][8][1].data.value = playerData:get_field("_AtkUpAlive")
-            --             log.debug("Saving Old _AtkUpAlive: " .. data[1][8][1].data.value)
-            --             playerData:set_field("_AtkUpAlive", attackMod)
-            --             log.debug("Setting _AtkUpAlive: " .. playerData:get_field("_AtkUpAlive"))
-            --         end
-            --     end,
-            --     post = function(retval)
-            --         local playerData = getPlayerData()
-            --         if not playerData then
-            --             return
-            --         end
-            --         -- playerData:set_field("_AtkUpAlive", 0)
-            --         if data[1][8][1].value >= 0 then
-            --             log.debug("Resetting _AtkUpAlive to ".. data[1][8][1].data.value)
-            --             playerData:set_field("_AtkUpAlive", data[1][8][1].data.value)
-            --             log.debug("Reset _AtkUpAlive")
-            --         end
-            --         return retval
-            --     end
-            -- }
-
-            -- This probably isn't the best way, but it's a way I found without causing nay crashes
+            -- This way it only affects if YOU are the host
             hook = {
                 path = "snow.player.PlayerManager",
                 func = "update",
                 pre = function(args)
 
                     local playerData = getPlayerData()
-                    if not playerData then
-                        return
-                    end
+                    if not playerData then return end
 
                     if data[1][8][1].value >= 0 then
                         -- Set the original attack value
@@ -588,16 +374,14 @@ data[1] = {
             data = {
                 value = 0
             },
-            -- This probably isn't the best way, but it's a way I found
+            -- This way it only affects if YOU are the host
             hook = {
                 path = "snow.player.PlayerManager",
                 func = "update",
                 pre = function(args)
 
                     local playerData = getPlayerData()
-                    if not playerData then
-                        return
-                    end
+                    if not playerData then return end
 
                     if data[1][8][2].value >= 0 then
                         -- Set the original defence value
@@ -639,9 +423,7 @@ data[2] = {
             func = "update",
             pre = function(args)
                 local managed = sdk.to_managed_object(args[2])
-                if data[2][1].value >= 0 then
-                    managed:set_field("_TameLv", data[2][1].value)
-                end
+                if data[2][1].value >= 0 then managed:set_field("_TameLv", data[2][1].value) end
             end,
             post = nothing()
         }
@@ -676,9 +458,7 @@ data[3] = {
             func = "update",
             pre = function(args)
                 local managed = sdk.to_managed_object(args[2])
-                if data[3][1].value then
-                    managed:set_field("_LongSwordGauge", 100)
-                end
+                if data[3][1].value then managed:set_field("_LongSwordGauge", 100) end
             end,
             post = nothing()
         }
@@ -694,9 +474,7 @@ data[3] = {
             func = "update",
             pre = function(args)
                 local managed = sdk.to_managed_object(args[2])
-                if data[3][2].value >= 0 then
-                    managed:set_field("_LongSwordGaugeLv", data[3][2].value)
-                end
+                if data[3][2].value >= 0 then managed:set_field("_LongSwordGaugeLv", data[3][2].value) end
             end,
             post = nothing()
         }
@@ -746,9 +524,7 @@ data[7] = {
                 if data[7][1].value then
 
                     local playerData = getPlayerData()
-                    if not playerData then
-                        return
-                    end
+                    if not playerData then return end
                     playerData:set_field("_ChargeDragonSlayCannonTime", 0)
                 end
             end,
@@ -823,9 +599,7 @@ data[9] = {
             func = "update",
             pre = function(args)
                 local managed = sdk.to_managed_object(args[2])
-                if data[9][1].value then
-                    managed:set_field("<RevoltGuage>k__BackingField", 100)
-                end
+                if data[9][1].value then managed:set_field("<RevoltGuage>k__BackingField", 100) end
             end,
             post = nothing()
         }
@@ -844,9 +618,7 @@ data[10] = {
             func = "update",
             pre = function(args)
                 local managed = sdk.to_managed_object(args[2])
-                if data[10][1].value then
-                    managed:set_field("_BottleGauge", 100)
-                end
+                if data[10][1].value then managed:set_field("_BottleGauge", 100) end
             end,
             post = nothing()
         }
@@ -860,9 +632,7 @@ data[10] = {
             func = "update",
             pre = function(args)
                 local managed = sdk.to_managed_object(args[2])
-                if data[10][2].value then
-                    managed:set_field("_BottleAwakeGauge", 150)
-                end
+                if data[10][2].value then managed:set_field("_BottleAwakeGauge", 150) end
             end,
             post = nothing()
         }
@@ -898,9 +668,7 @@ data[11] = {
             func = "update",
             pre = function(args)
                 local managed = sdk.to_managed_object(args[2])
-                if data[11][2].value then
-                    managed:set_field("_SwordBuffTimer", 500)
-                end
+                if data[11][2].value then managed:set_field("_SwordBuffTimer", 500) end
             end,
             post = nothing()
         }
@@ -914,9 +682,7 @@ data[11] = {
             func = "update",
             pre = function(args)
                 local managed = sdk.to_managed_object(args[2])
-                if data[11][3].value then
-                    managed:set_field("_ShieldBuffTimer", 1000)
-                end
+                if data[11][3].value then managed:set_field("_ShieldBuffTimer", 1000) end
             end,
             post = nothing()
         }
@@ -935,9 +701,7 @@ data[12] = {
             func = "update",
             pre = function(args)
                 local managed = sdk.to_managed_object(args[2])
-                if data[12][1].value then
-                    managed:set_field("_RedExtractiveTime", 8000)
-                end
+                if data[12][1].value then managed:set_field("_RedExtractiveTime", 8000) end
             end,
             post = nothing()
         }
@@ -951,9 +715,7 @@ data[12] = {
             func = "update",
             pre = function(args)
                 local managed = sdk.to_managed_object(args[2])
-                if data[12][2].value then
-                    managed:set_field("_WhiteExtractiveTime", 8000)
-                end
+                if data[12][2].value then managed:set_field("_WhiteExtractiveTime", 8000) end
             end,
             post = nothing()
         }
@@ -967,9 +729,7 @@ data[12] = {
             func = "update",
             pre = function(args)
                 local managed = sdk.to_managed_object(args[2])
-                if data[12][3].value then
-                    managed:set_field("_OrangeExtractiveTime", 8000)
-                end
+                if data[12][3].value then managed:set_field("_OrangeExtractiveTime", 8000) end
             end,
             post = nothing()
         }
@@ -983,9 +743,7 @@ data[12] = {
             func = "update",
             pre = function(args)
                 local managed = sdk.to_managed_object(args[2])
-                if data[12][4].value then
-                    managed:set_field("_AerialCount", 2)
-                end
+                if data[12][4].value then managed:set_field("_AerialCount", 2) end
             end,
             post = nothing()
         }
@@ -999,9 +757,7 @@ data[12] = {
             func = "update",
             pre = function(args)
                 local managed = sdk.to_managed_object(args[2])
-                if data[12][5].value then
-                    managed:set_field("<_Stamina>k__BackingField", 100)
-                end
+                if data[12][5].value then managed:set_field("<_Stamina>k__BackingField", 100) end
             end,
             post = nothing()
         }
@@ -1031,9 +787,7 @@ data[13] = {
             func = "update",
             pre = function(args)
                 local managed = sdk.to_managed_object(args[2])
-                if data[14][3].value == true then
-                    managed:call("resetBulletNum")
-                end
+                if data[14][3].value == true then managed:call("resetBulletNum") end
             end,
             post = nothing()
         },
@@ -1054,9 +808,7 @@ data[13] = {
                 if data[13][3].value then
 
                     local playerData = getPlayerData()
-                    if not playerData then
-                        return
-                    end
+                    if not playerData then return end
                     playerData:set_field("_WyvernBlastGauge", 3)
                     playerData:set_field("_WyvernBlastReloadTimer", 0)
                 end
@@ -1108,9 +860,7 @@ data[14] = {
             func = "update",
             pre = function(args)
                 local managed = sdk.to_managed_object(args[2])
-                if data[14][3].value == true then
-                    managed:call("resetBulletNum")
-                end
+                if data[14][3].value == true then managed:call("resetBulletNum") end
             end,
             post = nothing()
         },
@@ -1131,9 +881,7 @@ data[14] = {
                 if data[14][4].value then
 
                     local playerData = getPlayerData()
-                    if not playerData then
-                        return
-                    end
+                    if not playerData then return end
                     playerData:set_field("_HeavyBowgunWyvernSnipeBullet", 1)
                     playerData:set_field("_HeavyBowgunWyvernSnipeTimer", 0)
                 end
@@ -1152,9 +900,7 @@ data[14] = {
                 if data[14][5].value then
 
                     local playerData = getPlayerData()
-                    if not playerData then
-                        return
-                    end
+                    if not playerData then return end
                     playerData:set_field("_HeavyBowgunWyvernMachineGunBullet", 50)
                     playerData:set_field("_HeavyBowgunWyvernMachineGunTimer", 0)
                 end
@@ -1173,9 +919,7 @@ data[14] = {
                 if data[14][6].value then
 
                     local playerData = getPlayerData()
-                    if not playerData then
-                        return
-                    end
+                    if not playerData then return end
                     playerData:set_field("_HeavyBowgunHeatGauge", 0)
                 end
             end,
@@ -1241,9 +985,7 @@ local function getLength(obj)
     local count = 0
 
     -- Count the items in the table
-    for _ in pairs(obj) do
-        count = count + 1
-    end
+    for _ in pairs(obj) do count = count + 1 end
     return count
 end
 
@@ -1312,9 +1054,7 @@ local function drawMenu(table)
                 elseif obj.type == "slider" then
                     local sliderValue = "Off"
                     -- Add a Lvl prefix to the slider's value
-                    if (obj.value >= 0) then
-                        sliderValue = "Lvl " .. obj.value
-                    end
+                    if (obj.value >= 0) then sliderValue = "Lvl " .. obj.value end
                     -- To allow for steps we need to set these and divide them by the steps
                     local sliderMax = obj.max
                     local sliderVal = obj.value
@@ -1329,18 +1069,14 @@ local function drawMenu(table)
                     end
                     changed, steppedVal = imgui.slider_int(obj.title, sliderVal, obj.min, sliderMax, sliderValue)
                     -- If there is a step and the slider isn't off, then multiply the stepped value by the step to get the real total
-                    if obj.step and obj.value > -1 then
-                        steppedVal = steppedVal * obj.step
-                    end
+                    if obj.step and obj.value > -1 then steppedVal = steppedVal * obj.step end
                     -- Update the table's value with the new value
                     obj.value = steppedVal
 
                     -- If the table has a type of drag, not yet used for anything
                 elseif obj.type == "drag" then
                     local dragValue = "Off"
-                    if (obj.value >= 0) then
-                        dragValue = obj.value
-                    end
+                    if (obj.value >= 0) then dragValue = obj.value end
                     changed, obj.value = imgui.drag_int(obj.title, obj.value, obj.speed, obj.min, obj.max, dragValue)
                     -- If the table has a type of text, draw the text
                 elseif obj.type == "text" then
@@ -1348,14 +1084,10 @@ local function drawMenu(table)
                 end
 
                 -- If anything changed, save the config
-                if changed then
-                    saveConfig()
-                end
+                if changed then saveConfig() end
 
                 -- If anything changed, and the table has a onChange function, call it
-                if changed and obj.onChange then
-                    obj.onChange()
-                end
+                if changed and obj.onChange then obj.onChange() end
 
                 -- If the table doesn't have a value and isn't text, go deeper and see if the next level table has to be drawn
             elseif imgui.tree_node(obj.title) then
@@ -1389,29 +1121,15 @@ re.on_script_reset(function()
     -- Until I find a better way of increase attack, I have to reset this on script reset
     if data[1][8][1].value >= 0 then
         local playerData = getPlayerData()
-        if not playerData then
-            return
-        end
+        if not playerData then return end
         playerData:set_field("_AtkUpAlive", 0)
     end
 
     -- Until I find a better way of increase defence, I have to reset this on script reset
     if data[1][8][2].value >= 0 then
         local playerData = getPlayerData()
-        if not playerData then
-            return
-        end
+        if not playerData then return end
         playerData:set_field("_DefUpAlive", 0)
     end
 
-    -- All Dangos Available is currently disabled as it's crashing on some systems
-    -- if data[1][7][2].data.origData then
-    --     local dangoList = data[1][7][2].data.mealFunc:get_field("<DangoDataList>k__BackingField"):get_field("mItems")
-    --     for i, dango in ipairs(dangoList) do
-    --         local dangoParam = dango:get_field("_Param")
-    --         local dangoOrigParam = data[1][7][2].data.origData[dangoParam:get_field("_Id")]
-    --         dangoParam:set_field("_UnlockFlag", dangoOrigParam[1])
-    --         dangoParam:set_field("_DailyRate", dangoOrigParam[2])
-    --     end
-    -- end
 end)
