@@ -285,7 +285,7 @@ data[1] = {
                 path = "snow.data.DangoData",
                 func = "get_SkillActiveRate",
                 pre = function(args)
-                    if data[1][7][1][1].value or data[1][7][1][2].value then
+                    if data[1][7][1].value or data[1][7][2].value then
                         local managed = sdk.to_managed_object(args[2])
                         if not managed then return end
                         if not managed:get_type_definition():is_a("snow.data.DangoData") then
@@ -294,19 +294,19 @@ data[1] = {
 
                         local isUsingTicket = getMealFunc():call("getMealTicketFlag")
 
-                        if isUsingTicket or data[1][7][1][2].value then
-                            data[1][7][1].data.managed = managed
-                            data[1][7][1].data.chance = managed:get_field("_Param"):get_field("_SkillActiveRate")
+                        if isUsingTicket or data[1][7][2].value then
+                            data[1][7].data.managed = managed
+                            data[1][7].data.chance = managed:get_field("_Param"):get_field("_SkillActiveRate")
                             managed:get_field("_Param"):set_field("_SkillActiveRate", 100)
                         end
                     end
                 end,
                 post = function(retval)
                     -- Restore the original value
-                    if (data[1][7][1][1].value or data[1][7][1][2].value) and data[1][7][1].data.managed then
-                        data[1][7][1].data.managed:get_field("_Param"):set_field("_SkillActiveRate",
-                                                                                 data[1][7][1].data.chance)
-                        data[1][7][1].data.managed = nil
+                    if (data[1][7][1].value or data[1][7][2].value) and data[1][7].data.managed then
+                        data[1][7].data.managed:get_field("_Param"):set_field("_SkillActiveRate",
+                                                                                 data[1][7].data.chance)
+                        data[1][7].data.managed = nil
                     end
                     return retval
                 end
