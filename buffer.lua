@@ -191,7 +191,7 @@ data[1] = {
             path = "snow.player.PlayerManager",
             func = "update",
             pre = function()
-                if data[1][5].value then
+                if data[1][4].value then
                     local playerData = getPlayerData()
                     if not playerData then return end
                     local maxStamina = playerData:get_field("_staminaMax")
@@ -443,14 +443,6 @@ data[1] = {
             title = "Drag sliders to the left to reset if the stats break",
             type = "text"
         }
-    },
-    [9] = {
-        title = "Dango Level 4",
-        type = "checkbox",
-        value = false,
-        onChange = function()
-            if data[1][9].value then getMealFunc():set_field("NormalSkewerDangoLv", 4) end
-        end
     }
 }
 -- Great Sword Modifications
