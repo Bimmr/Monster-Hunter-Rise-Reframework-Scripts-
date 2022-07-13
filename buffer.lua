@@ -10,9 +10,11 @@ end
 
 -- Get Player Base
 local function getPlayerBase()
-    if not playerBase or playerData then
-        local playerManager = sdk.get_managed_singleton("snow.player.PlayerManager")
-        playerBase = playerManager:call("findMasterPlayer")
+    if not playerBase then
+        local inputManager = sdk.get_managed_singleton("snow.StmInputManager") 
+        local inGameInputDevice = inputManager:get_field("_InGameInputDevice")
+        local playerInput = inGameInputDevice:get_field("_pl_input") 
+        playerBase = playerInput:get_field("RefPlayer")
     end
     return playerBase
 end
