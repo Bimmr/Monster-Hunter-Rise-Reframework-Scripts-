@@ -567,9 +567,28 @@ data[5] = {
     }
 
 }
--- Nothing Yet - Lance
+-- Lance
 data[6] = {
-    -- title = "Lance",
+    title = "Lance",
+    [1] = {
+        title = "Anchor Rage",
+        type = "slider",
+        value = -1,
+        min = -1,
+        max = 3,
+        hook = {
+            path = "snow.player.Lance",
+            func = "update",
+            pre = function(args)
+                if data[6][1].value >= 0 then
+                    local managed = sdk.to_managed_object(args[2])
+                    managed:set_field("_GuardRageTimer", 3000)
+                    managed:set_field("_GuardRageBuffType", data[6][1].value)
+                end
+            end,
+            post = nothing()
+        }
+    }
 }
 -- Gunlance
 data[7] = {
