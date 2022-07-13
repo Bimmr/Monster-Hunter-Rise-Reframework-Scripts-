@@ -1,6 +1,6 @@
 local configPath = "Buffer.json"
-local playerBase, playerData
 local kitchenFacility, mealFunc
+local playerInput
 local data = {}
 
 -- Do nothing
@@ -10,23 +10,19 @@ end
 
 -- Get Player Base
 local function getPlayerBase()
-    if not playerBase then
-        local inputManager = sdk.get_managed_singleton("snow.StmInputManager") 
-        local inGameInputDevice = inputManager:get_field("_InGameInputDevice")
-        local playerInput = inGameInputDevice:get_field("_pl_input") 
-        playerBase = playerInput:get_field("RefPlayer")
+    if not playerInput then
+    local inputManager = sdk.get_managed_singleton("snow.StmInputManager")
+    local inGameInputDevice = inputManager:get_field("_InGameInputDevice")
+    playerInput = inGameInputDevice:get_field("_pl_input")
     end
-    return playerBase
+    return playerInput:get_field("RefPlayer")
 end
 
 -- Get Player Data from Player Base
 local function getPlayerData()
-    if not playerData then
-        local playerBase = getPlayerBase()
-        if not playerBase then return end
-        playerData = playerBase:call("get_PlayerData")
-    end
-    return playerData
+    local playerBase = getPlayerBase()
+    if not playerBase then return end
+    return playerBase:call("get_PlayerData")
 end
 
 -- Get kitchen Facility
@@ -447,6 +443,14 @@ data[1] = {
             title = "Drag sliders to the left to reset if the stats break",
             type = "text"
         }
+    },
+    [9] = {
+        title = "Dango Level 4",
+        type = "checkbox",
+        value = false,
+        onChange = function()
+            if data[1][9].value then getMealFunc():set_field("NormalSkewerDangoLv", 4) end
+        end
     }
 }
 -- Great Sword Modifications
