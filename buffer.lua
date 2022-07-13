@@ -186,30 +186,6 @@ data[1] = {
         }
     },
     [4] = {
-        title = "Unlimited Wirebugs",
-        type = "checkbox",
-        value = false,
-        hook = {
-            path = "snow.player.fsm.PlayerFsm2ActionHunterWire",
-            func = "start",
-            pre = nothing(),
-            post = function(retval)
-                if data[1][4].value then
-                    local playerBase = getPlayerBase()
-                    if not playerBase then return end
-                    local wireGuages = playerBase:get_field("_HunterWireGauge")
-                    if not wireGuages then return end
-                    wireGuages = wireGuages:get_elements()
-                    for i, gauge in ipairs(wireGuages) do
-                        gauge:set_field("_RecastTimer", 0)
-                        gauge:set_field("_RecoverWaitTimer", 0)
-                    end
-                end
-                return retval
-            end
-        }
-    },
-    [5] = {
         title = "Unlimited Stamina",
         type = "checkbox",
         value = false,
@@ -225,6 +201,68 @@ data[1] = {
                 end
             end,
             post = nothing()
+        }
+    },
+    [5] = {
+        title = "Wirebugs",
+        [1] = {
+            title = "Unlimited Wirebugs",
+            type = "checkbox",
+            value = false,
+            hook = {
+                path = "snow.player.fsm.PlayerFsm2ActionHunterWire",
+                func = "start",
+                pre = nothing(),
+                post = function(retval)
+                    if data[1][5][1].value then
+                        local playerBase = getPlayerBase()
+                        if not playerBase then return end
+                        local wireGuages = playerBase:get_field("_HunterWireGauge")
+                        if not wireGuages then return end
+                        wireGuages = wireGuages:get_elements()
+                        for i, gauge in ipairs(wireGuages) do
+                            gauge:set_field("_RecastTimer", 0)
+                            gauge:set_field("_RecoverWaitTimer", 0)
+                        end
+                    end
+                    return retval
+                end
+            }
+        },
+        [2] = {
+            title = "3 Wirebugs",
+            type = "checkbox",
+            value = false,
+            hook = {
+                path = "snow.player.PlayerManager",
+                func = "update",
+                pre = function(args)
+                    if data[1][5][2].value then
+                        local playerBase = getPlayerBase()
+                        if not playerBase then return end
+                        playerBase:set_field("<HunterWireWildNum>k__BackingField", 1)
+                        playerBase:set_field("_HunterWireNumAddTime", 7000)
+                    end
+                end,
+                post = nothing()
+            }
+        },
+        [3] = {
+            title = "Permanent Wirebug Powerup",
+            type = "checkbox",
+            value = false,
+            hook = {
+                path = "snow.player.PlayerManager",
+                func = "update",
+                pre = function(args)
+                    if data[1][5][3].value then
+                        local playerData = getPlayerData()
+                        if not playerData then return end
+                        playerData:set_field("_WireBugPowerUpTimer", 10700)
+                    end
+                end,
+                post = nothing()
+            }
         }
     },
     [6] = {
@@ -429,23 +467,23 @@ data[2] = {
             end,
             post = nothing()
         }
+    },
+    [2] = {
+        title = "Power Sheathe",
+        type = "checkbox",
+        value = false,
+        hook = {
+            path = "snow.player.GreatSword",
+            func = "update",
+            pre = function(args)
+                local managed = sdk.to_managed_object(args[2])
+                if data[2][2].value then
+                    -- managed:set_field("MoveWpOffBuffGreatSwordTimer", 1200)")
+                end
+            end,
+            post = nothing()
+        }
     }
-    -- [2] = {
-    --     title = "Wirebug Buff",
-    --     type = "checkbox",
-    --     value = false,
-    --     hook = {
-    --         path = "snow.player.GreatSword",
-    --         func = "update",
-    --         pre = function(args)
-    --             local managed = sdk.to_managed_object(args[2])
-    --             if data[2][2].value then
-    --                 -- managed:call("setMoveWpOffDamageUp")
-    --             end
-    --         end,
-    --         post = nothing()
-    --     }
-    -- }
 }
 -- Long Sword Modifications
 data[3] = {
@@ -486,9 +524,26 @@ data[3] = {
         }
     }
 }
--- Sword & Shield ... Can't find anything useful...
+-- Sword & Shield
 data[4] = {
-    -- title = "Sword & Shield",
+    title = "Sword & Shield",
+    [1] = {
+        title = "Destroyer Oil",
+        type = "checkbox",
+        value = false,
+        hook = {
+            path = "snow.player.ShortSword",
+            func = "update",
+            pre = function(args)
+                if data[4][1].value then
+                    local managed = sdk.to_managed_object(args[2])
+                    managed:set_field("<IsOilBuffSetting>k__BackingField", true)
+                    managed:set_field("_OilBuffTimer", 3000)
+                end
+            end,
+            post = nothing()
+        }
+    }
 }
 -- Dual Blade Modifications
 data[5] = {
