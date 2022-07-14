@@ -11,9 +11,9 @@ end
 -- Get Player Base
 local function getPlayerBase()
     if not playerInput then
-    local inputManager = sdk.get_managed_singleton("snow.StmInputManager")
-    local inGameInputDevice = inputManager:get_field("_InGameInputDevice")
-    playerInput = inGameInputDevice:get_field("_pl_input")
+        local inputManager = sdk.get_managed_singleton("snow.StmInputManager")
+        local inGameInputDevice = inputManager:get_field("_InGameInputDevice")
+        playerInput = inGameInputDevice:get_field("_pl_input")
     end
     return playerInput:get_field("RefPlayer")
 end
@@ -103,7 +103,41 @@ end
 -- Miscellaneous Modifications
 data[1] = {
     title = "Miscellaneous",
+
     [1] = {
+        title = "Unlimited Consumables",
+        type = "checkbox",
+        value = false,
+        hook = {
+            path = "snow.data.ItemSlider",
+            func = "notifyConsumeItem",
+            pre = function(args)
+                if data[1][1].value then return sdk.PreHookResult.SKIP_ORIGINAL end
+            end,
+            post = nothing()
+        }
+    },
+    [2] = {
+        title = "Purple Sharpness",
+        type = "checkbox",
+        value = false,
+        hook = {
+            path = "snow.player.PlayerManager",
+            func = "update",
+            pre = nothing(),
+            post = function(args)
+                if data[1][2].value then
+                    local playerBase = getPlayerBase()
+                    if not playerBase then return end
+                    -- 0=Red | 1=Orange | 2=Yellow | 3=Green | 4=Blue | 5=White | 6=Purple
+                    playerBase:set_field("<SharpnessLv>k__BackingField", 6) -- Sharpness Level of Purple
+                    -- playerBase:set_field("<SharpnessGauge>k__BackingField", 400) -- Sharpness Value
+                    -- playerBase:set_field("<SharpnessGaugeMax>k__BackingField", 400) -- Max Sharpness
+                end
+            end
+        }
+    },
+    [3] = {
         title = "Ammo & Coating Options",
         [1] = {
             title = "Unlimited Coatings (Arrows)",
@@ -118,7 +152,7 @@ data[1] = {
                 post = nothing()
             },
             onChange = function()
-                data[15][3].value = data[1][1][1].value -- Bow
+                data[16][2].value = data[1][3][1].value -- Bow
             end
         },
         [2] = {
@@ -129,13 +163,14 @@ data[1] = {
                 path = "snow.data.bulletSlider.BulletSliderFunc",
                 func = "consumeItem",
                 pre = function(args)
-                    if data[1][1][2].value then return sdk.PreHookResult.SKIP_ORIGINAL end
+                    if data[1][3][2].value then return sdk.PreHookResult.SKIP_ORIGINAL end
                 end,
                 post = nothing()
             },
             onChange = function()
-                data[13][1].value = data[1][1][2].value -- Light Bowgun
-                data[14][2].value = data[1][1][2].value -- Heavy Bowgun
+                local value = data[1][3][2].value
+                data[14][1].value = value -- Light Bowgun
+                data[15][2].value = value -- Heavy Bowgun
             end
         },
         [3] = {
@@ -145,63 +180,13 @@ data[1] = {
 
             -- No hook as this is called per weapon
             onChange = function()
-                data[13][2].value = data[1][1][3].value -- Light bow gun
-                data[14][3].value = data[1][1][3].value -- Heavy bow gun
-            end
-        }
-    },
-    [2] = {
-        title = "Unlimited Consumables",
-        type = "checkbox",
-        value = false,
-        hook = {
-            path = "snow.data.ItemSlider",
-            func = "notifyConsumeItem",
-            pre = function(args)
-                if data[1][2].value then return sdk.PreHookResult.SKIP_ORIGINAL end
-            end,
-            post = nothing()
-        }
-    },
-    [3] = {
-        title = "Purple Sharpness",
-        type = "checkbox",
-        value = false,
-        hook = {
-            path = "snow.player.PlayerManager",
-            func = "update",
-            pre = nothing(),
-            post = function(args)
-                if data[1][3].value then
-                    local playerBase = getPlayerBase()
-                    if not playerBase then return end
-                    -- 0=Red | 1=Orange | 2=Yellow | 3=Green | 4=Blue | 5=White | 6=Purple
-                    playerBase:set_field("<SharpnessLv>k__BackingField", 6) -- Sharpness Level of Purple
-                    -- playerBase:set_field("<SharpnessGauge>k__BackingField", 400) -- Sharpness Value
-                    -- playerBase:set_field("<SharpnessGaugeMax>k__BackingField", 400) -- Max Sharpness
-                end
+                local value = data[1][3][3].value
+                data[14][2].value = value -- Light bow gun
+                data[15][3].value = value -- Heavy bow gun
             end
         }
     },
     [4] = {
-        title = "Unlimited Stamina",
-        type = "checkbox",
-        value = false,
-        hook = {
-            path = "snow.player.PlayerManager",
-            func = "update",
-            pre = function()
-                if data[1][4].value then
-                    local playerData = getPlayerData()
-                    if not playerData then return end
-                    local maxStamina = playerData:get_field("_staminaMax")
-                    playerData:set_field("_stamina", maxStamina)
-                end
-            end,
-            post = nothing()
-        }
-    },
-    [5] = {
         title = "Wirebugs",
         [1] = {
             title = "Unlimited Wirebugs",
@@ -212,7 +197,7 @@ data[1] = {
                 func = "start",
                 pre = nothing(),
                 post = function(retval)
-                    if data[1][5][1].value then
+                    if data[1][4][1].value then
                         local playerBase = getPlayerBase()
                         if not playerBase then return end
                         local wireGuages = playerBase:get_field("_HunterWireGauge")
@@ -235,7 +220,7 @@ data[1] = {
                 path = "snow.player.PlayerManager",
                 func = "update",
                 pre = function(args)
-                    if data[1][5][2].value then
+                    if data[1][4][2].value then
                         local playerBase = getPlayerBase()
                         if not playerBase then return end
                         playerBase:set_field("<HunterWireWildNum>k__BackingField", 1)
@@ -253,7 +238,7 @@ data[1] = {
                 path = "snow.player.PlayerManager",
                 func = "update",
                 pre = function(args)
-                    if data[1][5][3].value then
+                    if data[1][4][3].value then
                         local playerData = getPlayerData()
                         if not playerData then return end
                         playerData:set_field("_WireBugPowerUpTimer", 10700)
@@ -263,7 +248,77 @@ data[1] = {
             }
         }
     },
-    [6] = {
+    [5] = {
+        title = "100% Dango Skills",
+        data = {
+            managed = nil,
+            chance = 0
+        },
+        [1] = {
+            title = "With Ticket",
+            type = "checkbox",
+            value = false,
+            hook = {
+                path = "snow.data.DangoData",
+                func = "get_SkillActiveRate",
+                pre = function(args)
+                    if data[1][5][1].value or data[1][5][2].value then
+                        local managed = sdk.to_managed_object(args[2])
+                        if not managed then return end
+                        if not managed:get_type_definition():is_a("snow.data.DangoData") then
+                            return
+                        end
+
+                        local isUsingTicket = getMealFunc():call("getMealTicketFlag")
+
+                        if isUsingTicket or data[1][5][2].value then
+                            data[1][5].data.managed = managed
+                            data[1][5].data.chance = managed:get_field("_Param"):get_field("_SkillActiveRate")
+                            managed:get_field("_Param"):set_field("_SkillActiveRate", 100)
+                        end
+                    end
+                end,
+                post = function(retval)
+                    -- Restore the original value
+                    if (data[1][5][1].value or data[1][5][2].value) and data[1][5].data.managed then
+                        data[1][5].data.managed:get_field("_Param")
+                            :set_field("_SkillActiveRate", data[1][5].data.chance)
+                        data[1][5].data.managed = nil
+                    end
+                    return retval
+                end
+            }
+        },
+        [2] = {
+            title = "Without Ticket (Cheater)",
+            type = "checkbox",
+            value = false
+        }
+    }
+
+}
+-- Character Modifications
+data[2] = {
+    title = "Character",
+    [1] = {
+        title = "Unlimited Stamina",
+        type = "checkbox",
+        value = false,
+        hook = {
+            path = "snow.player.PlayerManager",
+            func = "update",
+            pre = function()
+                if data[2][1].value then
+                    local playerData = getPlayerData()
+                    if not playerData then return end
+                    local maxStamina = playerData:get_field("_staminaMax")
+                    playerData:set_field("_stamina", maxStamina)
+                end
+            end,
+            post = nothing()
+        }
+    },
+    [2] = {
         title = "Health Options",
         [1] = {
             title = "Constant Healing",
@@ -273,7 +328,7 @@ data[1] = {
                 path = "snow.player.PlayerManager",
                 func = "update",
                 pre = function(args)
-                    if data[1][6][1].value then
+                    if data[2][2][1].value then
                         local playerData = getPlayerData()
                         if not playerData then return end
                         local max = playerData:get_field("_vitalMax")
@@ -292,7 +347,7 @@ data[1] = {
                 path = "snow.player.PlayerManager",
                 func = "update",
                 pre = function(args)
-                    if data[1][6][2].value then
+                    if data[2][2][2].value then
 
                         local playerData = getPlayerData()
                         if not playerData then return end
@@ -307,54 +362,7 @@ data[1] = {
             }
         }
     },
-    [7] = {
-        title = "100% Dango Skills",
-        data = {
-            managed = nil,
-            chance = 0
-        },
-        [1] = {
-            title = "With Ticket",
-            type = "checkbox",
-            value = false,
-            hook = {
-                path = "snow.data.DangoData",
-                func = "get_SkillActiveRate",
-                pre = function(args)
-                    if data[1][7][1].value or data[1][7][2].value then
-                        local managed = sdk.to_managed_object(args[2])
-                        if not managed then return end
-                        if not managed:get_type_definition():is_a("snow.data.DangoData") then
-                            return
-                        end
-
-                        local isUsingTicket = getMealFunc():call("getMealTicketFlag")
-
-                        if isUsingTicket or data[1][7][2].value then
-                            data[1][7].data.managed = managed
-                            data[1][7].data.chance = managed:get_field("_Param"):get_field("_SkillActiveRate")
-                            managed:get_field("_Param"):set_field("_SkillActiveRate", 100)
-                        end
-                    end
-                end,
-                post = function(retval)
-                    -- Restore the original value
-                    if (data[1][7][1].value or data[1][7][2].value) and data[1][7].data.managed then
-                        data[1][7].data.managed:get_field("_Param")
-                            :set_field("_SkillActiveRate", data[1][7].data.chance)
-                        data[1][7].data.managed = nil
-                    end
-                    return retval
-                end
-            }
-        },
-        [2] = {
-            title = "Without Ticket (Cheater)",
-            type = "checkbox",
-            value = false
-        }
-    },
-    [8] = {
+    [3] = {
         title = "Stat Modifiers (Cheater)",
         [1] = {
             title = "Attack Modifier",
@@ -376,24 +384,24 @@ data[1] = {
                     local playerData = getPlayerData()
                     if not playerData then return end
 
-                    if data[1][8][1].value >= 0 then
+                    if data[2][3][1].value >= 0 then
                         -- Set the original attack value
-                        if data[1][8][1].data.value == 0 then
-                            data[1][8][1].data.value = playerData:get_field("_Attack")
+                        if data[2][3][1].data.value == 0 then
+                            data[2][3][1].data.value = playerData:get_field("_Attack")
                         end
 
                         -- Setup variables to determine how much extra attack needs to be added to get to the set value
-                        local attack = data[1][8][1].data.value
-                        local attackTarget = data[1][8][1].value
+                        local attack = data[2][3][1].data.value
+                        local attackTarget = data[2][3][1].value
                         local attackMod = attackTarget - attack
 
                         -- Add the extra attack
                         playerData:set_field("_AtkUpAlive", attackMod)
 
                         -- Restore the original attack value if disabled    
-                    elseif data[1][8][1].data.value ~= 0 then
+                    elseif data[2][3][1].data.value ~= 0 then
                         playerData:set_field("_AtkUpAlive", 0)
-                        data[1][8][1].data.value = 0
+                        data[2][3][1].data.value = 0
                     end
                 end,
                 post = nothing()
@@ -419,21 +427,21 @@ data[1] = {
                     local playerData = getPlayerData()
                     if not playerData then return end
 
-                    if data[1][8][2].value >= 0 then
+                    if data[2][3][2].value >= 0 then
                         -- Set the original defence value
-                        if data[1][8][2].data.value == 0 then
-                            data[1][8][2].data.value = playerData:get_field("_Defence")
+                        if data[2][3][2].data.value == 0 then
+                            data[2][3][2].data.value = playerData:get_field("_Defence")
                         end
                         -- Setup variables to determine how much extra defence needs to be added to get to the set value
-                        local defence = data[1][8][2].data.value
-                        local defenceTarget = data[1][8][2].value
+                        local defence = data[2][3][2].data.value
+                        local defenceTarget = data[2][3][2].value
                         local defenceMod = defenceTarget - defence
                         playerData:set_field("_DefUpAlive", defenceMod)
 
                         -- Restore the original defence value if disabled
-                    elseif data[1][8][2].data.value ~= 0 then
+                    elseif data[2][3][2].data.value ~= 0 then
                         playerData:set_field("_DefUpAlive", 0)
-                        data[1][8][2].data.value = 0
+                        data[2][3][2].data.value = 0
                     end
                 end,
                 post = nothing()
@@ -446,7 +454,7 @@ data[1] = {
     }
 }
 -- Great Sword Modifications
-data[2] = {
+data[3] = {
     title = "Great Sword",
     [1] = {
         title = "Charge Level",
@@ -458,9 +466,9 @@ data[2] = {
             path = "snow.player.GreatSword",
             func = "update",
             pre = function(args)
-                if data[2][1].value >= 0 then
+                if data[3][1].value >= 0 then
                     local managed = sdk.to_managed_object(args[2])
-                    managed:set_field("_TameLv", data[2][1].value)
+                    managed:set_field("_TameLv", data[3][1].value)
                 end
             end,
             post = nothing()
@@ -475,7 +483,7 @@ data[2] = {
             func = "update",
             pre = function(args)
                 local managed = sdk.to_managed_object(args[2])
-                if data[2][2].value then
+                if data[3][2].value then
                     -- managed:set_field("MoveWpOffBuffGreatSwordTimer", 1200)")
                 end
             end,
@@ -484,7 +492,7 @@ data[2] = {
     }
 }
 -- Long Sword Modifications
-data[3] = {
+data[4] = {
     title = "Long Sword",
 
     [1] = {
@@ -495,7 +503,7 @@ data[3] = {
             path = "snow.player.LongSword",
             func = "update",
             pre = function(args)
-                if data[3][1].value then
+                if data[4][1].value then
                     local managed = sdk.to_managed_object(args[2])
                     managed:set_field("_LongSwordGauge", 100)
                 end
@@ -513,9 +521,9 @@ data[3] = {
             path = "snow.player.LongSword",
             func = "update",
             pre = function(args)
-                if data[3][2].value >= 0 then
+                if data[4][2].value >= 0 then
                     local managed = sdk.to_managed_object(args[2])
-                    managed:set_field("_LongSwordGaugeLv", data[3][2].value)
+                    managed:set_field("_LongSwordGaugeLv", data[4][2].value)
                 end
             end,
             post = nothing()
@@ -523,7 +531,7 @@ data[3] = {
     }
 }
 -- Sword & Shield
-data[4] = {
+data[5] = {
     title = "Sword & Shield",
     [1] = {
         title = "Destroyer Oil",
@@ -533,7 +541,7 @@ data[4] = {
             path = "snow.player.ShortSword",
             func = "update",
             pre = function(args)
-                if data[4][1].value then
+                if data[5][1].value then
                     local managed = sdk.to_managed_object(args[2])
                     managed:set_field("<IsOilBuffSetting>k__BackingField", true)
                     managed:set_field("_OilBuffTimer", 3000)
@@ -544,7 +552,7 @@ data[4] = {
     }
 }
 -- Dual Blade Modifications
-data[5] = {
+data[6] = {
     title = "Dual Blades",
 
     [1] = {
@@ -555,7 +563,7 @@ data[5] = {
             path = "snow.player.DualBlades",
             func = "update",
             pre = function(args)
-                if data[5][1].value then
+                if data[6][1].value then
                     local managed = sdk.to_managed_object(args[2])
                     managed:set_field("<KijinKyoukaGuage>k__BackingField", 100)
                 end
@@ -565,8 +573,8 @@ data[5] = {
     }
 
 }
--- Lance
-data[6] = {
+-- Lance Modifications
+data[7] = {
     title = "Lance",
     [1] = {
         title = "Anchor Rage",
@@ -578,18 +586,18 @@ data[6] = {
             path = "snow.player.Lance",
             func = "update",
             pre = function(args)
-                if data[6][1].value >= 0 then
+                if data[7][1].value >= 0 then
                     local managed = sdk.to_managed_object(args[2])
                     managed:set_field("_GuardRageTimer", 3000)
-                    managed:set_field("_GuardRageBuffType", data[6][1].value)
+                    managed:set_field("_GuardRageBuffType", data[7][1].value)
                 end
             end,
             post = nothing()
         }
     }
 }
--- Gunlance
-data[7] = {
+-- Gunlance Modifications
+data[8] = {
     title = "Gunlance",
     [1] = {
         title = "Unlimited Dragon Cannon",
@@ -599,7 +607,7 @@ data[7] = {
             path = "snow.player.PlayerManager",
             func = "update",
             pre = function(args)
-                if data[7][1].value then
+                if data[8][1].value then
 
                     local playerData = getPlayerData()
                     if not playerData then return end
@@ -617,7 +625,7 @@ data[7] = {
             path = "snow.player.GunLance",
             func = "update",
             pre = function(args)
-                if data[7][2].value then
+                if data[8][2].value then
                     local managed = sdk.to_managed_object(args[2])
                     managed:set_field("_AerialCount", 0)
                 end
@@ -633,7 +641,7 @@ data[7] = {
             path = "snow.player.GunLance",
             func = "update",
             pre = function(args)
-                if data[7][3].value then
+                if data[8][3].value then
                     local managed = sdk.to_managed_object(args[2])
                     managed:call("reloadBullet")
                 end
@@ -643,7 +651,7 @@ data[7] = {
     }
 }
 -- Hammer Modifications
-data[8] = {
+data[9] = {
     title = "Hammer",
 
     [1] = {
@@ -656,9 +664,9 @@ data[8] = {
             path = "snow.player.Hammer",
             func = "update",
             pre = function(args)
-                if data[8][1].value >= 0 then
+                if data[9][1].value >= 0 then
                     local managed = sdk.to_managed_object(args[2])
-                    managed:set_field("<NowChargeLevel>k__BackingField", data[8][1].value)
+                    managed:set_field("<NowChargeLevel>k__BackingField", data[9][1].value)
                 end
             end,
             post = nothing()
@@ -666,7 +674,7 @@ data[8] = {
     }
 }
 -- Hunting Horn Modifications
-data[9] = {
+data[10] = {
     title = "Hunting Horn",
     [1] = {
         title = "Infernal Mode",
@@ -676,7 +684,7 @@ data[9] = {
             path = "snow.player.Horn",
             func = "update",
             pre = function(args)
-                if data[9][1].value then
+                if data[10][1].value then
                     local managed = sdk.to_managed_object(args[2])
                     managed:set_field("<RevoltGuage>k__BackingField", 100)
                 end
@@ -685,8 +693,8 @@ data[9] = {
         }
     }
 }
--- Switch Axe Modifications... why is it called a SlashAxe...
-data[10] = {
+-- Switch Axe Modifications
+data[11] = {
     title = "Switch Axe",
 
     [1] = {
@@ -697,7 +705,7 @@ data[10] = {
             path = "snow.player.SlashAxe",
             func = "update",
             pre = function(args)
-                if data[10][1].value then
+                if data[11][1].value then
                     local managed = sdk.to_managed_object(args[2])
                     managed:set_field("_BottleGauge", 100)
                 end
@@ -713,7 +721,7 @@ data[10] = {
             path = "snow.player.SlashAxe",
             func = "update",
             pre = function(args)
-                if data[10][2].value then
+                if data[11][2].value then
                     local managed = sdk.to_managed_object(args[2])
                     managed:set_field("_BottleAwakeGauge", 150)
                 end
@@ -722,8 +730,8 @@ data[10] = {
         }
     }
 }
--- Charge Blade Modifications... why is it called a ChargeAxe...
-data[11] = {
+-- Charge Blade Modifications
+data[12] = {
     title = "Charge Blade",
 
     [1] = {
@@ -734,7 +742,7 @@ data[11] = {
             path = "snow.player.ChargeAxe",
             func = "update",
             pre = function(args)
-                if data[11][1].value then
+                if data[12][1].value then
                     local managed = sdk.to_managed_object(args[2])
                     managed:set_field("<ChargedBottleNum>k__BackingField", 5)
                     managed:set_field("_ChargeGauge", 50)
@@ -751,7 +759,7 @@ data[11] = {
             path = "snow.player.ChargeAxe",
             func = "update",
             pre = function(args)
-                if data[11][2].value then
+                if data[12][2].value then
                     local managed = sdk.to_managed_object(args[2])
                     managed:set_field("_SwordBuffTimer", 500)
                 end
@@ -767,7 +775,7 @@ data[11] = {
             path = "snow.player.ChargeAxe",
             func = "update",
             pre = function(args)
-                if data[11][3].value then
+                if data[12][3].value then
                     local managed = sdk.to_managed_object(args[2])
                     managed:set_field("_ShieldBuffTimer", 1000)
                 end
@@ -777,7 +785,7 @@ data[11] = {
     }
 }
 -- Insect Glaive Modifications
-data[12] = {
+data[13] = {
     title = "Insect Glaive",
 
     [1] = {
@@ -788,7 +796,7 @@ data[12] = {
             path = "snow.player.InsectGlaive",
             func = "update",
             pre = function(args)
-                if data[12][1].value then
+                if data[13][1].value then
                     local managed = sdk.to_managed_object(args[2])
                     managed:set_field("_RedExtractiveTime", 8000)
                 end
@@ -804,7 +812,7 @@ data[12] = {
             path = "snow.player.InsectGlaive",
             func = "update",
             pre = function(args)
-                if data[12][2].value then
+                if data[13][2].value then
                     local managed = sdk.to_managed_object(args[2])
                     managed:set_field("_WhiteExtractiveTime", 8000)
                 end
@@ -820,7 +828,7 @@ data[12] = {
             path = "snow.player.InsectGlaive",
             func = "update",
             pre = function(args)
-                if data[12][3].value then
+                if data[13][3].value then
                     local managed = sdk.to_managed_object(args[2])
                     managed:set_field("_OrangeExtractiveTime", 8000)
                 end
@@ -836,7 +844,7 @@ data[12] = {
             path = "snow.player.InsectGlaive",
             func = "update",
             pre = function(args)
-                if data[12][4].value then
+                if data[13][4].value then
                     local managed = sdk.to_managed_object(args[2])
                     managed:set_field("_AerialCount", 2)
                 end
@@ -852,7 +860,7 @@ data[12] = {
             path = "snow.player.IG_Insect",
             func = "update",
             pre = function(args)
-                if data[12][5].value then
+                if data[13][5].value then
                     local managed = sdk.to_managed_object(args[2])
                     managed:set_field("<_Stamina>k__BackingField", 100)
                 end
@@ -861,8 +869,8 @@ data[12] = {
         }
     }
 }
--- Light Bowgun
-data[13] = {
+-- Light Bowgun Modifications
+data[14] = {
     title = "Light Bowgun",
     [1] = {
         title = "Unlimited Ammo",
@@ -871,8 +879,8 @@ data[13] = {
         dontSave = true,
         onChange = function()
             -- Change and update Miscellaneous/Ammo Options/Unlimited Ammo (Bowguns)
-            data[1][1][2].value = data[13][1].value
-            data[1][1][2].onChange()
+            data[1][3][2].value = data[14][1].value
+            data[1][3][2].onChange()
         end
     },
     [2] = {
@@ -884,8 +892,7 @@ data[13] = {
             path = "snow.player.LightBowgun",
             func = "update",
             pre = function(args)
-                if data[14][3].value == true then
-
+                if data[14][2].value then
                     local managed = sdk.to_managed_object(args[2])
                     managed:call("resetBulletNum")
                 end
@@ -894,8 +901,8 @@ data[13] = {
         },
         onChange = function()
             -- Change and update Miscellaneous/Ammo & Coating Options/Auto Reload (Bowguns)
-            data[1][1][3].value = data[13][2].value
-            data[1][1][3].onChange()
+            data[1][3][3].value = data[14][2].value
+            data[1][3][3].onChange()
         end
     },
     [3] = {
@@ -906,7 +913,7 @@ data[13] = {
             path = "snow.player.PlayerManager",
             func = "update",
             pre = function(args)
-                if data[13][3].value then
+                if data[14][3].value then
 
                     local playerData = getPlayerData()
                     if not playerData then return end
@@ -919,7 +926,7 @@ data[13] = {
     }
 }
 -- Heavy Bowgun Modifications
-data[14] = {
+data[15] = {
     title = "Heavy Bowgun",
     [1] = {
         title = "Charge Level",
@@ -931,28 +938,28 @@ data[14] = {
             path = "snow.player.HeavyBowgun",
             func = "update",
             pre = function(args)
-                if data[14][1].value >= 0 then
+                if data[15][1].value >= 0 then
                     local managed = sdk.to_managed_object(args[2])
-                    managed:set_field("_ShotChargeLv", data[14][1].value)
-                    managed:set_field("_ShotChargeFrame", 30 * data[14][1].value)
+                    managed:set_field("_ShotChargeLv", data[15][1].value)
+                    managed:set_field("_ShotChargeFrame", 30 * data[15][1].value)
                 end
             end,
             post = nothing()
         }
     },
     [2] = {
-        title = "Unlimited Ammo",
+        title = "Unlimited Ammo ", -- Needs the space, otherwise it gets matched with LBG and doesn't work
         type = "checkbox",
         value = false,
         dontSave = true,
         onChange = function()
-            -- Change and update Miscellaneous/Ammo & Coating Options/Unlimited Ammo (Bowguns)
-            data[1][1][2].value = data[14][2].value
-            data[1][1][2].onChange()
+            -- Change and update Miscellaneous/Ammo Options/Unlimited Ammo (Bowguns)
+            data[1][3][2].value = data[15][2].value
+            data[1][3][2].onChange()
         end
     },
     [3] = {
-        title = "Auto Reload",
+        title = "Auto Reload ", -- Needs the space, otherwise it gets matched with LBG and doesn't work
         type = "checkbox",
         value = false,
         dontSave = true,
@@ -960,8 +967,7 @@ data[14] = {
             path = "snow.player.HeavyBowgun",
             func = "update",
             pre = function(args)
-                if data[14][3].value == true then
-
+                if data[15][3].value then
                     local managed = sdk.to_managed_object(args[2])
                     managed:call("resetBulletNum")
                 end
@@ -970,8 +976,8 @@ data[14] = {
         },
         onChange = function()
             -- Change and update Miscellaneous/Ammo & Coating Options/Auto Reload (Bowguns)
-            data[1][1][3].value = data[14][3].value
-            data[1][1][3].onChange()
+            data[1][3][3].value = data[15][3].value
+            data[1][3][3].onChange()
         end
     },
     [4] = {
@@ -982,7 +988,7 @@ data[14] = {
             path = "snow.player.PlayerManager",
             func = "update",
             pre = function(args)
-                if data[14][4].value then
+                if data[15][4].value then
 
                     local playerData = getPlayerData()
                     if not playerData then return end
@@ -1001,7 +1007,7 @@ data[14] = {
             path = "snow.player.PlayerManager",
             func = "update",
             pre = function(args)
-                if data[14][5].value then
+                if data[15][5].value then
 
                     local playerData = getPlayerData()
                     if not playerData then return end
@@ -1020,7 +1026,7 @@ data[14] = {
             path = "snow.player.PlayerManager",
             func = "update",
             pre = function(args)
-                if data[14][6].value then
+                if data[15][6].value then
 
                     local playerData = getPlayerData()
                     if not playerData then return end
@@ -1032,7 +1038,7 @@ data[14] = {
     }
 }
 -- Bow Modifications
-data[15] = {
+data[16] = {
     title = "Bow",
 
     [1] = {
@@ -1046,14 +1052,25 @@ data[15] = {
             func = "update",
             pre = function(args)
                 local managed = sdk.to_managed_object(args[2])
-                if data[15][1].value >= 0 then
-                    managed:set_field("<ChargeLv>k__BackingField", data[15][1].value)
+                if data[16][1].value >= 0 then
+                    managed:set_field("<ChargeLv>k__BackingField", data[16][1].value)
                 end
             end,
             post = nothing()
         }
     },
     [2] = {
+        title = "Unlimited Coatings",
+        type = "checkbox",
+        value = false,
+        dontSave = true,
+        onChange = function()
+            -- Change and update Miscellaneous/Ammo & Coating Options/Unlimited Coatings (Arrows)
+            data[1][3][1].value = data[16][2].value
+            data[1][3][1].onChange()
+        end
+    },
+    [3] = {
         title = "Herculean Draw",
         type = "checkbox",
         value = false,
@@ -1062,7 +1079,7 @@ data[15] = {
             func = "update",
             pre = function(args)
                 local managed = sdk.to_managed_object(args[2])
-                if data[15][2].value then
+                if data[16][3].value then
                     managed:set_field("<IsWireBuffSetting>k__BackingField", true)
                     managed:set_field("_WireBuffAttackUpTimer", 1800)
                     -- managed:call("setWireBuffAttackUp")
@@ -1070,17 +1087,6 @@ data[15] = {
             end,
             post = nothing()
         }
-    },
-    [3] = {
-        title = "Unlimited Coatings",
-        type = "checkbox",
-        value = false,
-        dontSave = true,
-        onChange = function()
-            -- Change and update Miscellaneous/Ammo & Coating Options/Unlimited Coatings (Arrows)
-            data[1][1][1].value = data[15][3].value
-            data[1][1][1].onChange()
-        end
     }
 }
 
@@ -1139,8 +1145,9 @@ local function initUpdates(table)
 end
 
 -- Draw the menu
-local function drawMenu(table)
-    table = table or data
+local function drawMenu(table, level)
+    if not table then table = data end
+    if not level then level = 0 end
     -- Loop through the table
     for i = 1, getLength(table) + 1 do
         local obj = table[i]
@@ -1194,9 +1201,18 @@ local function drawMenu(table)
                 if changed and obj.onChange then obj.onChange() end
 
                 -- If the table doesn't have a value and isn't text, go deeper and see if the next level table has to be drawn
-            elseif imgui.tree_node(obj.title) then
-                drawMenu(obj)
-                imgui.tree_pop()
+            else
+                if level == 0 and imgui.collapsing_header( obj.title) then
+                    drawMenu(obj, level + 1)
+                    imgui.separator()
+                    imgui.spacing()
+                elseif level > 0 and imgui.tree_node(obj.title) then
+                    drawMenu(obj, level + 1)
+                    imgui.separator()
+                    imgui.spacing()
+                    imgui.tree_pop()
+                end
+                
             end
         end
     end
@@ -1208,14 +1224,16 @@ initHooks()
 initUpdates()
 
 -- Update items that have multiple triggers
-data[1][1][1].onChange()
-data[1][1][2].onChange()
-data[1][1][3].onChange()
+data[1][3][1].onChange()
+data[1][3][2].onChange()
+data[1][3][3].onChange()
 
--- Add a button to the REFramework Script Generated UI
+-- Add the menu to the REFramework Script Generated UI
 re.on_draw_ui(function()
     imgui.begin_window("Modifiers & Settings", nil, ImGuiWindowFlags_AlwaysAutoResize)
+    imgui.spacing()
     drawMenu()
+    imgui.spacing()
     imgui.end_window()
 end)
 
@@ -1223,14 +1241,14 @@ end)
 re.on_script_reset(function()
 
     -- Until I find a better way of increase attack, I have to reset this on script reset
-    if data[1][8][1].value >= 0 then
+    if data[2][3][1].value >= 0 then
         local playerData = getPlayerData()
         if not playerData then return end
         playerData:set_field("_AtkUpAlive", 0)
     end
 
     -- Until I find a better way of increase defence, I have to reset this on script reset
-    if data[1][8][2].value >= 0 then
+    if data[2][3][2].value >= 0 then
         local playerData = getPlayerData()
         if not playerData then return end
         playerData:set_field("_DefUpAlive", 0)
