@@ -118,19 +118,22 @@ data[1] = {
         }
     },
     [2] = {
-        title = "Purple Sharpness",
-        type = "checkbox",
-        value = false,
+        title = "Sharpness",
+        type = "slider",
+        min = -1,
+        max = 6,
+        value = -1,
+        display = {"Red", "Orange", "Yellow", "Green", "Blue", "White", "Purple"},
         hook = {
             path = "snow.player.PlayerManager",
             func = "update",
             pre = nothing(),
             post = function(args)
-                if data[1][2].value then
+                if data[1][2].value >= 0 then
                     local playerBase = getPlayerBase()
                     if not playerBase then return end
                     -- 0=Red | 1=Orange | 2=Yellow | 3=Green | 4=Blue | 5=White | 6=Purple
-                    playerBase:set_field("<SharpnessLv>k__BackingField", 6) -- Sharpness Level of Purple
+                    playerBase:set_field("<SharpnessLv>k__BackingField", data[1][2].value) -- Sharpness Level of Purple
                     -- playerBase:set_field("<SharpnessGauge>k__BackingField", 400) -- Sharpness Value
                     -- playerBase:set_field("<SharpnessGaugeMax>k__BackingField", 400) -- Max Sharpness
                 end
@@ -462,6 +465,7 @@ data[3] = {
         value = -1,
         min = -1,
         max = 3,
+        display = "Level: %d",
         hook = {
             path = "snow.player.GreatSword",
             func = "update",
@@ -517,6 +521,7 @@ data[4] = {
         value = -1,
         min = -1,
         max = 3,
+        display = "Level: %d",
         hook = {
             path = "snow.player.LongSword",
             func = "update",
@@ -582,6 +587,7 @@ data[7] = {
         value = -1,
         min = -1,
         max = 3,
+        display = "Level: %d",
         hook = {
             path = "snow.player.Lance",
             func = "update",
@@ -634,7 +640,7 @@ data[8] = {
         }
     },
     [3] = {
-        title = "Auto Reload",
+        title = "Auto Reload ",
         type = "checkbox",
         value = false,
         hook = {
@@ -655,11 +661,12 @@ data[9] = {
     title = "Hammer",
 
     [1] = {
-        title = "Charge Level",
+        title = "Charge Level ",
         type = "slider",
         value = -1,
         min = -1,
         max = 2,
+        display = "Level: %d",
         hook = {
             path = "snow.player.Hammer",
             func = "update",
@@ -837,7 +844,7 @@ data[13] = {
         }
     },
     [4] = {
-        title = "Unlimited Aerial",
+        title = "Unlimited Aerials ",
         type = "checkbox",
         value = false,
         hook = {
@@ -884,7 +891,7 @@ data[14] = {
         end
     },
     [2] = {
-        title = "Auto Reload",
+        title = "Auto Reload ",
         type = "checkbox",
         value = false,
         dontSave = true,
@@ -929,11 +936,12 @@ data[14] = {
 data[15] = {
     title = "Heavy Bowgun",
     [1] = {
-        title = "Charge Level",
+        title = "Charge Level  ",
         type = "slider",
         value = -1,
         min = -1,
         max = 3,
+        display = "Level: %d",
         hook = {
             path = "snow.player.HeavyBowgun",
             func = "update",
@@ -948,7 +956,7 @@ data[15] = {
         }
     },
     [2] = {
-        title = "Unlimited Ammo ", -- Needs the space, otherwise it gets matched with LBG and doesn't work
+        title = "Unlimited Ammo  ", 
         type = "checkbox",
         value = false,
         dontSave = true,
@@ -959,7 +967,7 @@ data[15] = {
         end
     },
     [3] = {
-        title = "Auto Reload ", -- Needs the space, otherwise it gets matched with LBG and doesn't work
+        title = "Auto Reload  ", 
         type = "checkbox",
         value = false,
         dontSave = true,
@@ -1042,11 +1050,12 @@ data[16] = {
     title = "Bow",
 
     [1] = {
-        title = "Charge Level",
+        title = "Charge Level   ",
         type = "slider",
         value = -1,
         min = -1,
         max = 3,
+        display = "Level: %d",
         hook = {
             path = "snow.player.Bow",
             func = "update",
@@ -1163,9 +1172,13 @@ local function drawMenu(table, level)
 
                     -- If the table has a type of slider
                 elseif obj.type == "slider" then
-                    local sliderValue = "Off"
-                    -- Add a Lvl prefix to the slider's value
-                    if (obj.value >= 0) then sliderValue = "Lvl " .. obj.value end
+                    local sliderDisplay = "%d"
+                    local sliderValue = obj.value
+                    if obj.value == -1 then sliderDisplay = "Off" -- If Off
+                    elseif obj.display and obj.value >= 0 and type(obj.display) == "table" then sliderDisplay = obj.display[obj.value+1] -- If display is a table
+                    elseif obj.display and obj.value >= 0 then sliderDisplay = obj.display -- If a display format is passed
+                    end
+
                     -- To allow for steps we need to set these and divide them by the steps
                     local sliderMax = obj.max
                     local sliderVal = obj.value
@@ -1175,10 +1188,11 @@ local function drawMenu(table, level)
                         -- If the slider value is greater than -1 (Off), adjust the value by step as well
                         if (obj.value > -1) then
                             -- Divide the value by the step to get the reduced value
-                            sliderVal = math.floor(obj.value / obj.step)
+                            sliderVal  = math.floor(obj.value / obj.step)
+                            sliderDisplay = obj.value
                         end
                     end
-                    changed, steppedVal = imgui.slider_int(obj.title, sliderVal, obj.min, sliderMax, sliderValue)
+                    changed, steppedVal = imgui.slider_int(obj.title, sliderVal, obj.min, sliderMax, sliderDisplay)
                     -- If there is a step and the slider isn't off, then multiply the stepped value by the step to get the real total
                     if obj.step and obj.value > -1 then steppedVal = steppedVal * obj.step end
                     -- Update the table's value with the new value
