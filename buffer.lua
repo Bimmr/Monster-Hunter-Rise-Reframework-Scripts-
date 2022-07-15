@@ -147,7 +147,7 @@ data[1] = {
                 path = "snow.data.bulletSlider.BottleSliderFunc",
                 func = "consumeItem",
                 pre = function(args)
-                    if data[1][1][1].value then return sdk.PreHookResult.SKIP_ORIGINAL end
+                    if data[1][3][1].value then return sdk.PreHookResult.SKIP_ORIGINAL end
                 end,
                 post = nothing()
             },
