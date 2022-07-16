@@ -124,6 +124,9 @@ data[1] = {
         max = 6,
         value = -1,
         display = {"Red", "Orange", "Yellow", "Green", "Blue", "White", "Purple"},
+        data = {
+            sharpness = -1
+        },
         hook = {
             path = "snow.player.PlayerManager",
             func = "update",
@@ -133,9 +136,19 @@ data[1] = {
                     local playerBase = getPlayerBase()
                     if not playerBase then return end
                     -- 0=Red | 1=Orange | 2=Yellow | 3=Green | 4=Blue | 5=White | 6=Purple
+                    if data[1][2].data.sharpness == -1 then
+                        data[1][2].data.sharpness = playerBase:get_field("<SharpnessLv>k__BackingField")
+                    end
                     playerBase:set_field("<SharpnessLv>k__BackingField", data[1][2].value) -- Sharpness Level of Purple
                     -- playerBase:set_field("<SharpnessGauge>k__BackingField", 400) -- Sharpness Value
                     -- playerBase:set_field("<SharpnessGaugeMax>k__BackingField", 400) -- Max Sharpness
+                else
+                    if data[1][2].data.sharpness >= 0 then
+                        local playerBase = getPlayerBase()
+                        if not playerBase then return end
+                        playerBase:set_field("<SharpnessLv>k__BackingField", data[1][2].data.sharpness)
+                        data[1][2].data.sharpness = -1
+                    end
                 end
             end
         }
