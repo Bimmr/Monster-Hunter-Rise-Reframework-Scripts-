@@ -667,6 +667,22 @@ data[8] = {
             end,
             post = nothing()
         }
+    },
+    [4] = {
+        title = "Ground Splitter",
+        type = "checkbox",
+        value = false,
+        hook = {
+            path = "snow.player.GunLance",
+            func = "update",
+            pre = function(args)
+                if data[8][4].value then
+                    local managed = sdk.to_managed_object(args[2])
+                    managed:set_field("_ShotDamageUpDurationTimer", 1800)
+                end
+            end,
+            post = nothing()
+        }
     }
 }
 -- Hammer Modifications
