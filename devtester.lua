@@ -44,19 +44,21 @@ local calls = {{
         value = "true"
     }}
 }, {
-    path = "snow.data.FacilityDataManager",
+    -- local typeOptions = {"Method", "Field", "ArrayIndex"}
+    -- local operationOptions = {"Get", "Set", "Call"}
+    path = "snow.player.PlayerManager",
     instructions = {{
         type = 2,
-        name = "_Kitchen",
+        name = "PlayerList",
+        operation = 1
+    }, {
+        type = 3,
+        name = "0",
         operation = 1
     }, {
         type = 2,
-        name = "_MealFunc",
+        name = "_ShotDamageUpDurationTimer",
         operation = 1
-    }, {
-        type = 1,
-        name = "updateList",
-        operation = 3
     }}
 }}
 
@@ -92,13 +94,13 @@ local function performInstructions(last, instructions)
             local args = nil
             if not (instruction.args == nil or instruction.args == "") then args = instruction.args end
             if args then log.debug("args: " .. args) end
-            if instruction.operation == 1 then
+            if instruction.operation == 1 or instruction.operation == 3 then
                 if not args then
                     last = last:call(instruction.name) -- TODO: Split args
                 else
                     last = last:call(instruction.name, args) -- TODO: Split args
                 end
-            elseif instruction.operation == 2 or instruction.operation == 3 then
+            elseif instruction.operation == 2 then
                 last = last:call(instruction.name, instruction.value)
             end
         elseif instruction.type == 2 then

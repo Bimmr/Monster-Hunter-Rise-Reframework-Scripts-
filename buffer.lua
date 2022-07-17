@@ -92,12 +92,40 @@ local function generateSaveData(table, keyPrefix)
         end
     end
 end
+
 local function saveConfig()
     if json ~= nil then
         generateSaveData(data)
         json.dump_file(configPath, saveData)
         saveData = {}
     end
+end
+
+-- Check if player is in battle, base code by raffRun
+local musicManager, questManager
+local function checkIfInBattle()
+
+    if not musicManager then
+        musicManager = sdk.get_managed_singleton("snow.wwise.WwiseMusicManager")
+    end
+    if not questManager then
+        questManager = sdk.get_managed_singleton("snow.QuestManager")
+    end
+
+	local currentMusicType = musicManager:get_field("_FightBGMType")
+	local currentBattleState = musicManager:get_field("_CurrentEnemyAction")
+	
+	local currentQuestType = questManager:get_field("_QuestType")
+	local currentQuestStatus = questManager:get_field("_QuestStatus")
+	
+	local inBattle = currentBattleState == 3        -- Fighting a monster
+			or currentMusicType == 25     			-- Fighting a wave of monsters
+			or currentQuestType == 8     			-- Fighting in the arena (Village/Hub quests)
+			or currentQuestType == 64    			-- Fighting in the arena (Utsushi)
+    
+	local isQuestComplete = currentQuestStatus == 3 -- Completed the quest
+	
+	return inBattle and not isQuestComplete
 end
 
 -- Miscellaneous Modifications
@@ -205,7 +233,7 @@ data[1] = {
     [4] = {
         title = "Wirebugs",
         [1] = {
-            title = "Unlimited Wirebugs",
+            title = "Unlimited Wirebugs Out of Combat",
             type = "checkbox",
             value = false,
             hook = {
@@ -213,7 +241,7 @@ data[1] = {
                 func = "start",
                 pre = nothing(),
                 post = function(retval)
-                    if data[1][4][1].value then
+                    if (data[1][4][1].value and not checkIfInBattle()) or data[1][4][2].value then
                         local playerBase = getPlayerBase()
                         if not playerBase then return end
                         local wireGuages = playerBase:get_field("_HunterWireGauge")
@@ -229,6 +257,12 @@ data[1] = {
             }
         },
         [2] = {
+            title = "Unlimited Wirebugs Everywhere",
+            type = "checkbox",
+            value = false
+            -- Hook moved to Unlimited Wirebugs Out of Combat so we aren't double hooking
+        },
+        [3] = {
             title = "3 Wirebugs",
             type = "checkbox",
             value = false,
@@ -236,7 +270,7 @@ data[1] = {
                 path = "snow.player.PlayerManager",
                 func = "update",
                 pre = function(args)
-                    if data[1][4][2].value then
+                    if data[1][4][3].value then
                         local playerBase = getPlayerBase()
                         if not playerBase then return end
                         playerBase:set_field("<HunterWireWildNum>k__BackingField", 1)
@@ -246,7 +280,7 @@ data[1] = {
                 post = nothing()
             }
         },
-        [3] = {
+        [4] = {
             title = "Permanent Wirebug Powerup",
             type = "checkbox",
             value = false,
@@ -254,7 +288,7 @@ data[1] = {
                 path = "snow.player.PlayerManager",
                 func = "update",
                 pre = function(args)
-                    if data[1][4][3].value then
+                    if data[1][4][4].value then
                         local playerData = getPlayerData()
                         if not playerData then return end
                         playerData:set_field("_WireBugPowerUpTimer", 10700)
@@ -265,13 +299,13 @@ data[1] = {
         }
     },
     [5] = {
-        title = "100% Dango Skills",
+        title = "Canteen",
         data = {
             managed = nil,
             chance = 0
         },
         [1] = {
-            title = "With Ticket",
+            title = "100% Dango Skills With Ticket",
             type = "checkbox",
             value = false,
             hook = {
@@ -290,7 +324,7 @@ data[1] = {
                         if isUsingTicket or data[1][5][2].value then
                             data[1][5].data.managed = managed
                             data[1][5].data.chance = managed:get_field("_Param"):get_field("_SkillActiveRate")
-                            managed:get_field("_Param"):set_field("_SkillActiveRate", 100)
+                            managed:get_field("_Param"):set_field("_SkillActiveRate", 200)
                         end
                     end
                 end,
@@ -306,9 +340,10 @@ data[1] = {
             }
         },
         [2] = {
-            title = "Without Ticket (Cheater)",
+            title = "100% Dango Skills Without Ticket",
             type = "checkbox",
             value = false
+            -- Hook moved to 100% Dango Skills With Ticket so we aren't double hooking
         }
     }
 
