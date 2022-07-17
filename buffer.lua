@@ -105,27 +105,23 @@ end
 local musicManager, questManager
 local function checkIfInBattle()
 
-    if not musicManager then
-        musicManager = sdk.get_managed_singleton("snow.wwise.WwiseMusicManager")
-    end
-    if not questManager then
-        questManager = sdk.get_managed_singleton("snow.QuestManager")
-    end
+    if not musicManager then musicManager = sdk.get_managed_singleton("snow.wwise.WwiseMusicManager") end
+    if not questManager then questManager = sdk.get_managed_singleton("snow.QuestManager") end
 
-	local currentMusicType = musicManager:get_field("_FightBGMType")
-	local currentBattleState = musicManager:get_field("_CurrentEnemyAction")
-	
-	local currentQuestType = questManager:get_field("_QuestType")
-	local currentQuestStatus = questManager:get_field("_QuestStatus")
-	
-	local inBattle = currentBattleState == 3        -- Fighting a monster
-			or currentMusicType == 25     			-- Fighting a wave of monsters
-			or currentQuestType == 8     			-- Fighting in the arena (Village/Hub quests)
-			or currentQuestType == 64    			-- Fighting in the arena (Utsushi)
-    
-	local isQuestComplete = currentQuestStatus == 3 -- Completed the quest
-	
-	return inBattle and not isQuestComplete
+    local currentMusicType = musicManager:get_field("_FightBGMType")
+    local currentBattleState = musicManager:get_field("_CurrentEnemyAction")
+
+    local currentQuestType = questManager:get_field("_QuestType")
+    local currentQuestStatus = questManager:get_field("_QuestStatus")
+
+    local inBattle = currentBattleState == 3 -- Fighting a monster
+    or currentMusicType == 25 -- Fighting a wave of monsters
+    or currentQuestType == 8 -- Fighting in the arena (Village/Hub quests)
+    or currentQuestType == 64 -- Fighting in the arena (Utsushi)
+
+    local isQuestComplete = currentQuestStatus == 3 -- Completed the quest
+
+    return inBattle and not isQuestComplete
 end
 
 -- Miscellaneous Modifications
@@ -1020,7 +1016,7 @@ data[15] = {
         }
     },
     [2] = {
-        title = "Unlimited Ammo  ", 
+        title = "Unlimited Ammo  ",
         type = "checkbox",
         value = false,
         dontSave = true,
@@ -1031,7 +1027,7 @@ data[15] = {
         end
     },
     [3] = {
-        title = "Auto Reload  ", 
+        title = "Auto Reload  ",
         type = "checkbox",
         value = false,
         dontSave = true,
@@ -1238,9 +1234,12 @@ local function drawMenu(table, level)
                 elseif obj.type == "slider" then
                     local sliderDisplay = "%d"
                     local sliderValue = obj.value
-                    if obj.value == -1 then sliderDisplay = "Off" -- If Off
-                    elseif obj.display and obj.value >= 0 and type(obj.display) == "table" then sliderDisplay = obj.display[obj.value+1] -- If display is a table
-                    elseif obj.display and obj.value >= 0 then sliderDisplay = obj.display -- If a display format is passed
+                    if obj.value == -1 then
+                        sliderDisplay = "Off" -- If Off
+                    elseif obj.display and obj.value >= 0 and type(obj.display) == "table" then
+                        sliderDisplay = obj.display[obj.value + 1] -- If display is a table
+                    elseif obj.display and obj.value >= 0 then
+                        sliderDisplay = obj.display -- If a display format is passed
                     end
 
                     -- To allow for steps we need to set these and divide them by the steps
@@ -1252,7 +1251,7 @@ local function drawMenu(table, level)
                         -- If the slider value is greater than -1 (Off), adjust the value by step as well
                         if (obj.value > -1) then
                             -- Divide the value by the step to get the reduced value
-                            sliderVal  = math.floor(obj.value / obj.step)
+                            sliderVal = math.floor(obj.value / obj.step)
                             sliderDisplay = obj.value
                         end
                     end
@@ -1280,7 +1279,7 @@ local function drawMenu(table, level)
 
                 -- If the table doesn't have a value and isn't text, go deeper and see if the next level table has to be drawn
             else
-                if level == 0 and imgui.collapsing_header( obj.title) then
+                if level == 0 and imgui.collapsing_header(obj.title) then
                     drawMenu(obj, level + 1)
                     imgui.separator()
                     imgui.spacing()
@@ -1290,7 +1289,7 @@ local function drawMenu(table, level)
                     imgui.spacing()
                     imgui.tree_pop()
                 end
-                
+
             end
         end
     end
