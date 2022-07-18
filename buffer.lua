@@ -810,6 +810,22 @@ data[10] = {
             end,
             post = nothing()
         }
+    },
+    [2] = {
+        title = "Skillbind Shockwave",
+        type = "checkbox",
+        value = false,
+        hook = {
+            path = "snow.player.Horn",
+            func = "update",
+            pre = function(args)
+                if data[10][2].value then
+                    local managed = sdk.to_managed_object(args[2])
+                    managed:set_field("_ImpactPullsTimer", 1800)
+                end
+            end,
+            post = nothing()
+        }
     }
 }
 -- Switch Axe Modifications
