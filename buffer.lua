@@ -713,6 +713,25 @@ data[8] = {
             end,
             post = nothing()
         }
+    },
+    [5] = {
+        title = "Erupting Cannon",
+        type = "checkbox",
+        value = false,
+        hook = {
+            path = "snow.player.GunLance",
+            func = "update",
+            pre = function(args)
+                if data[8][5].value then
+                    local managed = sdk.to_managed_object(args[2])
+                    managed:set_field("_ExplodePileBuffTimer", 1800)
+                    managed:set_field("_ExplodePileAttackRate", 1.3)
+                    managed:set_field("_ExplodePileElemRate", 1.3)
+                    
+                end
+            end,
+            post = nothing()
+        }
     }
 }
 -- Hammer Modifications
