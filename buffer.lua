@@ -813,6 +813,38 @@ data[11] = {
             end,
             post = nothing()
         }
+    },
+    [3] = {
+        title = "Power Axe",
+        type = "checkbox",
+        value = false,
+        hook = {
+            path = "snow.player.SlashAxe",
+            func = "update",
+            pre = function(args)
+                if data[11][3].value then
+                    local managed = sdk.to_managed_object(args[2])
+                    managed:set_field("_BottleAwakeAssistTimer", 3600)
+                end
+            end,
+            post = nothing()
+        }
+    },
+    [4] = {
+        title = "Switch Charger",
+        type = "checkbox",
+        value = false,
+        hook = {
+            path = "snow.player.SlashAxe",
+            func = "update",
+            pre = function(args)
+                if data[11][4].value then
+                    local managed = sdk.to_managed_object(args[2])
+                    managed:set_field("_NoUseSlashGaugeTimer", 400)
+                end
+            end,
+            post = nothing()
+        }
     }
 }
 -- Charge Blade Modifications
