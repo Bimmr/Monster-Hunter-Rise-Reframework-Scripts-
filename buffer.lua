@@ -531,9 +531,8 @@ data[3] = {
             func = "update",
             pre = function(args)
                 local managed = sdk.to_managed_object(args[2])
-                if data[3][2].value then
-                    -- managed:set_field("MoveWpOffBuffGreatSwordTimer", 1200)")
-                end
+                -- TODO: Make sure this is right... Why was it commented out?
+                if data[3][2].value then managed:set_field("MoveWpOffBuffGreatSwordTimer", 1200) end
             end,
             post = nothing()
         }
@@ -1151,7 +1150,22 @@ data[16] = {
                 if data[16][3].value then
                     managed:set_field("<IsWireBuffSetting>k__BackingField", true)
                     managed:set_field("_WireBuffAttackUpTimer", 1800)
-                    -- managed:call("setWireBuffAttackUp")
+                end
+            end,
+            post = nothing()
+        }
+    },
+    [4] = {
+        title = "Bolt Boost",
+        type = "checkbox",
+        value = false,
+        hook = {
+            path = "snow.player.Bow",
+            func = "update",
+            pre = function(args)
+                local managed = sdk.to_managed_object(args[2])
+                if data[16][3].value then
+                    managed:set_field("_WireBuffArrowUpTimer", 1800)
                 end
             end,
             post = nothing()
