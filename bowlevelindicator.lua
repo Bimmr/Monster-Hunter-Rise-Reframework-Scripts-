@@ -85,7 +85,7 @@ end)
 re.on_frame(function()
     if screenSize.width == 0 then getWindowSize() end
 
-    -- TODO: Find a way to check if the player is aiming, and use that instead
+    -- TODO: Find a way to check if the player is aiming, and use that instead, could also check what weapon type is being held
     if getQuestState() == 2 then
 
         -- Draw text level
