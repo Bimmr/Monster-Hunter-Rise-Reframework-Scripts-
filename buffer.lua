@@ -1093,7 +1093,7 @@ data[15] = {
                 if data[15][1].value >= 0 then
                     local managed = sdk.to_managed_object(args[2])
                     managed:set_field("_ShotChargeLv", data[15][1].value)
-                    managed:set_field("_ShotChargeFrame", 30 * data[15][1].value)
+                    -- managed:set_field("_ShotChargeFrame", 30 * data[15][1].value) -- Don't think this is needed anymore
                 end
             end,
             post = nothing()
@@ -1233,8 +1233,8 @@ data[16] = {
             pre = function(args)
                 local managed = sdk.to_managed_object(args[2])
                 if data[16][3].value then
-                    managed:set_field("<IsWireBuffSetting>k__BackingField", true)
                     managed:set_field("_WireBuffAttackUpTimer", 1800)
+                    managed:set_field("<IsWireBuffSetting>k__BackingField", true)
                 end
             end,
             post = nothing()
