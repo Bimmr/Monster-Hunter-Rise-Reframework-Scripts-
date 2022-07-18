@@ -531,7 +531,6 @@ data[3] = {
             func = "update",
             pre = function(args)
                 local managed = sdk.to_managed_object(args[2])
-                -- TODO: Make sure this is right... Why was it commented out?
                 if data[3][2].value then managed:set_field("MoveWpOffBuffGreatSwordTimer", 1200) end
             end,
             post = nothing()
@@ -627,7 +626,7 @@ data[6] = {
             path = "snow.player.DualBlades",
             func = "update",
             pre = function(args)
-                if data[6][1].value then
+                if data[6][2].value then
                     local managed = sdk.to_managed_object(args[2])
                     managed:set_field("SharpnessRecoveryBuffValidTimer", 3000)
                 end
@@ -743,7 +742,7 @@ data[8] = {
                     managed:set_field("_ExplodePileBuffTimer", 1800)
                     managed:set_field("_ExplodePileAttackRate", 1.3)
                     managed:set_field("_ExplodePileElemRate", 1.3)
-                    
+
                 end
             end,
             post = nothing()
@@ -1265,9 +1264,7 @@ data[16] = {
             func = "update",
             pre = function(args)
                 local managed = sdk.to_managed_object(args[2])
-                if data[16][3].value then
-                    managed:set_field("_WireBuffArrowUpTimer", 1800)
-                end
+                if data[16][3].value then managed:set_field("_WireBuffArrowUpTimer", 1800) end
             end,
             post = nothing()
         }
