@@ -87,9 +87,13 @@ end
 
 -- local typeOptions = {"Method", "Field", "ArrayIndex"}
 -- local operationOptions = {"Get", "Set", "Call"}
-local function performInstructions(last, instructions)
+local function performInstructions(last, instructions, instructionsToPerform)
     if not last then return "Error with Singleton" end
+    if not instructionsToPerform then
+        instructionsToPerform = #instructions
+    end
     for i, instruction in ipairs(instructions) do
+        if i > instructionsToPerform then break end
         if instruction.type == 1 then
             local args = nil
             if not (instruction.args == nil or instruction.args == "") then args = instruction.args end
@@ -172,20 +176,20 @@ local function drawCallMenu()
 
                 -- If operation is GET and is last item in instructions, show value
                 if instruction.operation == 1 and i1 == #call.instructions then
-                    imgui.input_text("Value " .. i .. "-" .. i1, performInstructions(singleton, call.instructions),
+                    imgui.input_text("Value " .. i .. "-" .. i1, performInstructions(singleton, call.instructions, i1),
                                      ImGuiInputTextFlags_ReadOnly)
 
                     --  If operation is SET, show value input, and a set button
                 elseif instruction.operation == 2 then
                     changed, instruction.value = imgui.input_text("Value " .. i .. "-" .. i1, instruction.value)
                     if imgui.button("Set Value " .. i .. "-" .. i1) then
-                        performInstructions(singleton, call.instructions)
+                        performInstructions(singleton, call.instructions, i1)
                     end
                     -- If operation is CALL, show value input, and a call button
                 elseif instruction.operation == 3 then
 
                     if imgui.button("Call Method " .. i .. "-" .. i1) then
-                        performInstructions(singleton, call.instructions)
+                        performInstructions(singleton, call.instructions, i1)
                     end
                 end
                 imgui.spacing()
