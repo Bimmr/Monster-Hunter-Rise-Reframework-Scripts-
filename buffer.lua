@@ -379,7 +379,6 @@ data[2] = {
                         local playerData = getPlayerData()
                         if not playerData then return end
                         local max = playerData:get_field("_vitalMax")
-
                         playerData:set_field("_r_Vital", max)
                     end
                 end,
@@ -399,10 +398,14 @@ data[2] = {
                         local playerData = getPlayerData()
                         if not playerData then return end
                         local max = playerData:get_field("_vitalMax")
-                        local maxFloat = max + .0
 
-                        playerData:set_field("_r_Vital", max)
-                        playerData:call("set__vital", maxFloat)
+                        -- Possible fix for Unlimited Health insta-death
+                        if max > playerData:get_field("_r_Vital") then
+                            local maxFloat = max + .0
+                            playerData:set_field("_r_Vital", max)
+                            playerData:call("set__vital", maxFloat)
+                        end
+
                     end
                 end,
                 post = nothing()
