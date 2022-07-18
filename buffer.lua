@@ -618,6 +618,22 @@ data[6] = {
             end,
             post = nothing()
         }
+    },
+    [2] = {
+        title = "Ironshine Silk",
+        type = "checkbox",
+        value = false,
+        hook = {
+            path = "snow.player.DualBlades",
+            func = "update",
+            pre = function(args)
+                if data[6][1].value then
+                    local managed = sdk.to_managed_object(args[2])
+                    managed:set_field("SharpnessRecoveryBuffValidTimer", 3000)
+                end
+            end,
+            post = nothing()
+        }
     }
 
 }
