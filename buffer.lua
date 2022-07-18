@@ -772,6 +772,24 @@ data[9] = {
             end,
             post = nothing()
         }
+    },
+    [2] = {
+        title = "Impact Burst",
+        type = "checkbox",
+        value = false,
+        hook = {
+            path = "snow.player.Hammer",
+            func = "update",
+            pre = function(args)
+                if data[9][2].value then
+                    local managed = sdk.to_managed_object(args[2])
+                    managed:set_field("_ImpactPullsTimer", 3600)
+                    managed:set_field("_IsEnableImapctPulls", true) -- They mispelt this field
+                    managed:set_field("_IsEnableImpactPulls", true) -- Adding this just incase they fix it in a later version
+                end
+            end,
+            post = nothing()
+        }
     }
 }
 -- Hunting Horn Modifications
