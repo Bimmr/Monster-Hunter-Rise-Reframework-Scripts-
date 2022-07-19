@@ -386,7 +386,7 @@ data[2] = {
             }
         },
         [2] = {
-            title = "Unlimited Health (Cheater)",
+            title = "Insta-Healing (Cheater)",
             type = "checkbox",
             value = false,
             hook = {
@@ -407,9 +407,93 @@ data[2] = {
                 end,
                 post = nothing()
             }
+        },
+        [3] = {
+            title = "Dragonheart Health",
+            type = "checkbox",
+            value = false,
+            hook = {
+                path = "snow.player.PlayerManager",
+                func = "update",
+                pre = function(args)
+                    if data[2][2][3].value then
+
+                        local playerData = getPlayerData()
+                        if not playerData then return end
+
+                        local max = playerData:get_field("_vitalMax")
+                        local healthToSet = max + .0
+
+                        local playerSkills = playerData:call("get_PlayerSkillList")
+                        if not playerSkills then return end
+                        local dhSkill = playerSkills:call("getSkillData", 103) -- Dragonheart Skill ID
+                        if not dhSkill then return end
+                        local dhLevel = dhSkill:get_field("SkillLv")
+
+                        -- Depending on level set health percent
+                        if dhLevel == 1 or dhLevel == 2 then healthToSet = healthToSet * 0.5 end
+                        if dhLevel == 3 then healthToSet = healthToSet * 0.7 end
+                        if dhLevel == 4 then healthToSet = healthToSet * 0.8 end
+
+                        playerData:set_field("_r_Vital", healthToSet)
+                        playerData:call("set__vital", healthToSet)
+
+                    end
+                end,
+                post = nothing()
+            }
+        },
+        [4] = {
+            title = "Heroics Health",
+            type = "checkbox",
+            value = false,
+            hook = {
+                path = "snow.player.PlayerManager",
+                func = "update",
+                pre = function(args)
+                    if data[2][2][4].value then
+
+                        local playerData = getPlayerData()
+                        if not playerData then return end
+
+                        local max = playerData:get_field("_vitalMax")
+                        local healthToSet = max + .0
+                        healthToSet = healthToSet * 0.3
+
+                        playerData:set_field("_r_Vital", healthToSet)
+                        playerData:call("set__vital", healthToSet)
+
+                    end
+                end,
+                post = nothing()
+            }
+        },
+        [5] = {
+            title = "Adrenaline Health",
+            type = "checkbox",
+            value = false,
+            hook = {
+                path = "snow.player.PlayerManager",
+                func = "update",
+                pre = function(args)
+                    if data[2][2][5].value then
+
+                        local playerData = getPlayerData()
+                        if not playerData then return end
+
+                        local healthToSet = 10.0
+
+                        playerData:set_field("_r_Vital", healthToSet)
+                        playerData:call("set__vital", healthToSet)
+
+                    end
+                end,
+                post = nothing()
+            }
         }
     },
-    [3] = {
+    
+    [4] = {
         title = "Stat Modifiers (Cheater)",
         [1] = {
             title = "Attack Modifier",
@@ -431,24 +515,24 @@ data[2] = {
                     local playerData = getPlayerData()
                     if not playerData then return end
 
-                    if data[2][3][1].value >= 0 then
+                    if data[2][4][1].value >= 0 then
                         -- Set the original attack value
-                        if data[2][3][1].data.value == 0 then
-                            data[2][3][1].data.value = playerData:get_field("_Attack")
+                        if data[2][4][1].data.value == 0 then
+                            data[2][4][1].data.value = playerData:get_field("_Attack")
                         end
 
                         -- Setup variables to determine how much extra attack needs to be added to get to the set value
-                        local attack = data[2][3][1].data.value
-                        local attackTarget = data[2][3][1].value
+                        local attack = data[2][4][1].data.value
+                        local attackTarget = data[2][4][1].value
                         local attackMod = attackTarget - attack
 
                         -- Add the extra attack
                         playerData:set_field("_AtkUpAlive", attackMod)
 
                         -- Restore the original attack value if disabled    
-                    elseif data[2][3][1].data.value ~= 0 then
+                    elseif data[2][4][1].data.value ~= 0 then
                         playerData:set_field("_AtkUpAlive", 0)
-                        data[2][3][1].data.value = 0
+                        data[2][4][1].data.value = 0
                     end
                 end,
                 post = nothing()
@@ -474,21 +558,21 @@ data[2] = {
                     local playerData = getPlayerData()
                     if not playerData then return end
 
-                    if data[2][3][2].value >= 0 then
+                    if data[2][4][2].value >= 0 then
                         -- Set the original defence value
-                        if data[2][3][2].data.value == 0 then
-                            data[2][3][2].data.value = playerData:get_field("_Defence")
+                        if data[2][4][2].data.value == 0 then
+                            data[2][4][2].data.value = playerData:get_field("_Defence")
                         end
                         -- Setup variables to determine how much extra defence needs to be added to get to the set value
-                        local defence = data[2][3][2].data.value
-                        local defenceTarget = data[2][3][2].value
+                        local defence = data[2][4][2].data.value
+                        local defenceTarget = data[2][4][2].value
                         local defenceMod = defenceTarget - defence
                         playerData:set_field("_DefUpAlive", defenceMod)
 
                         -- Restore the original defence value if disabled
-                    elseif data[2][3][2].data.value ~= 0 then
+                    elseif data[2][4][2].data.value ~= 0 then
                         playerData:set_field("_DefUpAlive", 0)
-                        data[2][3][2].data.value = 0
+                        data[2][4][2].data.value = 0
                     end
                 end,
                 post = nothing()
@@ -1108,7 +1192,7 @@ data[15] = {
                 if data[15][1].value >= 0 then
                     local managed = sdk.to_managed_object(args[2])
                     managed:set_field("_ShotChargeLv", data[15][1].value)
-                    -- managed:set_field("_ShotChargeFrame", 30 * data[15][1].value) -- Don't think this is needed anymore
+                    managed:set_field("_ShotChargeFrame", 30 * data[15][1].value) 
                 end
             end,
             post = nothing()
@@ -1430,14 +1514,14 @@ end)
 re.on_script_reset(function()
 
     -- Until I find a better way of increase attack, I have to reset this on script reset
-    if data[2][3][1].value >= 0 then
+    if data[2][4][1].value >= 0 then
         local playerData = getPlayerData()
         if not playerData then return end
         playerData:set_field("_AtkUpAlive", 0)
     end
 
     -- Until I find a better way of increase defence, I have to reset this on script reset
-    if data[2][3][2].value >= 0 then
+    if data[2][4][2].value >= 0 then
         local playerData = getPlayerData()
         if not playerData then return end
         playerData:set_field("_DefUpAlive", 0)
