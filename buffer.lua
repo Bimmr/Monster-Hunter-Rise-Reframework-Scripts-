@@ -1,7 +1,7 @@
 local configPath = "Buffer.json"
 local kitchenFacility, mealFunc
 local playerInput
-local data = {}
+local data = {} 
 
 -- Do nothing
 local function nothing(retval)
