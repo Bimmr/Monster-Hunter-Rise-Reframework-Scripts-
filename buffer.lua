@@ -1,7 +1,7 @@
 local configPath = "Buffer.json"
 local kitchenFacility, mealFunc
 local playerInput
-local data = {} 
+local data = {}
 
 -- Do nothing
 local function nothing(retval)
@@ -420,21 +420,22 @@ data[2] = {
 
                         local playerData = getPlayerData()
                         if not playerData then return end
+                        local playerBase = getPlayerBase()
+                        if not playerBase then return end
 
                         local max = playerData:get_field("_vitalMax")
-                        local healthToSet = max + .0
-
-                        local playerSkills = playerData:call("get_PlayerSkillList")
+                        local playerSkills = playerBase:call("get_PlayerSkillList")
                         if not playerSkills then return end
                         local dhSkill = playerSkills:call("getSkillData", 103) -- Dragonheart Skill ID
                         if not dhSkill then return end
                         local dhLevel = dhSkill:get_field("SkillLv")
 
                         -- Depending on level set health percent
-                        if dhLevel == 1 or dhLevel == 2 then healthToSet = healthToSet * 0.5 end
-                        if dhLevel == 3 then healthToSet = healthToSet * 0.7 end
-                        if dhLevel == 4 then healthToSet = healthToSet * 0.8 end
+                        if dhLevel == 1 or dhLevel == 2 then max = math.floor(max * 0.5) end
+                        if dhLevel == 3 or dhLevel == 4 then max = math.floor(max * 0.7) end
+                        if dhLevel == 5 then max = math.floor(max * 0.8) end
 
+                        local healthToSet = max + .0
                         playerData:set_field("_r_Vital", healthToSet)
                         playerData:call("set__vital", healthToSet)
 
@@ -492,7 +493,7 @@ data[2] = {
             }
         }
     },
-    
+
     [4] = {
         title = "Stat Modifiers (Cheater)",
         [1] = {
@@ -1192,7 +1193,7 @@ data[15] = {
                 if data[15][1].value >= 0 then
                     local managed = sdk.to_managed_object(args[2])
                     managed:set_field("_ShotChargeLv", data[15][1].value)
-                    managed:set_field("_ShotChargeFrame", 30 * data[15][1].value) 
+                    managed:set_field("_ShotChargeFrame", 30 * data[15][1].value)
                 end
             end,
             post = nothing()
