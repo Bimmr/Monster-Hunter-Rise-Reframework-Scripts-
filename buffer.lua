@@ -493,6 +493,286 @@ data[2] = {
             }
         }
     },
+    [3] = {
+        title = "Conditions, Ailments, & Blights",
+        [1] = {
+            title = "Prevent Blights",
+            [1] = {
+                title = "Fire Blight",
+                type = "checkbox",
+                value = false,
+                hook = {
+                    path = "snow.player.PlayerManager",
+                    func = "update",
+                    pre = function(args)
+                        if data[2][3][1][1].value then
+                            local playerBase = getPlayerBase()
+                            if not playerBase then return end
+
+                            playerBase:set_field("_FireLDurationTimer", 0) -- The fire timer
+                            playerBase:set_field("_FireDamageTimer", 0) -- The fire damage timer
+                        end
+                    end,
+                    post = nothing()
+                }
+            },
+            [2] = {
+                title = "Water Blight",
+                type = "checkbox",
+                value = false,
+                hook = {
+                    path = "snow.player.PlayerManager",
+                    func = "update",
+                    pre = function(args)
+                        if data[2][3][1][2].value then
+                            local playerBase = getPlayerBase()
+                            if not playerBase then return end
+
+                            playerBase:set_field("_WaterLDurationTimer", 0) -- The water blight timer
+                        end
+                    end,
+                    post = nothing()
+                }
+            },
+            [3] = {
+                title = "Ice Blight",
+                type = "checkbox",
+                value = false,
+                hook = {
+                    path = "snow.player.PlayerManager",
+                    func = "update",
+                    pre = function(args)
+                        if data[2][3][1][3].value then
+                            local playerBase = getPlayerBase()
+                            if not playerBase then return end
+
+                            playerBase:set_field("_IceLDurationTimer", 0) -- The ice blight timer
+                        end
+                    end,
+                    post = nothing()
+                }
+            },
+            [4] = {
+                title = "Thunder Blight",
+                type = "checkbox",
+                value = false,
+                hook = {
+                    path = "snow.player.PlayerManager",
+                    func = "update",
+                    pre = function(args)
+                        if data[2][3][1][4].value then
+                            local playerBase = getPlayerBase()
+                            if not playerBase then return end
+
+                            playerBase:set_field("_ThunderLDurationTimer", 0) -- The thunder blight timer
+                        end
+                    end,
+                    post = nothing()
+                }
+            },
+            [5] = {
+                title = "Dragon Blight",
+                type = "checkbox",
+                value = false,
+                hook = {
+                    path = "snow.player.PlayerManager",
+                    func = "update",
+                    pre = function(args)
+                        if data[2][3][1][5].value then
+                            local playerBase = getPlayerBase()
+                            if not playerBase then return end
+
+                            playerBase:set_field("_DragonLDurationTimer", 0) -- The dragon blight timer
+                        end
+                    end,
+                    post = nothing()
+                }
+            },
+            [6] = {
+                title = "Bubble Blight",
+                type = "checkbox",
+                value = false,
+                hook = {
+                    path = "snow.player.PlayerManager",
+                    func = "update",
+                    pre = function(args)
+                        if data[2][3][1][6].value then
+                            local playerBase = getPlayerBase()
+                            if not playerBase then return end
+
+                            playerBase:set_field("_BubbleDamageTimer", 0) -- The bubble timer
+                            -- playerData:set_field("_BubbleType", 0) -- | 0=None | 1=BubbleS | 2=BubbleL |
+                        end
+                    end,
+                    post = nothing()
+                }
+            },
+            [7] = {
+                title = "Blast Blight",
+                type = "checkbox",
+                value = false,
+                hook = {
+                    path = "snow.player.PlayerManager",
+                    func = "update",
+                    pre = function(args)
+                        if data[2][3][1][7].value then
+                            local playerBase = getPlayerBase()
+                            if not playerBase then return end
+
+                            playerBase:set_field("_BombDurationTimer", 0) -- The blast timer
+                        end
+                    end,
+                    post = nothing()
+                }
+            }
+        },
+        [2] = {
+            title = "Prevent Conditions",
+            [1] = {
+                title = "Bleeding",
+                type = "checkbox",
+                value = false,
+                hook = {
+                    path = "snow.player.PlayerManager",
+                    func = "update",
+                    pre = function(args)
+                        if data[2][3][2][1].value then
+                            local playerBase = getPlayerBase()
+                            if not playerBase then return end
+
+                            playerBase:set_field("_BleedingDebuffTimer", 0) -- The bleeding timer
+                        end
+                    end,
+                    post = nothing()
+                }
+            },
+            [2] = {
+                title = "Stun",
+                type = "checkbox",
+                value = false,
+                hook = {
+                    path = "snow.player.PlayerManager",
+                    func = "update",
+                    pre = function(args)
+                        if data[2][3][2][2].value then
+                            local playerBase = getPlayerBase()
+                            if not playerBase then return end
+                            playerBase:set_field("_StunDurationTimer", 0) -- The stun timer
+
+                        end
+                    end,
+                    post = nothing()
+                }
+            },
+
+            [3] = {
+                title = "Poison",
+                type = "checkbox",
+                value = false,
+                hook = {
+                    path = "snow.player.PlayerManager",
+                    func = "update",
+                    pre = function(args)
+                        if data[2][3][2][3].value then
+                            local playerBase = getPlayerBase()
+                            if not playerBase then return end
+
+                            playerBase:set_field("_PoisonDurationTimer", 0) -- The poison timer
+                            playerBase:set_field("_PoisonDamageTimer", 0) -- How long till next poison tick
+                            -- playerData:set_field("_PoisonLv", 0) -- | 0=None | 1=Poison | 2=NoxiousPoison | 3=DeadlyPoison | 
+                        end
+                    end,
+                    post = nothing()
+                }
+            },
+            [4] = {
+                title = "Sleep",
+                type = "checkbox",
+                value = false,
+                hook = {
+                    path = "snow.player.PlayerManager",
+                    func = "update",
+                    pre = function(args)
+                        if data[2][3][2][4].value then
+                            local playerBase = getPlayerBase()
+                            if not playerBase then return end
+
+                            playerBase:set_field("_SleepDurationTimer", 0) -- The sleep timer
+                            playerBase:set_field("<SleepMovableTimer>k__BackingField", 0) -- The sleep walking timer
+                        end
+                    end,
+                    post = nothing()
+                }
+            },
+            [5] = {
+                title = "Frenzy",
+                type = "checkbox",
+                value = false,
+                hook = {
+                    path = "snow.player.PlayerManager",
+                    func = "update",
+                    pre = function(args)
+                        if data[2][3][2][5].value then
+                            local playerBase = getPlayerBase()
+                            if not playerBase then return end
+
+                            playerBase:set_field("_IsVirusLatency", false) -- The frenzy virus
+                            playerBase:set_field("_VirusTimer", 0) -- How long till the next frenzy virus tick
+                            playerBase:set_field("_VirusAccumulator", 0) -- Total ticks of Frenzy
+                        end
+                    end,
+                    post = nothing()
+                }
+            },
+            [6] = {
+                title = "Defence/Restistance Down",
+                type = "checkbox",
+                value = false,
+                hook = {
+                    path = "snow.player.PlayerManager",
+                    func = "update",
+                    pre = function(args)
+                        if data[2][3][2][6].value then
+                            local playerBase = getPlayerBase()
+                            if not playerBase then return end
+
+                            playerBase:set_field("_ResistanceDownDurationTimer", 0) -- The resistance down timer
+                            playerBase:set_field("_DefenceDownDurationTimer", 0) -- The defence down timer
+                        end
+                    end,
+                    post = nothing()
+                }
+            },
+            [7] = {
+                title = "Prevent Hellfire and Stentch",
+                type = "checkbox",
+                value = false,
+                hook = {
+                    path = "snow.player.PlayerManager",
+                    func = "update",
+                    pre = function(args)
+                        if data[2][3][2][7].value then
+                            local playerBase = getPlayerBase()
+                            if not playerBase then return end
+
+                            playerBase:set_field("_OniBombDurationTimer", 0) -- The hellfire timer
+                            playerBase:set_field("_StinkDurationTimer", 0) -- The putrid gas damage timer
+                        end
+                    end,
+                    post = nothing()
+                }
+            },
+            [8] = {
+                title = "Still working on Paralyze and Web",
+                type = "text"
+    
+                -- playerBase:set_field("_ParalyzeDurationTimer", 0) -- The paralysis recovery timer -- DOESN'T REMOVE ANIMATION TIME
+                -- playerBase:set_field("_BetoDurationTimer", 0) -- The covered in spider web recovery timer -- DOESN'T REMOVE ANIMATION TIME
+                -- playerBase:set_field("_EarDurationTimer", 0) -- The roar recovery timer -- DOESN'T REMOVE ANIMATION TIME
+                -- playerBase:set_field("_QuakeDurationTimer", 0) -- The stomp recovery timer -- DOESN'T REMOVE ANIMATION TIME
+            }
+        },
+    },
 
     [4] = {
         title = "Stat Modifiers (Cheater)",
