@@ -212,13 +212,13 @@ local function drawMenu(table, level)
     end
 end
 
+-- Init the modules
+for _, module in ipairs(modules) do if module.init then module.init() end end
+
 -- Load and Initialize everything that we need
 loadConfig()
 initHooks()
 initUpdates()
-
--- Init the modules
-for _, module in ipairs(modules) do if module.init then module.init() end end
 
 -- Add the menu to the REFramework Script Generated UI
 re.on_draw_ui(function()
