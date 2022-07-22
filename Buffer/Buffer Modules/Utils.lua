@@ -59,7 +59,7 @@ function utils.getLength(obj)
 end
 
 -- Check if player is in battle, base code by raffRun
-local function checkIfInBattle()
+function utils.checkIfInBattle()
 
     if not musicManager then musicManager = sdk.get_managed_singleton("snow.wwise.WwiseMusicManager") end
     if not questManager then questManager = sdk.get_managed_singleton("snow.QuestManager") end
