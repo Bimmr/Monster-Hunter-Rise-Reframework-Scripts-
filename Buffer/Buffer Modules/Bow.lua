@@ -65,7 +65,7 @@ bow = {
             path = "snow.player.Bow",
             func = "update",
             pre = function(args)
-                if bow[3].value then
+                if bow[4].value then
                     local managed = sdk.to_managed_object(args[2])
                     managed:set_field("_WireBuffArrowUpTimer", 1800)
                 end
