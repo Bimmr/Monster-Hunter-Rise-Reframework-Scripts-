@@ -222,7 +222,7 @@ initUpdates()
 
 -- Add the menu to the REFramework Script Generated UI
 re.on_draw_ui(function()
-    imgui.begin_window("Modifiers & Settings", nil, ImGuiWindowFlags_AlwaysAutoResize)
+    imgui.begin_window("Modifiers & Settings", nil, 0)
     imgui.spacing()
     drawMenu()
     imgui.spacing()
