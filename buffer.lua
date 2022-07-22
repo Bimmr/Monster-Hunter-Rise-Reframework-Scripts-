@@ -409,7 +409,7 @@ data[2] = {
             }
         },
         [3] = {
-            title = "Dragonheart Health",
+            title = "Max Dragonheart Health",
             type = "checkbox",
             value = false,
             hook = {
@@ -431,13 +431,13 @@ data[2] = {
                         local dhLevel = dhSkill:get_field("SkillLv")
 
                         -- Depending on level set health percent
-                        if dhLevel == 1 or dhLevel == 2 then max = math.floor(max * 0.5) end
-                        if dhLevel == 3 or dhLevel == 4 then max = math.floor(max * 0.7) end
-                        if dhLevel == 5 then max = math.floor(max * 0.8) end
+                        local newHealth = max
+                        if dhLevel == 1 or dhLevel == 2 then newHealth = math.floor(max * 0.5) end
+                        if dhLevel == 3 or dhLevel == 4 then newHealth = math.floor(max * 0.7) end
+                        if dhLevel == 5 then newHealth = math.floor(max * 0.8) end
 
-                        local healthToSet = max + .0
-                        playerData:set_field("_r_Vital", healthToSet)
-                        playerData:call("set__vital", healthToSet)
+                        playerData:set_field("_r_Vital", math.min(max, newHealth) + .0)
+                        playerData:call("set__vital", math.min(max, newHealth) + .0)
 
                     end
                 end,
@@ -445,7 +445,7 @@ data[2] = {
             }
         },
         [4] = {
-            title = "Heroics Health",
+            title = "Max Heroics Health",
             type = "checkbox",
             value = false,
             hook = {
@@ -458,11 +458,10 @@ data[2] = {
                         if not playerData then return end
 
                         local max = playerData:get_field("_vitalMax")
-                        local healthToSet = max + .0
-                        healthToSet = healthToSet * 0.3
+                        local newHealth = math.floor(max * 0.3)
 
-                        playerData:set_field("_r_Vital", healthToSet)
-                        playerData:call("set__vital", healthToSet)
+                        playerData:set_field("_r_Vital", math.min(max, newHealth) + .0)
+                        playerData:call("set__vital", math.min(max, newHealth) + .0)
 
                     end
                 end,
@@ -470,7 +469,7 @@ data[2] = {
             }
         },
         [5] = {
-            title = "Adrenaline Health",
+            title = "Max Adrenaline Health",
             type = "checkbox",
             value = false,
             hook = {
@@ -482,10 +481,10 @@ data[2] = {
                         local playerData = getPlayerData()
                         if not playerData then return end
 
-                        local healthToSet = 10.0
+                        local newHealth = 10.0
 
-                        playerData:set_field("_r_Vital", healthToSet)
-                        playerData:call("set__vital", healthToSet)
+                        playerData:set_field("_r_Vital", math.min(max, newHealth) + .0)
+                        playerData:call("set__vital", math.min(max, newHealth) + .0)
 
                     end
                 end,
