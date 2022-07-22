@@ -51,7 +51,6 @@ bow = {
                 if bow[3].value then
                     local managed = sdk.to_managed_object(args[2])
                     managed:set_field("_WireBuffAttackUpTimer", 1800)
-                    managed:set_field("<IsWireBuffSetting>k__BackingField", true)
                 end
             end,
             post = utils.nothing()
