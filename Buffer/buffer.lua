@@ -13,6 +13,7 @@ local greatSword = require("Buffer Modules.GreatSword")
 local longSword = require("Buffer Modules.LongSword")
 local shortSword = require("Buffer Modules.ShortSword")
 local dualBlades = require("Buffer Modules.DualBlades")
+local hammer = require("Buffer Modules.Hammer")
 local lance = require("Buffer Modules.Lance")
 local gunlance = require("Buffer Modules.Gunlance")
 local huntingHorn = require("Buffer Modules.HuntingHorn")
@@ -23,9 +24,8 @@ local lightBowgun = require("Buffer Modules.LightBowgun")
 local heavyBowgun = require("Buffer Modules.HeavyBowgun")
 local bow = require("Buffer Modules.Bow")
 
-local modules = {miscellaneous, character, greatSword, longSword, shortSword, dualBlades, lance, gunlance, huntingHorn,
-                 switchAxe, chargeBlade, insectGlaive, lightBowgun, heavyBowgun, bow}
-
+local modules = {miscellaneous, character, greatSword, longSword, shortSword, dualBlades, hammer, lance, gunlance,
+                 huntingHorn, switchAxe, chargeBlade, insectGlaive, lightBowgun, heavyBowgun, bow}
 
 -- Save the config
 local function generateSaveData(table, keyPrefix)
@@ -147,7 +147,7 @@ local function drawMenu(table, level)
                 if obj.type == "checkbox" then
                     changed, obj.value = imgui.checkbox(obj.title, obj.value)
 
-                -- If the table has a type of slider
+                    -- If the table has a type of slider
                 elseif obj.type == "slider" then
                     local sliderDisplay = "%d"
                     local sliderValue = obj.value
