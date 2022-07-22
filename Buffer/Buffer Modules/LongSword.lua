@@ -33,7 +33,7 @@ longsword = {
             pre = function(args)
                 if longsword[2].value >= 0 then
                     local managed = sdk.to_managed_object(args[2])
-                    managed:set_field("_LongSwordGaugeLv", longsword.spiritLevel.value)
+                    managed:set_field("_LongSwordGaugeLv", longsword[2].value)
                 end
             end,
             post = utils.nothing()
