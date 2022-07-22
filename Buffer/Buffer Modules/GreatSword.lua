@@ -18,7 +18,7 @@ greatsword = {
             pre = function(args)
                 if greatsword[1].value >= 0 then
                     local managed = sdk.to_managed_object(args[2])
-                    managed:set_field("_TameLv", greatsword.chargeLevel.value)
+                    managed:set_field("_TameLv", greatsword[1].value)
                 end
             end,
             post = utils.nothing()
