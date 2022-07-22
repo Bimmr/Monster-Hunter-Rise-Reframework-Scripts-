@@ -224,6 +224,41 @@ data[1] = {
                 data[14][2].value = value -- Light bow gun
                 data[15][3].value = value -- Heavy bow gun
             end
+        },
+        [4] = {
+            title = "No Deviation (Bowguns)",
+            type = "checkbox",
+            value = false,
+            data = {
+                isDeviation = false
+            },
+            hook = {
+                path = "snow.equip.BulletWeaponBaseUserData.Param",
+                func = "get_Fluctuation",
+                pre = function(args)
+                    local managed = sdk.to_managed_object(args[2])
+                    if not managed then return end
+                    if not managed:get_type_definition():is_a("snow.equip.BulletWeaponBaseUserData.Param") then
+                        return
+                    end
+                    if data[1][3][4].value then
+                        data[1][3][4].data.isDeviation = true
+                        return sdk.PreHookResult.SKIP_ORIGINAL
+                    end
+                end,
+                post = function(retval)
+                    if data[1][3][4].data.isDeviation then
+                        data[1][3][4].data.isDeviation = false
+                        if data[1][3][4].value then return 0 end
+                    end
+                    return retval
+                end
+            },
+            onChange = function()
+                local value = data[1][3][4].value
+                data[14][4].value = value -- Light Bowgun
+                data[15][7].value = value -- Heavy Bowgun
+            end
         }
     },
     [4] = {
@@ -764,13 +799,13 @@ data[2] = {
             [8] = {
                 title = "Still working on Paralyze and Web",
                 type = "text"
-    
+
                 -- playerBase:set_field("_ParalyzeDurationTimer", 0) -- The paralysis recovery timer -- DOESN'T REMOVE ANIMATION TIME
                 -- playerBase:set_field("_BetoDurationTimer", 0) -- The covered in spider web recovery timer -- DOESN'T REMOVE ANIMATION TIME
                 -- playerBase:set_field("_EarDurationTimer", 0) -- The roar recovery timer -- DOESN'T REMOVE ANIMATION TIME
                 -- playerBase:set_field("_QuakeDurationTimer", 0) -- The stomp recovery timer -- DOESN'T REMOVE ANIMATION TIME
             }
-        },
+        }
     },
 
     [4] = {
@@ -1453,6 +1488,16 @@ data[14] = {
             end,
             post = nothing()
         }
+    },
+    [4] = {
+        title = "No Deviation",
+        type = "checkbox",
+        value = false,
+        onChange = function()
+            -- Change and update Miscellaneous/Ammo & Coating Options/No Deviation (Bowguns)
+            data[1][3][4].value = data[14][4].value
+            data[1][3][4].onChange()
+        end
     }
 }
 -- Heavy Bowgun Modifications
@@ -1566,6 +1611,16 @@ data[15] = {
             end,
             post = nothing()
         }
+    },
+    [7] = {
+        title = "No Deviation ",
+        type = "checkbox",
+        value = false,
+        onChange = function()
+            -- Change and update Miscellaneous/Ammo & Coating Options/No Deviation (Bowguns)
+            data[1][3][4].value = data[15][7].value
+            data[1][3][4].onChange()
+        end
     }
 }
 -- Bow Modifications
@@ -1583,8 +1638,8 @@ data[16] = {
             path = "snow.player.Bow",
             func = "update",
             pre = function(args)
-                local managed = sdk.to_managed_object(args[2])
                 if data[16][1].value >= 0 then
+                    local managed = sdk.to_managed_object(args[2])
                     managed:set_field("<ChargeLv>k__BackingField", data[16][1].value)
                 end
             end,
@@ -1610,8 +1665,8 @@ data[16] = {
             path = "snow.player.Bow",
             func = "update",
             pre = function(args)
-                local managed = sdk.to_managed_object(args[2])
                 if data[16][3].value then
+                    local managed = sdk.to_managed_object(args[2])
                     managed:set_field("_WireBuffAttackUpTimer", 1800)
                     managed:set_field("<IsWireBuffSetting>k__BackingField", true)
                 end
@@ -1627,8 +1682,10 @@ data[16] = {
             path = "snow.player.Bow",
             func = "update",
             pre = function(args)
-                local managed = sdk.to_managed_object(args[2])
-                if data[16][3].value then managed:set_field("_WireBuffArrowUpTimer", 1800) end
+                if data[16][3].value then
+                    local managed = sdk.to_managed_object(args[2])
+                    managed:set_field("_WireBuffArrowUpTimer", 1800)
+                end
             end,
             post = nothing()
         }
