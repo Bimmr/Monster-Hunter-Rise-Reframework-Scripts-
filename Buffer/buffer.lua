@@ -99,7 +99,7 @@ local function tooltip(text)
         imgui.end_window()
     end
 end
-
+ 
 -- Initialize the hooks
 local function initHooks(table)
     table = table or modules
