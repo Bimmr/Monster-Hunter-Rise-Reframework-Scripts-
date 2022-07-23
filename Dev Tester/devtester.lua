@@ -208,17 +208,17 @@ local function drawCallMenu()
 
                 if (i1 ~= #call.instructions and (instruction.status ~= "Success" and instruction.status ~= nil)) or
                     (instruction.status ~= "Success" and instruction.status ~= nil) then
-                    imgui.input_text("Status " .. i .. "-" .. i1, instruction.status, ImGuiInputTextFlags_ReadOnly)
+                    imgui.input_text("Status " .. i .. "-" .. i1, instruction.status, 16384)
                 end
 
                 -- If operation is GET and is last item in instructions, show value
                 if instruction.operation == 1 and i1 == #call.instructions then
                     if call.type == 1 then
                     imgui.input_text("Value " .. i .. "-" .. i1, performInstructions(path, call.instructions, i1),
-                                     ImGuiInputTextFlags_ReadOnly)
+                    16384)
                     else
                         imgui.input_text("Value " .. i .. "-" .. i1, instruction.value,
-                                         ImGuiInputTextFlags_ReadOnly)
+                        16384)
                     end
 
                     --  If operation is SET, show value input, and a set button
