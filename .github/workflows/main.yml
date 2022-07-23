@@ -19,5 +19,6 @@ jobs:
       with:
         artifacts: "release.zip"
         allowUpdates: true
-        commit: "Buffer"
+        tag: 'Buffer'
+        replacesArtifacts: true
         token: ${{ secrets.TOKEN }}
