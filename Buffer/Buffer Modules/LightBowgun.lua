@@ -52,7 +52,7 @@ lightBowgun = {
             pre = function(args)
                 if lightBowgun[3].value then
 
-                    local playerData = getPlayerData()
+                    local playerData = utils.getPlayerData()
                     if not playerData then return end
                     playerData:set_field("_WyvernBlastGauge", 3)
                     playerData:set_field("_WyvernBlastReloadTimer", 0)
