@@ -18,7 +18,7 @@ jobs:
     - name: Upload Release
       uses: ncipollo/release-action@v1
       with:
-        artifacts: "release.zip"
+        artifacts: "buffer.zip"
         allowUpdates: true
         tag: 'Buffer'
         replacesArtifacts: true
