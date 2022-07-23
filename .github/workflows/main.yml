@@ -1,0 +1,23 @@
+name: Create Archive
+on:
+  push:
+    tags:
+    - '*'
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - name: Archive Release
+      uses: thedoctor0/zip-release@main
+      with:
+        type: 'zip'
+        path: 'Buffer/'
+        filename: 'buffer.zip'
+    - name: Upload Release
+      uses: ncipollo/release-action@v1
+      with:
+        artifacts: "release.zip"
+        allowUpdates: true
+        commit: "Buffer"
+        token: ${{ secrets.TOKEN }}
