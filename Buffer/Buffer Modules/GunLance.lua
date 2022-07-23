@@ -14,7 +14,7 @@ gunLance = {
             pre = function(args)
                 if gunLance[1].value then
 
-                    local playerData = getPlayerData()
+                    local playerData = utils.getPlayerData()
                     if not playerData then return end
                     playerData:set_field("_ChargeDragonSlayCannonTime", 0)
                 end
