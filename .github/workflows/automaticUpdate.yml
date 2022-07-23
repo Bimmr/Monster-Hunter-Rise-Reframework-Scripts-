@@ -1,4 +1,4 @@
-name: Update Release (Manual)
+name: Update Release (Auto)
 on:
   push:
     paths:
