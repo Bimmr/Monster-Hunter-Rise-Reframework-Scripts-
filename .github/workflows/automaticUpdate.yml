@@ -1,0 +1,24 @@
+name: Update Release (Manual)
+on:
+  push:
+    paths:
+      - Buffer/**
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - name: Archive Release
+      uses: thedoctor0/zip-release@main
+      with:
+        type: 'zip'
+        path: 'Buffer/'
+        filename: 'buffer.zip'
+    - name: Upload Release
+      uses: ncipollo/release-action@v1
+      with:
+        artifacts: "buffer.zip"
+        allowUpdates: true
+        tag: 'Buffer'
+        replacesArtifacts: true
+        token: ${{ secrets.TOKEN }}
