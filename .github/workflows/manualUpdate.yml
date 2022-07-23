@@ -14,6 +14,7 @@ jobs:
         tag_name: Buffer # tag name to delete
       env:
         GITHUB_TOKEN: ${{ secrets.TOKEN }}
+    - uses: actions/checkout@master
     - name: Archive Release
       uses: thedoctor0/zip-release@main
       with:
