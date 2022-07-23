@@ -72,7 +72,7 @@ heavyBowgun = {
             pre = function(args)
                 if heavyBowgun[4].value then
 
-                    local playerData = getPlayerData()
+                    local playerData = utils.getPlayerData()
                     if not playerData then return end
                     playerData:set_field("_HeavyBowgunWyvernSnipeBullet", 1)
                     playerData:set_field("_HeavyBowgunWyvernSnipeTimer", 0)
@@ -91,7 +91,7 @@ heavyBowgun = {
             pre = function(args)
                 if heavyBowgun[5].value then
 
-                    local playerData = getPlayerData()
+                    local playerData = utils.getPlayerData()
                     if not playerData then return end
                     playerData:set_field("_HeavyBowgunWyvernMachineGunBullet", 50)
                     playerData:set_field("_HeavyBowgunWyvernMachineGunTimer", 0)
@@ -110,7 +110,7 @@ heavyBowgun = {
             pre = function(args)
                 if heavyBowgun[6].value then
 
-                    local playerData = getPlayerData()
+                    local playerData = utils.getPlayerData()
                     if not playerData then return end
                     playerData:set_field("_HeavyBowgunHeatGauge", 0)
                 end
