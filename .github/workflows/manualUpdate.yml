@@ -1,4 +1,4 @@
-name: Create Archive
+name: Update Release (Manual)
 on:
   workflow_dispatch
   #push:
