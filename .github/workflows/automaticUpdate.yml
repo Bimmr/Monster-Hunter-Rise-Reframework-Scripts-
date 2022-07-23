@@ -7,6 +7,12 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+    - uses: dev-drprasad/delete-tag-and-release@v0.2.0
+      with:
+        delete_release: true # default: false
+        tag_name: Buffer # tag name to delete
+      env:
+        GITHUB_TOKEN: ${{ secrets.TOKEN }}
     - uses: actions/checkout@master
     - name: Archive Release
       uses: thedoctor0/zip-release@main
@@ -21,6 +27,5 @@ jobs:
         artifacts: "Buffer.zip"
         allowUpdates: true
         tag: 'Buffer'
-        body: 'This is a standing release which means the date will not change. However the Buffer.zip file will update on a code push'
         replacesArtifacts: true
         token: ${{ secrets.TOKEN }}
