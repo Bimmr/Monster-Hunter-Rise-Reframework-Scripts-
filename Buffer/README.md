@@ -84,7 +84,6 @@
          </td>
          <td>
             <ul>
-              
                <li>
                   Switch Axe
                   <ul>
