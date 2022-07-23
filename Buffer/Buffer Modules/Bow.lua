@@ -44,6 +44,7 @@ bow = {
         title = "Herculean Draw",
         type = "checkbox",
         value = false,
+        tooltip = "No effect will appear on the weapon",
         hook = {
             path = "snow.player.Bow",
             func = "update",

@@ -85,6 +85,21 @@ local function saveConfig()
     end
 end
 
+-- Custom tooltip
+local function tooltip(text)
+    if imgui.is_item_hovered() then
+        local pos = imgui.get_mouse()
+        pos.x = pos.x + 10
+        pos.y = pos.y - 10
+        imgui.set_next_window_pos(pos, ImGuiCond_FirstUseEver, nil)
+        imgui.begin_window("Tooltip", nil, 1+4+64+512)
+        imgui.text("")
+        imgui.text("     "..text.."     ")
+        imgui.text("")
+        imgui.end_window()
+    end
+end
+
 -- Initialize the hooks
 local function initHooks(table)
     table = table or modules
@@ -186,6 +201,12 @@ local function drawMenu(table, level)
                     -- If the table has a type of text, draw the text
                 elseif obj.type == "text" then
                     imgui.text(obj.title)
+                end
+
+                if obj.tooltip then
+                    imgui.same_line()
+                    imgui.text("(?)")
+                    tooltip(obj.tooltip)
                 end
 
                 -- If anything changed, save the config

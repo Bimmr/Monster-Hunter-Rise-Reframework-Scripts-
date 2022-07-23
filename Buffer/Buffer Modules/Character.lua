@@ -456,6 +456,7 @@ character = {
             min = -1,
             step = 10,
             max = 2600,
+            tooltip = "Drag slider to the left to reset if the stat break",
             dontSave = true,
             data = {
                 value = 0
@@ -499,6 +500,7 @@ character = {
             min = -1,
             step = 10,
             max = 3100,
+            tooltip = "Drag slider to the left to reset if the stat break",
             dontSave = true,
             data = {
                 value = 0
@@ -531,10 +533,6 @@ character = {
                 end,
                 post = utils.nothing()
             }
-        },
-        [3] = {
-            title = "Drag sliders to the left to reset if the stats break",
-            type = "text"
         }
     }
 }

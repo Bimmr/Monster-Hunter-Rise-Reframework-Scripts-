@@ -28,6 +28,7 @@ greatsword = {
         title = "Power Sheathe",
         type = "checkbox",
         value = false,
+        tooltip = "No effect will appear on the weapon",
         hook = {
             path = "snow.player.GreatSword",
             func = "update",
