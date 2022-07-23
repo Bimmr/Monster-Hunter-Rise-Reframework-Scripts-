@@ -91,7 +91,7 @@ local function tooltip(text)
         local pos = imgui.get_mouse()
         pos.x = pos.x + 10
         pos.y = pos.y - 10
-        imgui.set_next_window_pos(pos, ImGuiCond_FirstUseEver, nil)
+        imgui.set_next_window_pos(pos, 1, nil)
         imgui.begin_window("Tooltip", nil, 1+4+64+512)
         imgui.text("")
         imgui.text("     "..text.."     ")
@@ -243,6 +243,7 @@ initUpdates()
 
 -- Add the menu to the REFramework Script Generated UI
 re.on_draw_ui(function()
+    imgui.set_next_window_size(Vector2f.new(520, 450), 4)
     imgui.begin_window("Modifiers & Settings", nil, 0)
     imgui.spacing()
     drawMenu()
