@@ -21,7 +21,7 @@ jobs:
         type: 'zip'
         path: 'Buffer/'
         filename: 'Buffer.zip'
-        exclusions: 'README.md'
+        recursive_exclusions: '*.md'
     - name: Upload Release
       uses: ncipollo/release-action@v1
       with:
