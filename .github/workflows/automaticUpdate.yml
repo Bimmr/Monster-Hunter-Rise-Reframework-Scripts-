@@ -21,5 +21,6 @@ jobs:
         artifacts: "Buffer.zip"
         allowUpdates: true
         tag: 'Buffer'
+        body: 'This is a standing release which means the date will not change. However the Buffer.zip file will update on a code push'
         replacesArtifacts: true
         token: ${{ secrets.TOKEN }}
