@@ -13,11 +13,12 @@ jobs:
       with:
         type: 'zip'
         path: 'Buffer/'
-        filename: 'buffer.zip'
+        filename: 'Buffer.zip'
+        exclusions: 'README.md'
     - name: Upload Release
       uses: ncipollo/release-action@v1
       with:
-        artifacts: "buffer.zip"
+        artifacts: "Buffer.zip"
         allowUpdates: true
         tag: 'Buffer'
         replacesArtifacts: true
