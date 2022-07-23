@@ -1,6 +1,9 @@
 <div align="center">
    <h1>Buffer</h1>
    <p>Buffs, Modifications, and Cheats for weapons and stats.</p>
+   <h2>Download Mod</h2>
+   <p><a href="https://www.nexusmods.com/monsterhunterrise/mods/685">Nexus Mods</a></p>
+   <p><a href="https://github.com/Bimmr/Monster-Hunter-Rise-Reframework-Scripts-/releases">Github Releases</a></p>
    <table>
       <tr>
          <td>
@@ -150,7 +153,5 @@
          <td> <img src="https://staticdelivery.nexusmods.com/mods/4095/images/thumbnails/685/685-1657836766-2078051896.png" alt="Image3"></td>
       </tr>
    </table>
-   <h2>Download Mod</h2>
-   <p><a href="https://www.nexusmods.com/monsterhunterrise/mods/685">Nexus Mods</a></p>
-   <p><a href="https://github.com/Bimmr/Monster-Hunter-Rise-Reframework-Scripts-/releases">Github Releases</a></p>
+   
 </div>
