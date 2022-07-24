@@ -2,9 +2,6 @@ local utils = require("Buffer Modules.Utils")
 local misc
 local bow = {}
 
-function bow.init()
-    misc = require("Buffer Modules.Miscellaneous")
-end
 
 -- Bow Modifications
 bow = {
@@ -74,4 +71,7 @@ bow = {
         }
     }
 }
+function bow.init()
+    misc = require("Buffer Modules.Miscellaneous")
+end
 return bow

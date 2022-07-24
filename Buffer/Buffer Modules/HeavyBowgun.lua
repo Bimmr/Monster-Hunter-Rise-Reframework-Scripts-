@@ -2,10 +2,6 @@ local utils = require("Buffer Modules.Utils")
 local misc
 local heavyBowgun = {}
 
-function heavyBowgun.init()
-    misc = require("Buffer Modules.Miscellaneous")
-end
-
 -- Heavy Bowgun Modifications
 heavyBowgun = {
     title = "Heavy Bowgun",
@@ -129,4 +125,8 @@ heavyBowgun = {
         end
     }
 }
+function heavyBowgun.init()
+    misc = require("Buffer Modules.Miscellaneous")
+end
+
 return heavyBowgun

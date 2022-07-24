@@ -1,22 +1,6 @@
 local utils = require("Buffer Modules.Utils")
 local character = {}
 
-function character.reset()
-    -- Until I find a better way of increase attack, I have to reset this on script reset
-    if character[4][1].value >= 0 then
-        local playerData = utils.getPlayerData()
-        if not playerData then return end
-        playerData:set_field("_AtkUpAlive", 0)
-    end
-
-    -- Until I find a better way of increase defence, I have to reset this on script reset
-    if character[4][2].value >= 0 then
-        local playerData = utils.getPlayerData()
-        if not playerData then return end
-        playerData:set_field("_DefUpAlive", 0)
-    end
-
-end
 
 -- character Modifications
 character = {
@@ -536,4 +520,21 @@ character = {
         }
     }
 }
+
+function character.reset()
+    -- Until I find a better way of increase attack, I have to reset this on script reset
+    if character[4][1].value >= 0 then
+        local playerData = utils.getPlayerData()
+        if not playerData then return end
+        playerData:set_field("_AtkUpAlive", 0)
+    end
+
+    -- Until I find a better way of increase defence, I have to reset this on script reset
+    if character[4][2].value >= 0 then
+        local playerData = utils.getPlayerData()
+        if not playerData then return end
+        playerData:set_field("_DefUpAlive", 0)
+    end
+
+end
 return character

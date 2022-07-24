@@ -2,9 +2,6 @@ local utils = require("Buffer Modules.Utils")
 local misc 
 local lightBowgun = {}
 
-function lightBowgun.init()
-    misc = require("Buffer Modules.Misc")
-end
 
 -- Light Bowgun Modifications
 lightBowgun = {
@@ -72,4 +69,7 @@ lightBowgun = {
         end
     }
 }
+function lightBowgun.init()
+    misc = require("Buffer Modules.Miscellaneous")
+end
 return lightBowgun

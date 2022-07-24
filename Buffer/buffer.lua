@@ -62,7 +62,12 @@ local function setConfig(key, value, table)
         end
     else
         -- log.debug("Checking for "..key)
-        for k, v in pairs(table) do if v.title == key then table[k].value = value end end
+        for k, v in pairs(table) do 
+
+            if type(v) ~= "function" and v.title == key then
+                 table[k].value = value 
+                end 
+            end
     end
 end
 
@@ -234,7 +239,8 @@ local function drawMenu(table, level)
 end
 
 -- Init the modules
-for _, module in ipairs(modules) do if module.init then module.init() end end
+for i, module in pairs(modules) do 
+    if module.init ~= nil then module.init() end end
 
 -- Load and Initialize everything that we need
 loadConfig()
@@ -253,5 +259,5 @@ end)
 
 -- On script reset, reset anything that needs to be reset
 re.on_script_reset(function()
-    for _, module in ipairs(modules) do if module.reset then module.reset() end end
+    for _, module in pairs(modules) do if module.reset ~= nil then module.reset() end end
 end)

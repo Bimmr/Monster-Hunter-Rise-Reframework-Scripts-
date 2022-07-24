@@ -2,18 +2,6 @@ local utils = require("Buffer Modules.Utils")
 local lightBowgun, heavyBowgun, bow
 local miscellaneous = {}
 
-function miscellaneous.init()
-    lightBowgun = require("Buffer Modules.LightBowgun")
-    heavyBowgun = require("Buffer Modules.HeavyBowgun")
-    bow = require("Buffer Modules.Bow")
-
-    -- Update items that have multiple triggers
-    miscellaneous[3][1].onChange()
-    miscellaneous[3][2].onChange()
-    miscellaneous[3][3].onChange()
-    miscellaneous[3][4].onChange()
-end
-
 -- Miscellaneous Modifications
 miscellaneous = {
     title = "Miscellaneous",
@@ -268,4 +256,16 @@ miscellaneous = {
         }
     }
 }
+function miscellaneous.init()
+    lightBowgun = require("Buffer Modules.LightBowgun")
+    heavyBowgun = require("Buffer Modules.HeavyBowgun")
+    bow = require("Buffer Modules.Bow")
+
+    -- Update items that have multiple triggers
+    miscellaneous[3][1].onChange()
+    miscellaneous[3][2].onChange()
+    miscellaneous[3][3].onChange()
+    miscellaneous[3][4].onChange()
+end
+
 return miscellaneous
