@@ -34,7 +34,7 @@ bow = {
         onChange = function()
             -- Change and update Miscellaneous/Ammo & Coating Options/Unlimited Coatings (Arrows)
             misc[3][1].value = bow[2].value
-            misc[1].onChange()
+            misc[3][1].onChange()
         end
     },
     [3] = {
