@@ -25,6 +25,7 @@ miscellaneous = {
         min = -1,
         max = 6,
         value = -1,
+        tooltip = "The sharpness bar will still move, but the sharpness level won't change",
         display = {"Red", "Orange", "Yellow", "Green", "Blue", "White", "Purple"},
         data = {
             sharpness = -1
