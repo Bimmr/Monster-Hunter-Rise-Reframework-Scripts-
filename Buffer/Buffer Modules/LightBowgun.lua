@@ -58,7 +58,8 @@ function data.create_config_section()
 end
 
 function data.load_from_config(config_section)
-    if config_section[data.title] then data.wyvern_blast = config_section[data.title].wyvern_blast or data.wyvern_blast end
+    if not config_section then return end
+    data.wyvern_blast = config_section.wyvern_blast or data.wyvern_blast
 end
 
 return data
