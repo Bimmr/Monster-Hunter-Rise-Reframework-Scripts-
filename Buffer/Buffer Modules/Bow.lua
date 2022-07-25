@@ -26,8 +26,6 @@ end
 
 function data.draw()
 
-    -- I really don't like how this looks, so I'm gonna change it. Plus the saving doesn't work yet
-
     local changed, any_changed, misc_changed = false, false, false
     changed, data.charge_level = imgui.slider_int("Charge Level   ", data.charge_level, 0, 4, data.charge_level > -1 and "Level %d" or "Off")
     any_changed = changed or any_changed
