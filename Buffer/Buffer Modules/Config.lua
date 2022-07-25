@@ -29,4 +29,16 @@ function config.get_section(config_section_key)
     return current_config[config_section_key] or {}
 end
 
+function config.set(key, value)
+    local current_config = config.get_config() or {}
+    current_config[key] = value
+    json.dump_file(configPath, current_config)
+end
+
+function config.get(key)
+    local current_config = config.get_config()
+    if current_config == nil then return nil end
+    return current_config[key]
+end
+
 return config

@@ -1,4 +1,4 @@
-local isWindowOpen = false
+local isWindowOpen, wasOpen = false, false
 
 -- Utilities Modules
 local utils = require("Buffer Modules.Utils")
@@ -24,41 +24,30 @@ local lightBowgun = require("Buffer Modules.LightBowgun")
 local heavyBowgun = require("Buffer Modules.HeavyBowgun")
 local bow = require("Buffer Modules.Bow")
 
-local modules = {
-    miscellaneous, 
-    character, 
-    greatSword, 
-    longSword, 
-    shortSword, 
-    dualBlades, 
-    hammer, 
-    lance, 
-    gunlance,
-    huntingHorn, 
-    switchAxe, 
-    chargeBlade, 
-    insectGlaive, 
-    lightBowgun, 
-    heavyBowgun, 
-    bow
-}
+local modules = {miscellaneous, character, greatSword, longSword, shortSword, dualBlades, hammer, lance, gunlance, huntingHorn, switchAxe, chargeBlade, insectGlaive, lightBowgun,
+                 heavyBowgun, bow}
 
- 
 -- Init the modules
-for i, module in pairs(modules) do 
-    if module.init ~= nil then module.init() end 
+for i, module in pairs(modules) do
+    if module.init ~= nil then module.init() end
     if module.load_from_config ~= nil then module.load_from_config(config.get_section(module.title)) end
+end
+
+if config.get("is_window_open") == true then
+    isWindowOpen = true
 end
 
 -- Add the menu to the REFramework Script Generated UI
 re.on_draw_ui(function()
     if imgui.button("Toggle Buffer GUI") then
         isWindowOpen = not isWindowOpen
+        config.set("is_window_open", isWindowOpen)
     end
     if isWindowOpen then
+        wasOpen = true
         imgui.set_next_window_size(Vector2f.new(520, 450), 4)
-   
-      isWindowOpen = imgui.begin_window("Modifiers & Settings", isWindowOpen, 0)
+
+        isWindowOpen = imgui.begin_window("Modifiers & Settings", isWindowOpen, 0)
         imgui.spacing()
         for _, module in pairs(modules) do
             if imgui.collapsing_header(module.title) then
@@ -69,9 +58,11 @@ re.on_draw_ui(function()
         end
         imgui.spacing()
         imgui.end_window()
+    elseif wasOpen then
+        wasOpen = false
+        config.set("is_window_open", isWindowOpen)
     end
 end)
-
 
 -- On script reset, reset anything that needs to be reset
 re.on_script_reset(function()
