@@ -1,75 +1,64 @@
-local utils = require("Buffer Modules.Utils")
-local misc 
-local lightBowgun = {}
-
-
--- Light Bowgun Modifications
-lightBowgun = {
+local utils, misc, config
+local data = {
     title = "Light Bowgun",
-    [1] = {
-        title = "Unlimited Ammo",
-        type = "checkbox",
-        value = false,
-        dontSave = true,
-        onChange = function()
-            -- Change and update Miscellaneous/Ammo Options/Unlimited Ammo (Bowguns)
-            misc[3][2].value = lightBowgun[1].value
-            misc[3][2].onChange()
-        end
-    },
-    [2] = {
-        title = "Auto Reload ",
-        type = "checkbox",
-        value = false,
-        dontSave = true,
-        hook = {
-            path = "snow.player.LightBowgun",
-            func = "update",
-            pre = function(args)
-                if lightBowgun[2].value then
-                    local managed = sdk.to_managed_object(args[2])
-                    managed:call("resetBulletNum")
-                end
-            end,
-            post = utils.nothing()
-        },
-        onChange = function()
-            -- Change and update Miscellaneous/Ammo & Coating Options/Auto Reload (Bowguns)
-            misc[3][3].value = lightBowgun[2].value
-            misc[3][3].onChange()
-        end
-    },
-    [3] = {
-        title = "Unlimited Wyvern Blast",
-        type = "checkbox",
-        value = false,
-        hook = {
-            path = "snow.player.PlayerManager",
-            func = "update",
-            pre = function(args)
-                if lightBowgun[3].value then
-
-                    local playerData = utils.getPlayerData()
-                    if not playerData then return end
-                    playerData:set_field("_WyvernBlastGauge", 3)
-                    playerData:set_field("_WyvernBlastReloadTimer", 0)
-                end
-            end,
-            post = utils.nothing()
-        }
-    },
-    [4] = {
-        title = "No Deviation",
-        type = "checkbox",
-        value = false,
-        onChange = function()
-            -- Change and update Miscellaneous/Ammo & Coating Options/No Deviation (Bowguns)
-            misc[3][4].value = lightBowgun[4].value
-            misc[3][4].onChange()
-        end
-    }
+    -- unlimited_ammo -- In Misc
+    -- auto_reload   -- In Misc
+    wyvern_blast = false
+    -- no_deviation  -- In Misc
 }
-function lightBowgun.init()
+
+function data.init()
+    utils = require("Buffer Modules.Utils")
     misc = require("Buffer Modules.Miscellaneous")
+    config = require("Buffer Modules.Config")
+
+    data.init_hooks()
 end
-return lightBowgun
+
+function data.init_hooks()
+    sdk.hook(sdk.find_type_definition("snow.player.LightBowgun"):get_method("update"), function(args)
+        local managed = sdk.to_managed_object(args[2])
+
+        if misc.auto_reload then managed:call("resetBulletNum") end
+    end, utils.nothing())
+
+    sdk.hook(sdk.find_type_definition("snow.player.PlayerManager"):get_method("update"), function(args)
+        local playerData = utils.getPlayerData()
+        if not playerData then return end
+
+        if data.wyvern_blast then
+            playerData:set_field("_WyvernBlastGauge", 3)
+            playerData:set_field("_WyvernBlastReloadTimer", 0)
+        end
+    end, utils.nothing())
+end
+
+function data.draw()
+
+    local changed, any_changed, misc_changed = false, false, false
+    changed, misc.ammo_and_coatings.unlimited_ammo = imgui.checkbox("Unlimited Ammo", misc.ammo_and_coatings.unlimited_ammo)
+    misc_changed = changed or misc_changed
+    changed, misc.ammo_and_coatings.auto_reload = imgui.checkbox("Auto Reload ", misc.ammo_and_coatings.auto_reload)
+    misc_changed = changed or misc_changed
+    changed, data.wyvern_blast = imgui.checkbox("Unlimited Wyvern Blast", data.wyvern_blast)
+    any_changed = changed or any_changed
+    changed, misc.ammo_and_coatings.no_deviation = imgui.checkbox("No Deviation ", misc.ammo_and_coatings.no_deviation)
+    misc_changed = changed or misc_changed
+
+    if any_changed then config.save_section(data.create_config_section()) end
+    if misc_changed then config.save_section(misc.create_config_section()) end
+end
+
+function data.create_config_section()
+    return {
+        [data.title] = {
+            wyvern_blast = data.wyvern_blast
+        }
+    }
+end
+
+function data.load_from_config(config_section)
+    if config_section[data.title] then data.wyvern_blast = config_section[data.title].wyvern_blast or data.wyvern_blast end
+end
+
+return data

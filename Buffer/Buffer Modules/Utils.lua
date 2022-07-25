@@ -80,4 +80,21 @@ function utils.checkIfInBattle()
     return inBattle and not isQuestComplete
 end
 
+-- Custom tooltip
+function utils.tooltip(text)
+    imgui.same_line()
+    imgui.text("(?)")
+    if imgui.is_item_hovered() then
+        local pos = imgui.get_mouse()
+        pos.x = pos.x + 10
+        pos.y = pos.y - 10
+        imgui.set_next_window_pos(pos, 1, nil)
+        imgui.begin_window("Tooltip", nil, 1+4+64+512)
+        imgui.text("")
+        imgui.text("     "..text.."     ")
+        imgui.text("")
+        imgui.end_window()
+    end
+end
+
 return utils

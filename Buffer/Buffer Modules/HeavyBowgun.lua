@@ -1,132 +1,89 @@
-local utils = require("Buffer Modules.Utils")
-local misc
-local heavyBowgun = {}
-
--- Heavy Bowgun Modifications
-heavyBowgun = {
+local utils, misc, config
+local data = {
     title = "Heavy Bowgun",
-    [1] = {
-        title = "Charge Level  ",
-        type = "slider",
-        value = -1,
-        min = -1,
-        max = 3,
-        display = "Level: %d",
-        hook = {
-            path = "snow.player.HeavyBowgun",
-            func = "update",
-            pre = function(args)
-                if heavyBowgun[1].value >= 0 then
-                    local managed = sdk.to_managed_object(args[2])
-                    managed:set_field("_ShotChargeLv", heavyBowgun[1].value)
-                    managed:set_field("_ShotChargeFrame", 30 * heavyBowgun[1].value)
-                end
-            end,
-            post = utils.nothing()
-        }
-    },
-    [2] = {
-        title = "Unlimited Ammo  ",
-        type = "checkbox",
-        value = false,
-        dontSave = true,
-        onChange = function()
-            -- Change and update Miscellaneous/Ammo Options/Unlimited Ammo (Bowguns)
-            misc[3][2].value = heavyBowgun[2].value
-            misc[3][2].onChange()
-        end
-    },
-    [3] = {
-        title = "Auto Reload  ",
-        type = "checkbox",
-        value = false,
-        dontSave = true,
-        hook = {
-            path = "snow.player.HeavyBowgun",
-            func = "update",
-            pre = function(args)
-                if heavyBowgun[3].value then
-                    local managed = sdk.to_managed_object(args[2])
-                    managed:call("resetBulletNum")
-                end
-            end,
-            post = utils.nothing()
-        },
-        onChange = function()
-            -- Change and update Miscellaneous/Ammo & Coating Options/Auto Reload (Bowguns)
-            misc[3][3].value = heavyBowgun[3].value
-            misc[3][3].onChange()
-        end
-    },
-    [4] = {
-        title = "Unlimited Wyvern Sniper",
-        type = "checkbox",
-        value = false,
-        hook = {
-            path = "snow.player.PlayerManager",
-            func = "update",
-            pre = function(args)
-                if heavyBowgun[4].value then
-
-                    local playerData = utils.getPlayerData()
-                    if not playerData then return end
-                    playerData:set_field("_HeavyBowgunWyvernSnipeBullet", 1)
-                    playerData:set_field("_HeavyBowgunWyvernSnipeTimer", 0)
-                end
-            end,
-            post = utils.nothing()
-        }
-    },
-    [5] = {
-        title = "Unlimited Wyvern Machine Gun",
-        type = "checkbox",
-        value = false,
-        hook = {
-            path = "snow.player.PlayerManager",
-            func = "update",
-            pre = function(args)
-                if heavyBowgun[5].value then
-
-                    local playerData = utils.getPlayerData()
-                    if not playerData then return end
-                    playerData:set_field("_HeavyBowgunWyvernMachineGunBullet", 50)
-                    playerData:set_field("_HeavyBowgunWyvernMachineGunTimer", 0)
-                end
-            end,
-            post = utils.nothing()
-        }
-    },
-    [6] = {
-        title = "Prevent Overheat",
-        type = "checkbox",
-        value = false,
-        hook = {
-            path = "snow.player.PlayerManager",
-            func = "update",
-            pre = function(args)
-                if heavyBowgun[6].value then
-
-                    local playerData = utils.getPlayerData()
-                    if not playerData then return end
-                    playerData:set_field("_HeavyBowgunHeatGauge", 0)
-                end
-            end,
-            post = utils.nothing()
-        }
-    },
-    [7] = {
-        title = "No Deviation ",
-        type = "checkbox",
-        value = false,
-        onChange = function()
-            -- Change and update Miscellaneous/Ammo & Coating Options/No Deviation (Bowguns)
-            misc[3][4].value = heavyBowgun[7].value
-            misc[3][4].onChange()
-        end
-    }
+    charge_level = -1,
+    -- unlimited_ammo - In Misc
+    -- auto_reload  - In Misc
+    wyvern_sniper = false,
+    wyvern_machine_gun = false
+    -- no_deviation  - In Misc
 }
-function heavyBowgun.init()
+
+function data.init()
+    utils = require("Buffer Modules.Utils")
     misc = require("Buffer Modules.Miscellaneous")
+    config = require("Buffer Modules.Config")
+
+    data.init_hooks()
 end
 
-return heavyBowgun
+function data.init_hooks()
+    sdk.hook(sdk.find_type_definition("snow.player.HeavyBowgun"):get_method("update"), function(args)
+        local managed = sdk.to_managed_object(args[2])
+
+        if data.charge_level > -1 then
+            managed:set_field("_ShotChargeLv", data.charge_level)
+            managed:set_field("_ShotChargeFrame", 30 * data.charge_level)
+        end
+        if misc.auto_reload then managed:call("resetBulletNum") end
+    end, utils.nothing())
+
+    sdk.hook(sdk.find_type_definition("snow.player.PlayerManager"):get_method("update"), function(args)
+        local playerData = utils.getPlayerData()
+        if not playerData then return end
+
+        if data.wyvern_sniper then
+            playerData:set_field("_HeavyBowgunWyvernSnipeBullet", 1)
+            playerData:set_field("_HeavyBowgunWyvernSnipeTimer", 0)
+        end
+        if data.wyvern_machinegun then
+            playerData:set_field("_HeavyBowgunWyvernMachineGunBullet", 50)
+            playerData:set_field("_HeavyBowgunWyvernMachineGunTimer", 0)
+        end
+        if data.overheat then playerData:set_field("_HeavyBowgunHeatGauge", 0) end
+    end, utils.nothing())
+end
+
+function data.draw()
+
+    local changed, any_changed, misc_changed = false, false, false
+    changed, data.charge_level = imgui.slider_int("Charge Level  ", data.charge_level, -1, 4, data.charge_level > -1 and "Level %d" or "Off")
+    any_changed = changed or any_changed
+    changed, misc.ammo_and_coatings.unlimited_ammo = imgui.checkbox("Unlimited Ammo ", misc.ammo_and_coatings.unlimited_ammo)
+    misc_changed = changed or misc_changed
+    changed, misc.ammo_and_coatings.auto_reload = imgui.checkbox("Auto Reload  ", misc.ammo_and_coatings.auto_reload)
+    misc_changed = changed or misc_changed
+    changed, data.wyvern_sniper = imgui.checkbox("Unlimited Wyvern Sniper", data.wyvern_sniper)
+    any_changed = changed or any_changed
+    changed, data.wyvern_machine_gun = imgui.checkbox("Unlimited Wyvern Machine Gun", data.wyvern_machine_gun)
+    any_changed = changed or any_changed
+    changed, data.overheat = imgui.checkbox("Prevent Overheat", data.overheat)
+    any_changed = changed or any_changed
+    changed, misc.ammo_and_coatings.no_deviation = imgui.checkbox("No Deviation  ", misc.ammo_and_coatings.no_deviation)
+    misc_changed = changed or misc_changed
+
+    if any_changed then config.save_section(data.create_config_section()) end
+    if misc_changed then config.save_section(misc.create_config_section()) end
+end
+
+function data.create_config_section()
+    return {
+        [data.title] = {
+            charge_level = data.charge_level,
+            wyvern_sniper = data.wyvern_sniper,
+            wyvern_machine_gun = data.wyvern_machine_gun,
+            overheat = data.overheat
+        }
+    }
+end
+
+function data.load_from_config(config_section)
+    if not config_section then return end
+
+    data.charge_level = config_section.charge_level or data.charge_level
+    data.wyvern_sniper = config_section.wyvern_sniper or data.wyvern_sniper
+    data.wyvern_machine_gun = config_section.wyvern_machine_gun or data.wyvern_machine_gun
+    data.overheat = config_section.overheat or data.overheat
+end
+
+return data
