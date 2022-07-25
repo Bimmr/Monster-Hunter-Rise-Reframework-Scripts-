@@ -1,6 +1,6 @@
-local utils
+local utils, config
 local lightBowgun, heavyBowgun, bow
-local miscellaneous = {
+local data = {
     title = "Miscellaneous",
     unlimited_consumables = false,
     sharpness_level = -1,
@@ -29,33 +29,42 @@ local miscellaneous = {
     }
 }
 
+function data.init()
+    utils = require("Buffer Modules.Utils")
+    config = require("Buffer Modules.Config")
+    lightBowgun = require("Buffer Modules.LightBowgun")
+    heavyBowgun = require("Buffer Modules.HeavyBowgun")
+    bow = require("Buffer Modules.Bow")
 
-function miscellaneous.init_hooks()
+    data.init_hooks()
+end
+
+function data.init_hooks()
     sdk.hook(sdk.find_type_definition("snow.data.ItemSlider"):get_method("notifyConsumeItem"), function(args)
-        if miscellaneous.unlimited_consumables then return sdk.PreHookResult.SKIP_ORIGINAL end
+        if data.unlimited_consumables then return sdk.PreHookResult.SKIP_ORIGINAL end
     end, utils.nothing())
 
     sdk.hook(sdk.find_type_definition("snow.player.PlayerManager"):get_method("update"), function(args)
         local playerBase = utils.getPlayerBase()
         if not playerBase then return end
 
-        if miscellaneous.sharpness_level > -1 then
-            if miscellaneous.data.sharpness_level_old == -1 then miscellaneous.data.sharpness_level_old = playerBase:get_field("<SharpnessLv>k__BackingField") end
+        if data.sharpness_level > -1 then
+            if data.data.sharpness_level_old == -1 then data.data.sharpness_level_old = playerBase:get_field("<SharpnessLv>k__BackingField") end
             -- 0=Red | 1=Orange | 2=Yellow | 3=Green | 4=Blue | 5=White | 6=Purple
-            playerBase:set_field("<SharpnessLv>k__BackingField", miscellaneous.sharpness_level) -- Sharpness Level of Purple
+            playerBase:set_field("<SharpnessLv>k__BackingField", data.sharpness_level) -- Sharpness Level of Purple
             -- playerBase:set_field("<SharpnessGauge>k__BackingField", 400) -- Sharpness Value
             -- playerBase:set_field("<SharpnessGaugeMax>k__BackingField", 400) -- Max Sharpness
-        elseif miscellaneous.sharpness_level == -1 and miscellaneous.data.sharpness_level_old > -1 then
-            playerBase:set_field("<SharpnessLv>k__BackingField", miscellaneous.data.sharpness_level_old)
-            miscellaneous.data.sharpness_level_old = -1
+        elseif data.sharpness_level == -1 and data.data.sharpness_level_old > -1 then
+            playerBase:set_field("<SharpnessLv>k__BackingField", data.data.sharpness_level_old)
+            data.data.sharpness_level_old = -1
         end
 
-        if miscellaneous.wirebugs.give_3 then
+        if data.wirebugs.give_3 then
             playerBase:set_field("<HunterWireWildNum>k__BackingField", 1)
             playerBase:set_field("_HunterWireNumAddTime", 7000)
         end
 
-        if miscellaneous.wirebugs.unlimited_powerup then
+        if data.wirebugs.unlimited_powerup then
             local playerData = utils.getPlayerData()
             if not playerData then return end
             playerData:set_field("_WireBugPowerUpTimer", 10700)
@@ -64,11 +73,11 @@ function miscellaneous.init_hooks()
     end, utils.nothing())
 
     sdk.hook(sdk.find_type_definition("snow.data.bulletSlider.BottleSliderFunc"):get_method("notifyConsumeItem"), function(args)
-        if miscellaneous.ammo_and_coatings.unlimited_coatings then return sdk.PreHookResult.SKIP_ORIGINAL end
+        if data.ammo_and_coatings.unlimited_coatings then return sdk.PreHookResult.SKIP_ORIGINAL end
     end, utils.nothing())
 
     sdk.hook(sdk.find_type_definition("snow.data.bulletSlider.BulletSliderFunc"):get_method("notifyConsumeItem"), function(args)
-        if miscellaneous.ammo_and_coatings.unlimited_ammo then return sdk.PreHookResult.SKIP_ORIGINAL end
+        if data.ammo_and_coatings.unlimited_ammo then return sdk.PreHookResult.SKIP_ORIGINAL end
     end, utils.nothing())
 
     sdk.hook(sdk.find_type_definition("snow.equip.BulletWeaponBaseUserData.Param"):get_method("get_Fluctuation"), function(args)
@@ -77,20 +86,20 @@ function miscellaneous.init_hooks()
         if not managed then return end
         if not managed:get_type_definition():is_a("snow.equip.BulletWeaponBaseUserData.Param") then return end
 
-        if miscellaneous.ammo_and_coatings.no_deviation then
-            miscellaneous.ammo_and_coatings.is_DeviationMethod = true
+        if data.ammo_and_coatings.no_deviation then
+            data.ammo_and_coatings.is_DeviationMethod = true
             return sdk.PreHookResult.SKIP_ORIGINAL
         end
 
     end, function(retval)
-        if miscellaneous.ammo_and_coatings.is_DeviationMethod then
-            miscellaneous.ammo_and_coatings.is_DeviationMethod = false
+        if data.ammo_and_coatings.is_DeviationMethod then
+            data.ammo_and_coatings.is_DeviationMethod = false
             return 0
         end
     end)
 
     sdk.hook(sdk.find_type_definition("snow.player.fsm.PlayerFsm2ActionHunterWire"):get_method("start"), utils.nothing(), function(retval)
-        if (miscellaneous.wirebugs.unlimited_ooc and not utils.checkIfInBattle()) or miscellaneous.wirebugs.unlimited then
+        if (data.wirebugs.unlimited_ooc and not utils.checkIfInBattle()) or data.wirebugs.unlimited then
             local playerBase = utils.getPlayerBase()
             if not playerBase then return end
 
@@ -107,14 +116,14 @@ function miscellaneous.init_hooks()
 
     local managed_dango, managed_dango_chance = nil, nil
     sdk.hook(sdk.find_type_definition("snow.data.DangoData"):get_method("update"), function(args)
-        if miscellaneous.canteen.dango_100_no_ticket or miscellaneous.canteen.dango_100_ticket then
+        if data.canteen.dango_100_no_ticket or data.canteen.dango_100_ticket then
             local managed = sdk.to_managed_object(args[2])
             if not managed then return end
             if not managed:get_type_definition():is_a("snow.data.DangoData") then return end
 
             local isUsingTicket = utils.getMealFunc():call("getMealTicketFlag")
 
-            if isUsingTicket or miscellaneous.canteen.dango_100_no_ticket then
+            if isUsingTicket or data.canteen.dango_100_no_ticket then
                 managed_dango = managed
                 managed_dango_chance = managed:get_field("_Param"):get_field("_SkillActiveRate")
                 managed:get_field("_Param"):set_field("_SkillActiveRate", 200)
@@ -122,7 +131,7 @@ function miscellaneous.init_hooks()
         end
     end, function(retval)
         -- Restore the original value
-        if (miscellaneous.canteen.dango_100_no_ticket or miscellaneous.canteen.dango_100_ticket) and managed_dango then
+        if (data.canteen.dango_100_no_ticket or data.canteen.dango_100_ticket) and managed_dango then
             managed_dango:get_field("_Param"):set_field("_SkillActiveRate", managed_dango_chance)
             managed_dango = nil
             managed_dango_chance = nil
@@ -131,15 +140,15 @@ function miscellaneous.init_hooks()
     end)
 
     sdk.hook(sdk.find_type_definition("snow.facility.kitchen.MealFunc"):get_method("updateList"), function(args)
-        if miscellaneous.canteen.level_4 and not miscellaneous.data.level_4_wasEnabled then
-            miscellaneous.data.level_4_wasEnabled = true
+        if data.canteen.level_4 and not data.data.level_4_wasEnabled then
+            data.data.level_4_wasEnabled = true
             local dangoLevels = utils.getMealFunc():get_field("SpecialSkewerDangoLv")
             local level4 = sdk.create_instance("System.UInt32")
             level4:set_field("mValue", 4)
             for i = 0, 2 do dangoLevels[i] = level4 end
 
-        elseif not miscellaneous.canteen.level_4 and miscellaneous.data.level_4_wasEnabled then
-            miscellaneous.data.level_4_wasEnabled = false
+        elseif not data.canteen.level_4 and data.data.level_4_wasEnabled then
+            data.data.level_4_wasEnabled = false
             local dangoLevels = utils.getMealFunc():get_field("SpecialSkewerDangoLv")
 
             for i = 0, 2 do
@@ -151,42 +160,85 @@ function miscellaneous.init_hooks()
     end, utils.nothing())
 end
 
-function miscellaneous.init()
-    utils = require("Buffer Modules.Utils")
-    lightBowgun = require("Buffer Modules.LightBowgun")
-    heavyBowgun = require("Buffer Modules.HeavyBowgun")
-    bow = require("Buffer Modules.Bow")
-
-    miscellaneous.init_hooks()
-end
-function miscellaneous.draw()
-    local changed
-    changed, miscellaneous.unlimited_consumables = imgui.checkbox("Unlimited Consumables", miscellaneous.unlimited_consumables)
+function data.draw()
+    
+    local changed, any_changed = false, false
+    changed, data.unlimited_consumables = imgui.checkbox("Unlimited Consumables", data.unlimited_consumables)
+    any_changed = any_changed or changed
     local sharpness_display = {"Off", "Red", "Orange", "Yellow", "Green", "Blue", "White", "Purple"}
-    changed, miscellaneous.sharpness_level = imgui.slider_int("Sharpness Level", miscellaneous.sharpness_level, -1, 6, sharpness_display[miscellaneous.sharpness_level + 2])
+    changed, data.sharpness_level = imgui.slider_int("Sharpness Level", data.sharpness_level, -1, 6, sharpness_display[data.sharpness_level + 2])
     utils.tooltip("The sharpness bar will still move, but the sharpness level won't change")
+    any_changed = any_changed or changed
     if imgui.tree_node("Ammo & Coating") then
-        changed, miscellaneous.ammo_and_coatings.unlimited_coatings = imgui.checkbox("Unlimited Coatings (Bow)", miscellaneous.ammo_and_coatings.unlimited_coatings)
-        changed, miscellaneous.ammo_and_coatings.unlimited_ammo = imgui.checkbox("Unlimited Ammo (Bowguns)", miscellaneous.ammo_and_coatings.unlimited_ammo)
-        changed, miscellaneous.ammo_and_coatings.auto_reload = imgui.checkbox("Auto Reload", miscellaneous.ammo_and_coatings.auto_reload)
-        changed, miscellaneous.ammo_and_coatings.no_deviation = imgui.checkbox("No Deviation", miscellaneous.ammo_and_coatings.no_deviation)
+        changed, data.ammo_and_coatings.unlimited_coatings = imgui.checkbox("Unlimited Coatings (Bow)", data.ammo_and_coatings.unlimited_coatings)
+        any_changed = any_changed or changed
+        changed, data.ammo_and_coatings.unlimited_ammo = imgui.checkbox("Unlimited Ammo (Bowguns)", data.ammo_and_coatings.unlimited_ammo)
+        any_changed = any_changed or changed
+        changed, data.ammo_and_coatings.auto_reload = imgui.checkbox("Auto Reload", data.ammo_and_coatings.auto_reload)
+        any_changed = any_changed or changed
+        changed, data.ammo_and_coatings.no_deviation = imgui.checkbox("No Deviation", data.ammo_and_coatings.no_deviation)
+        any_changed = any_changed or changed
         imgui.tree_pop()
     end
     if imgui.tree_node("Wirebugs") then
-        changed, miscellaneous.wirebugs.unlimited_ooc = imgui.checkbox("Unlimited Wirebugs (Out of Combat)", miscellaneous.wirebugs.unlimited_ooc)
-        changed, miscellaneous.wirebugs.unlimited = imgui.checkbox("Unlimited Wirebugs", miscellaneous.wirebugs.unlimited)
-        changed, miscellaneous.wirebugs.give_3 = imgui.checkbox("Give 3 Wirebugs", miscellaneous.wirebugs.give_3)
-        changed, miscellaneous.wirebugs.unlimited_powerup = imgui.checkbox("Unlimited Powerup", miscellaneous.wirebugs.unlimited_powerup)
+        changed, data.wirebugs.unlimited_ooc = imgui.checkbox("Unlimited Wirebugs (Out of Combat)", data.wirebugs.unlimited_ooc)
+        any_changed = any_changed or changed
+        changed, data.wirebugs.unlimited = imgui.checkbox("Unlimited Wirebugs", data.wirebugs.unlimited)
+        any_changed = any_changed or changed
+        changed, data.wirebugs.give_3 = imgui.checkbox("Give 3 Wirebugs", data.wirebugs.give_3)
+        any_changed = any_changed or changed
+        changed, data.wirebugs.unlimited_powerup = imgui.checkbox("Unlimited Powerup", data.wirebugs.unlimited_powerup)
+        any_changed = any_changed or changed
         imgui.tree_pop()
     end
     if imgui.tree_node("Canteen") then
-        changed, miscellaneous.canteen.dango_100_no_ticket = imgui.checkbox("Dango Skill 100% (No Ticket)", miscellaneous.canteen.dango_100_no_ticket)
-        changed, miscellaneous.canteen.dango_100_ticket = imgui.checkbox("Dango Skill 100% (Ticket)", miscellaneous.canteen.dango_100_ticket)
-        changed, miscellaneous.canteen.level_4 = imgui.checkbox("Level 4 Dango", miscellaneous.canteen.level_4)
+        changed, data.canteen.dango_100_no_ticket = imgui.checkbox("Dango Skill 100% (No Ticket)", data.canteen.dango_100_no_ticket)
+        any_changed = any_changed or changed
+        changed, data.canteen.dango_100_ticket = imgui.checkbox("Dango Skill 100% (Ticket)", data.canteen.dango_100_ticket)
+        any_changed = any_changed or changed
+        changed, data.canteen.level_4 = imgui.checkbox("Level 4 Dango", data.canteen.level_4)
         utils.tooltip("GUI won't show level 4, but it will give you the level 4 skill")
+        any_changed = any_changed or changed
         imgui.tree_pop()
     end
-    if changed then utils.saveConfig() end
+
+    if any_changed then config.save_section(data.create_config_section()) end
 end
 
-return miscellaneous
+function data.create_config_section()
+    return {
+        [data.title] = {
+            unlimited_consumables = data.unlimited_consumables,
+            sharpness_level = data.sharpness_level,
+            ammo_and_coatings = {
+                unlimited_coatings = data.ammo_and_coatings.unlimited_coatings,
+                unlimited_ammo = data.ammo_and_coatings.unlimited_ammo,
+                auto_reload = data.ammo_and_coatings.auto_reload,
+                no_deviation = data.ammo_and_coatings.no_deviation
+            },
+            wirebugs = {
+                unlimited_ooc = data.wirebugs.unlimited_ooc,
+                unlimited = data.wirebugs.unlimited,
+                give_3 = data.wirebugs.give_3,
+                unlimited_powerup = data.wirebugs.unlimited_powerup
+            },
+            canteen = {
+                dango_100_no_ticket = data.canteen.dango_100_no_ticket,
+                dango_100_ticket = data.canteen.dango_100_ticket,
+                level_4 = data.canteen.level_4
+            }
+        }
+    }
+end
+
+
+function data.load_from_config(config_section)
+    if not config_section then return end
+    data.unlimited_consumables = config_section.unlimited_consumables or data.unlimited_consumables
+    data.sharpness_level = config_section.sharpness_level or data.sharpness_level
+    data.ammo_and_coatings = config_section.ammo_and_coatings or data.ammo_and_coatings
+    data.wirebugs = config_section.wirebugs or data.wirebugs
+    data.canteen = config_section.canteen or data.canteen
+end
+
+return data

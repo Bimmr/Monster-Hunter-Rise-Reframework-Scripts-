@@ -1,33 +1,54 @@
-local utils
-local great_sword = {
+local utils, config
+local data = {
     title = "Great Sword",
     charge_level = -1,
     power_sheathe = false
 }
 
-function great_sword.init_hooks()
+function data.init()
+    utils = require("Buffer Modules.Utils")
+    config = require("Buffer Modules.Config")
+
+    data.init_hooks()
+end
+
+function data.init_hooks()
     sdk.hook(sdk.find_type_definition("snow.player.GreatSword"):get_method("update"), function(args)
         local managed = sdk.to_managed_object(args[2])
         
-        if great_sword.charge_level > -1 then managed:set_field("_TameLv", great_sword.charge_level) end
-        if great_sword.power_sheathe then managed:set_field("MoveWpOffBuffGreatSwordTimer", 1200) end
+        if data.charge_level > -1 then managed:set_field("_TameLv", data.charge_level) end
+        if data.power_sheathe then managed:set_field("MoveWpOffBuffGreatSwordTimer", 1200) end
     end, utils.nothing())
 end
 
-function great_sword.init()
-    utils = require("Buffer Modules.Utils")
-
-    great_sword.init_hooks()
-end
-
-function great_sword.draw()
-    local changed = false
-    changed, great_sword.charge_level = imgui.slider_int("Charge Level", great_sword.charge_level, -1, 3,
-                                                         great_sword.charge_level > -1 and "Level %d" or "Off")
-    changed, great_sword.power_sheathe = imgui.checkbox("Power Sheathe", great_sword.power_sheathe)
+function data.draw()
+    
+    local changed, any_changed = false, false
+    changed, data.charge_level = imgui.slider_int("Charge Level", data.charge_level, -1, 3,
+                                                         data.charge_level > -1 and "Level %d" or "Off")
+    any_changed = changed or any_changed
+    changed, data.power_sheathe = imgui.checkbox("Power Sheathe", data.power_sheathe)
     utils.tooltip("No effect will appear on the weapon")
-    if changed then utils.saveConfig() end
+    any_changed = changed or any_changed
+
+    if any_changed then config.save_section(data.create_config_section()) end
 
 end
 
-return great_sword
+function data.create_config_section()
+    return {
+        [data.title] = {
+            charge_level = data.charge_level,
+            power_sheathe = data.power_sheathe
+        }
+    }
+end
+
+function data.load_from_config(config_section)
+    if not config_section then return end
+    data.charge_level = config_section.charge_level or data.charge_level
+    data.power_sheathe = config_section.power_sheathe or data.power_sheathe
+end
+
+
+return data

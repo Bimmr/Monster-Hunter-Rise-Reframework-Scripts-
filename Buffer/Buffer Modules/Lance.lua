@@ -1,30 +1,47 @@
-local utils
-local lance = {
+local utils, config
+local data = {
     title = "Lance",
     anchor_rage = -1
 }
-function lance.init_hooks()
+
+function data.init()
+    utils = require("Buffer Modules.Utils")
+
+    data.init_hooks()
+end
+
+function data.init_hooks()
     sdk.hook(sdk.find_type_definition("snow.player.Lance"):get_method("update"), function(args)
         local managed = sdk.to_managed_object(args[2])
 
-        if lance.anchor_rage > -1 then
+        if data.anchor_rage > -1 then
             managed:set_field("_GuardRageTimer", 3000)
-            managed:set_field("_GuardRageBuffType", lance[1].value)
+            managed:set_field("_GuardRageBuffType", data[1].value)
         end
     end, utils.nothing())
 
 end
-function lance.init()
-    utils = require("Buffer Modules.Utils")
 
-    lance.init_hooks()
+function data.draw()
+
+    local changed, any_changed = false, false
+    changed, data.anchor_rage = imgui.slider_int("Anchor Rage ", data.anchor_rage, -1, 3, data.anchor_rage > -1 and "Level %d" or "Off")
+    any_changed = changed or any_changed
+
+    if any_changed then config.save_section(data.create_config_section()) end
 end
 
-function lance.draw()
-    local changed = false
-    changed, lance.anchor_rage = imgui.slider_int("Anchor Rage ", lance.anchor_rage, -1, 3,
-                                                  lance.anchor_rage > -1 and "Level %d" or "Off")
-    if changed then utils.saveConfig() end
+function data.create_config_section()
+    return {
+        [data.title] = {
+            anchor_rage = data.anchor_rage
+        }
+    }
 end
 
-return lance
+function data.load_from_config(config_section)
+    if not config_section then return end
+    data.anchor_rage = config_section.anchor_rage or data.anchor_rage
+end
+
+return data

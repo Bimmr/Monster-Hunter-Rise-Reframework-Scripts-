@@ -1,60 +1,63 @@
 local utils, misc, config
-local bow = {
+local data = {
     title = "Bow",
-    charge_level = 0,
+    charge_level = -1,
     herculean_draw = false,
     bolt_boost = false
 }
 
-function bow.init()
+function data.init()
     utils = require("Buffer Modules.Utils")
     misc = require("Buffer Modules.Miscellaneous")
     config = require("Buffer Modules.Config")
 
-    bow.init_hooks()
+    data.init_hooks()
 end
 
-function bow.init_hooks()
+function data.init_hooks()
     sdk.hook(sdk.find_type_definition("snow.player.Bow"):get_method("update"), function(args)
         local managed = sdk.to_managed_object(args[2])
 
-        if bow.charge_level > 0 then managed:set_field("<ChargeLv>k__BackingField", bow[1].value) end
-        if bow.herculean_draw then managed:set_field("_WireBuffAttackUpTimer", 1800) end
-        if bow.bolt_boost then managed:set_field("_WireBuffArrowUpTimer", 1800) end
+        if data.charge_level > 0 then managed:set_field("<ChargeLv>k__BackingField", data[1].value) end
+        if data.herculean_draw then managed:set_field("_WireBuffAttackUpTimer", 1800) end
+        if data.bolt_boost then managed:set_field("_WireBuffArrowUpTimer", 1800) end
     end, utils.nothing())
 end
 
-function bow.draw()
+function data.draw()
 
     -- I really don't like how this looks, so I'm gonna change it. Plus the saving doesn't work yet
 
-    local changed = false
-    changed, bow.charge_level = imgui.slider_int("Charge Level   ", bow.charge_level, 0, 4, bow.charge_level > -1 and "Level %d" or "Off")
-    if changed then config.saveSection(bow.create_config_section()) end
+    local changed, any_changed, misc_changed = false, false, false
+    changed, data.charge_level = imgui.slider_int("Charge Level   ", data.charge_level, 0, 4, data.charge_level > -1 and "Level %d" or "Off")
+    any_changed = changed or any_changed
     changed, misc.ammo_and_coatings.unlimited_coatings = imgui.checkbox("Unlimited Arrows", misc.ammo_and_coatings.unlimited_coatings)
-    if changed then config.saveSection(bow.create_config_section()) end
-    changed, bow.herculean_draw = imgui.checkbox("Herculean Draw", bow.herculean_draw)
+    misc_changed = changed or misc_changed
+    changed, data.herculean_draw = imgui.checkbox("Herculean Draw", data.herculean_draw)
     utils.tooltip("No effect will appear on the weapon")
-    if changed then config.saveSection(bow.create_config_section()) end
-    changed, bow.bolt_boost = imgui.checkbox("Bolt Boost", bow.bolt_boost)
-    if changed then config.saveSection(bow.create_config_section()) end
+    any_changed = changed or any_changed
+    changed, data.bolt_boost = imgui.checkbox("Bolt Boost", data.bolt_boost)
+    any_changed = changed or any_changed
+
+    if any_changed then config.save_section(data.create_config_section()) end
+    if misc_changed then config.save_section(misc.create_config_section()) end
 end
 
-function bow.create_config_section()
+function data.create_config_section()
     return {
-        [bow.title] = {
-            charge_level = bow.charge_level,
-            herculean_draw = bow.herculean_draw,
-            bolt_boost = bow.bolt_boost
+        [data.title] = {
+            charge_level = data.charge_level,
+            herculean_draw = data.herculean_draw,
+            bolt_boost = data.bolt_boost
         }
     }
 end
 
-function bow.load_from_config(config_section)
+function data.load_from_config(config_section)
     if not config_section then return end
-    bow.charge_level = config_section.charge_level or bow.charge_level
-    bow.herculean_draw = config_section.herculean_draw or bow.herculean_draw
-    bow.bolt_boost = config_section.bolt_boost or bow.bolt_boost
+    data.charge_level = config_section.charge_level or data.charge_level
+    data.herculean_draw = config_section.herculean_draw or data.herculean_draw
+    data.bolt_boost = config_section.bolt_boost or data.bolt_boost
 end
 
-return bow
+return data

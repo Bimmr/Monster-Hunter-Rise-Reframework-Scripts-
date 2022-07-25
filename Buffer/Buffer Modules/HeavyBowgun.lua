@@ -1,6 +1,5 @@
-local utils
-local misc
-local heavy_bowgun = {
+local utils, misc, config
+local data = {
     title = "Heavy Bowgun",
     charge_level = -1,
     -- unlimited_ammo - In Misc
@@ -9,13 +8,22 @@ local heavy_bowgun = {
     wyvern_machine_gun = false
     -- no_deviation  - In Misc
 }
-function heavy_bowgun.init_hooks()
+
+function data.init()
+    utils = require("Buffer Modules.Utils")
+    misc = require("Buffer Modules.Miscellaneous")
+    config = require("Buffer Modules.Config")
+
+    data.init_hooks()
+end
+
+function data.init_hooks()
     sdk.hook(sdk.find_type_definition("snow.player.HeavyBowgun"):get_method("update"), function(args)
         local managed = sdk.to_managed_object(args[2])
 
-        if heavy_bowgun.charge_level > -1 then
-            managed:set_field("_ShotChargeLv", heavy_bowgun.charge_level)
-            managed:set_field("_ShotChargeFrame", 30 * heavy_bowgun.charge_level)
+        if data.charge_level > -1 then
+            managed:set_field("_ShotChargeLv", data.charge_level)
+            managed:set_field("_ShotChargeFrame", 30 * data.charge_level)
         end
         if misc.auto_reload then managed:call("resetBulletNum") end
     end, utils.nothing())
@@ -24,37 +32,58 @@ function heavy_bowgun.init_hooks()
         local playerData = utils.getPlayerData()
         if not playerData then return end
 
-        if heavy_bowgun.wyvern_sniper then
+        if data.wyvern_sniper then
             playerData:set_field("_HeavyBowgunWyvernSnipeBullet", 1)
             playerData:set_field("_HeavyBowgunWyvernSnipeTimer", 0)
         end
-        if heavy_bowgun.wyvern_machinegun then
+        if data.wyvern_machinegun then
             playerData:set_field("_HeavyBowgunWyvernMachineGunBullet", 50)
             playerData:set_field("_HeavyBowgunWyvernMachineGunTimer", 0)
         end
-        if heavy_bowgun.overheat then playerData:set_field("_HeavyBowgunHeatGauge", 0) end
+        if data.overheat then playerData:set_field("_HeavyBowgunHeatGauge", 0) end
     end, utils.nothing())
 end
 
-function heavy_bowgun.init()
-    utils = require("Buffer Modules.Utils")
-    misc = require("Buffer Modules.Miscellaneous")
+function data.draw()
 
-    heavy_bowgun.init_hooks()
-end
-
-function heavy_bowgun.draw()
-    local changed = false
-    changed, heavy_bowgun.charge_level = imgui.slider_int("Charge Level  ", heavy_bowgun.charge_level, -1, 4,
-                                                          heavy_bowgun.charge_level > -1 and "Level %d" or "Off")
+    local changed, any_changed, misc_changed = false, false, false
+    changed, data.charge_level = imgui.slider_int("Charge Level  ", data.charge_level, -1, 4, data.charge_level > -1 and "Level %d" or "Off")
+    any_changed = changed or any_changed
     changed, misc.ammo_and_coatings.unlimited_ammo = imgui.checkbox("Unlimited Ammo ", misc.ammo_and_coatings.unlimited_ammo)
+    misc_changed = changed or misc_changed
     changed, misc.ammo_and_coatings.auto_reload = imgui.checkbox("Auto Reload  ", misc.ammo_and_coatings.auto_reload)
-    changed, heavy_bowgun.wyvern_sniper = imgui.checkbox("Unlimited Wyvern Sniper", heavy_bowgun.wyvern_sniper)
-    changed, heavy_bowgun.wyvern_machine_gun = imgui.checkbox("Unlimited Wyvern Machine Gun",
-                                                              heavy_bowgun.wyvern_machine_gun)
-    changed, heavy_bowgun.overheat = imgui.checkbox("Prevent Overheat", heavy_bowgun.overheat)
+    misc_changed = changed or misc_changed
+    changed, data.wyvern_sniper = imgui.checkbox("Unlimited Wyvern Sniper", data.wyvern_sniper)
+    any_changed = changed or any_changed
+    changed, data.wyvern_machine_gun = imgui.checkbox("Unlimited Wyvern Machine Gun", data.wyvern_machine_gun)
+    any_changed = changed or any_changed
+    changed, data.overheat = imgui.checkbox("Prevent Overheat", data.overheat)
+    any_changed = changed or any_changed
     changed, misc.ammo_and_coatings.no_deviation = imgui.checkbox("No Deviation  ", misc.ammo_and_coatings.no_deviation)
+    misc_changed = changed or misc_changed
 
-    if changed then utils.saveConfig() end
+    if any_changed then config.save_section(data.create_config_section()) end
+    if misc_changed then config.save_section(misc.create_config_section()) end
 end
-return heavy_bowgun
+
+function data.create_config_section()
+    return {
+        [data.title] = {
+            charge_level = data.charge_level,
+            wyvern_sniper = data.wyvern_sniper,
+            wyvern_machine_gun = data.wyvern_machine_gun,
+            overheat = data.overheat
+        }
+    }
+end
+
+function data.load_from_config(config_section)
+    if not config_section then return end
+
+    data.charge_level = config_section.charge_level or data.charge_level
+    data.wyvern_sniper = config_section.wyvern_sniper or data.wyvern_sniper
+    data.wyvern_machine_gun = config_section.wyvern_machine_gun or data.wyvern_machine_gun
+    data.overheat = config_section.overheat or data.overheat
+end
+
+return data
