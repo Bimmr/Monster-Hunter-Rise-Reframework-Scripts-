@@ -80,24 +80,19 @@ function data.init_hooks()
         if data.ammo_and_coatings.unlimited_ammo then return sdk.PreHookResult.SKIP_ORIGINAL end
     end, utils.nothing())
 
-    -- sdk.hook(sdk.find_type_definition("snow.data.BulletWeaponBaseData"):get_method("getFluctuation"), function(args)
-    --     if not args then return end
-    --     if not args[2] then return end
-    --     local managed = sdk.to_managed_object(args[2])
-    --     if not managed then return end
-    --     if not managed:get_type_definition():is_a("snow.data.BulletWeaponBaseData") then return end
-
-    --     if data.ammo_and_coatings.no_deviation then
-    --         data.ammo_and_coatings.is_DeviationMethod = true
-    --         return sdk.PreHookResult.SKIP_ORIGINAL
-    --     end
-
-    -- end, function(retval)
-    --     if data.ammo_and_coatings.is_DeviationMethod then
-    --         data.ammo_and_coatings.is_DeviationMethod = false
-    --         return 0
-    --     end
-    -- end)
+    local managed_fluctuation = nil
+    sdk.hook(sdk.find_type_definition("snow.data.BulletWeaponData"):get_method("get_Fluctuation"), function(args)
+        local managed = sdk.to_managed_object(args[2])
+        if not managed then return end
+        if not managed:get_type_definition():is_a("snow.data.BulletWeaponData") then return end
+        managed_fluctuation = true
+    end, function(retval)
+        if managed_fluctuation ~= nil then
+            managed_fluctuation = nil
+            if data.ammo_and_coatings.no_deviation then return 0 end
+        end
+        return retval
+    end)
 
     sdk.hook(sdk.find_type_definition("snow.player.fsm.PlayerFsm2ActionHunterWire"):get_method("start"), utils.nothing(), function(retval)
         if (data.wirebugs.unlimited_ooc and not utils.checkIfInBattle()) or data.wirebugs.unlimited then
@@ -163,7 +158,7 @@ function data.init_hooks()
 end
 
 function data.draw()
-    
+
     local changed, any_changed = false, false
     changed, data.unlimited_consumables = imgui.checkbox("Unlimited Consumables", data.unlimited_consumables)
     any_changed = any_changed or changed
@@ -178,7 +173,7 @@ function data.draw()
         any_changed = any_changed or changed
         changed, data.ammo_and_coatings.auto_reload = imgui.checkbox("Auto Reload", data.ammo_and_coatings.auto_reload)
         any_changed = any_changed or changed
-        changed, data.ammo_and_coatings.no_deviation = imgui.checkbox("No Deviation (Disabled)", data.ammo_and_coatings.no_deviation)
+        changed, data.ammo_and_coatings.no_deviation = imgui.checkbox("No Deviation", data.ammo_and_coatings.no_deviation)
         any_changed = any_changed or changed
         imgui.tree_pop()
     end
@@ -232,7 +227,6 @@ function data.create_config_section()
         }
     }
 end
-
 
 function data.load_from_config(config_section)
     if not config_section then return end
