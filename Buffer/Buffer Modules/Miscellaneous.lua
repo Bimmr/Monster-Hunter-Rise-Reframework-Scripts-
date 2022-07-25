@@ -254,6 +254,41 @@ miscellaneous = {
             type = "checkbox",
             value = false
             -- Hook moved to 100% Dango Skills With Ticket so we aren't double hooking
+        },
+        [3] = {
+            title = "Level 4 Dangos",
+            type = "checkbox",
+            tooltip = "GUI won't show level 4, but it will give you the level 4 skill",
+            value = false,
+            data = {
+                wasEnabled = false
+            },
+            hook = {
+                    path = "snow.facility.kitchen.MealFunc",
+                    func = "updateList",
+                pre = function(args)
+                    if miscellaneous[5][3].value and not miscellaneous[5][3].data.wasEnabled then
+                        miscellaneous[5][3].data.wasEnabled = true
+                        local dangoLevels = utils.getMealFunc():get_field("SpecialSkewerDangoLv")
+                        local level4 = sdk.create_instance("System.UInt32")
+                        level4:set_field("mValue", 4)
+                        for i = 0, 2 do
+                            dangoLevels[i] = level4
+                        end
+                    
+                    elseif not miscellaneous[5][3].value and miscellaneous[5][3].data.wasEnabled then
+                        miscellaneous[5][3].data.wasEnabled = false
+                        local dangoLevels = utils.getMealFunc():get_field("SpecialSkewerDangoLv")
+                        
+                        for i = 0, 2 do
+                            local level = sdk.create_instance("System.UInt32")
+                            level:set_field("mValue", i == 0 and 4 or i == 1 and 3 or 1)  -- lua version of i == 0 ? 4 : i == 1 ? 3 : 1
+                            dangoLevels[i] = level
+                        end
+                    end
+                end,
+                post = utils.nothing()
+            }
         }
     }
 }
