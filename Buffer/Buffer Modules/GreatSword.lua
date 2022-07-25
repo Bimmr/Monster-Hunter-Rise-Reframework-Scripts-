@@ -1,43 +1,33 @@
-local utils = require("Buffer Modules.Utils")
-local greatsword = {}
-
-
--- Great Sword Modifications
-greatsword = {
+local utils
+local great_sword = {
     title = "Great Sword",
-    [1] = {
-        title = "Charge Level",
-        type = "slider",
-        value = -1,
-        min = -1,
-        max = 3,
-        display = "Level: %d",
-        hook = {
-            path = "snow.player.GreatSword",
-            func = "update",
-            pre = function(args)
-                if greatsword[1].value >= 0 then
-                    local managed = sdk.to_managed_object(args[2])
-                    managed:set_field("_TameLv", greatsword[1].value)
-                end
-            end,
-            post = utils.nothing()
-        }
-    },
-    [2] = {
-        title = "Power Sheathe",
-        type = "checkbox",
-        value = false,
-        tooltip = "No effect will appear on the weapon",
-        hook = {
-            path = "snow.player.GreatSword",
-            func = "update",
-            pre = function(args)
-                local managed = sdk.to_managed_object(args[2])
-                if greatsword[2].value then managed:set_field("MoveWpOffBuffGreatSwordTimer", 1200) end
-            end,
-            post = utils.nothing()
-        }
-    }
+    charge_level = -1,
+    power_sheathe = false
 }
-return greatsword
+
+function great_sword.init_hooks()
+    sdk.hook(sdk.find_type_definition("snow.player.GreatSword"):get_method("update"), function(args)
+        local managed = sdk.to_managed_object(args[2])
+        
+        if great_sword.charge_level > -1 then managed:set_field("_TameLv", great_sword.charge_level) end
+        if great_sword.power_sheathe then managed:set_field("MoveWpOffBuffGreatSwordTimer", 1200) end
+    end, utils.nothing())
+end
+
+function great_sword.init()
+    utils = require("Buffer Modules.Utils")
+
+    great_sword.init_hooks()
+end
+
+function great_sword.draw()
+    local changed = false
+    changed, great_sword.charge_level = imgui.slider_int("Charge Level", great_sword.charge_level, -1, 3,
+                                                         great_sword.charge_level > -1 and "Level %d" or "Off")
+    changed, great_sword.power_sheathe = imgui.checkbox("Power Sheathe", great_sword.power_sheathe)
+    utils.tooltip("No effect will appear on the weapon")
+    if changed then utils.saveConfig() end
+
+end
+
+return great_sword
