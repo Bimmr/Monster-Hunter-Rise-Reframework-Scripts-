@@ -80,23 +80,24 @@ function data.init_hooks()
         if data.ammo_and_coatings.unlimited_ammo then return sdk.PreHookResult.SKIP_ORIGINAL end
     end, utils.nothing())
 
-    sdk.hook(sdk.find_type_definition("snow.equip.BulletWeaponBaseUserData.Param"):get_method("get_Fluctuation"), function(args)
+    -- sdk.hook(sdk.find_type_definition("snow.data.BulletWeaponBaseData"):get_method("getFluctuation"), function(args)
+    --     if not args then return end
+    --     if not args[2] then return end
+    --     local managed = sdk.to_managed_object(args[2])
+    --     if not managed then return end
+    --     if not managed:get_type_definition():is_a("snow.data.BulletWeaponBaseData") then return end
 
-        local managed = sdk.to_managed_object(args[2])
-        if not managed then return end
-        if not managed:get_type_definition():is_a("snow.equip.BulletWeaponBaseUserData.Param") then return end
+    --     if data.ammo_and_coatings.no_deviation then
+    --         data.ammo_and_coatings.is_DeviationMethod = true
+    --         return sdk.PreHookResult.SKIP_ORIGINAL
+    --     end
 
-        if data.ammo_and_coatings.no_deviation then
-            data.ammo_and_coatings.is_DeviationMethod = true
-            return sdk.PreHookResult.SKIP_ORIGINAL
-        end
-
-    end, function(retval)
-        if data.ammo_and_coatings.is_DeviationMethod then
-            data.ammo_and_coatings.is_DeviationMethod = false
-            return 0
-        end
-    end)
+    -- end, function(retval)
+    --     if data.ammo_and_coatings.is_DeviationMethod then
+    --         data.ammo_and_coatings.is_DeviationMethod = false
+    --         return 0
+    --     end
+    -- end)
 
     sdk.hook(sdk.find_type_definition("snow.player.fsm.PlayerFsm2ActionHunterWire"):get_method("start"), utils.nothing(), function(retval)
         if (data.wirebugs.unlimited_ooc and not utils.checkIfInBattle()) or data.wirebugs.unlimited then
@@ -115,7 +116,7 @@ function data.init_hooks()
     end)
 
     local managed_dango, managed_dango_chance = nil, nil
-    sdk.hook(sdk.find_type_definition("snow.data.DangoData"):get_method("update"), function(args)
+    sdk.hook(sdk.find_type_definition("snow.data.DangoData"):get_method("get_SkillActiveRate"), function(args)
         if data.canteen.dango_100_no_ticket or data.canteen.dango_100_ticket then
             local managed = sdk.to_managed_object(args[2])
             if not managed then return end
@@ -127,6 +128,7 @@ function data.init_hooks()
                 managed_dango = managed
                 managed_dango_chance = managed:get_field("_Param"):get_field("_SkillActiveRate")
                 managed:get_field("_Param"):set_field("_SkillActiveRate", 200)
+                return sdk.PreHookResult.SKIP_ORIGINAL
             end
         end
     end, function(retval)
@@ -176,7 +178,7 @@ function data.draw()
         any_changed = any_changed or changed
         changed, data.ammo_and_coatings.auto_reload = imgui.checkbox("Auto Reload", data.ammo_and_coatings.auto_reload)
         any_changed = any_changed or changed
-        changed, data.ammo_and_coatings.no_deviation = imgui.checkbox("No Deviation", data.ammo_and_coatings.no_deviation)
+        changed, data.ammo_and_coatings.no_deviation = imgui.checkbox("No Deviation (Disabled)", data.ammo_and_coatings.no_deviation)
         any_changed = any_changed or changed
         imgui.tree_pop()
     end

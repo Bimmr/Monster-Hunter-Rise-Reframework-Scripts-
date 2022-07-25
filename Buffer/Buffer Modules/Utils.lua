@@ -5,7 +5,6 @@ local playerInput
 
 local musicManager, questManager
 
-
 -- Do nothing
 function utils.nothing(retval)
     return retval
@@ -48,7 +47,6 @@ function utils.getMealFunc()
     return mealFunc
 end
 
-
 -- Function to get length of table
 function utils.getLength(obj)
     local count = 0
@@ -89,9 +87,9 @@ function utils.tooltip(text)
         pos.x = pos.x + 10
         pos.y = pos.y - 10
         imgui.set_next_window_pos(pos, 1, nil)
-        imgui.begin_window("Tooltip", nil, 1+4+64+512)
+        imgui.begin_window("Tooltip", nil, 1 + 4 + 64 + 512)
         imgui.text("")
-        imgui.text("     "..text.."     ")
+        imgui.text("     " .. text .. "     ")
         imgui.text("")
         imgui.end_window()
     end

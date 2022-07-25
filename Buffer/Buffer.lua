@@ -24,8 +24,24 @@ local lightBowgun = require("Buffer Modules.LightBowgun")
 local heavyBowgun = require("Buffer Modules.HeavyBowgun")
 local bow = require("Buffer Modules.Bow")
 
-local modules = {miscellaneous, character, greatSword, longSword, shortSword, dualBlades, hammer, lance, gunlance,
-                 huntingHorn, switchAxe, chargeBlade, insectGlaive, lightBowgun, heavyBowgun, bow}
+local modules = {
+    miscellaneous, 
+    character, 
+    greatSword, 
+    longSword, 
+    shortSword, 
+    dualBlades, 
+    hammer, 
+    lance, 
+    gunlance,
+    huntingHorn, 
+    switchAxe, 
+    chargeBlade, 
+    insectGlaive, 
+    lightBowgun, 
+    heavyBowgun, 
+    bow
+}
 
  
 -- Init the modules
