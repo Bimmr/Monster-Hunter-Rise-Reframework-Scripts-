@@ -47,7 +47,7 @@ end
 function data.draw()
 
     local changed, any_changed, misc_changed = false, false, false
-    changed, data.charge_level = imgui.slider_int("Charge Level  ", data.charge_level, -1, 4, data.charge_level > -1 and "Level %d" or "Off")
+    changed, data.charge_level = imgui.slider_int("Charge Level  ", data.charge_level, -1, 3, data.charge_level > -1 and "Level %d" or "Off")
     any_changed = changed or any_changed
     changed, misc.ammo_and_coatings.unlimited_ammo = imgui.checkbox("Unlimited Ammo ", misc.ammo_and_coatings.unlimited_ammo)
     misc_changed = changed or misc_changed
