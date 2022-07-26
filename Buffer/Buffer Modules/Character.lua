@@ -291,8 +291,8 @@ function data.draw()
         data.stats.defence = defence_slider * step
         imgui.tree_pop()
 
-        if any_changed then config.save_section(data.create_config_section()) end
     end
+    if any_changed then config.save_section(data.create_config_section()) end
 end
 
 function data.reset()
