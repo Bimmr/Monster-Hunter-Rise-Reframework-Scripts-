@@ -18,7 +18,7 @@ function data.init_hooks()
     sdk.hook(sdk.find_type_definition("snow.player.Bow"):get_method("update"), function(args)
         local managed = sdk.to_managed_object(args[2])
 
-        if data.charge_level > 0 then managed:set_field("<ChargeLv>k__BackingField", data[1].value) end
+        if data.charge_level > 0 then managed:set_field("<ChargeLv>k__BackingField", data.charge_level) end
         if data.herculean_draw then managed:set_field("_WireBuffAttackUpTimer", 1800) end
         if data.bolt_boost then managed:set_field("_WireBuffArrowUpTimer", 1800) end
     end, utils.nothing())
