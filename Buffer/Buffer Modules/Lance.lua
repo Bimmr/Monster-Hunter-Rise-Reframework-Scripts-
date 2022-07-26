@@ -6,6 +6,7 @@ local data = {
 
 function data.init()
     utils = require("Buffer Modules.Utils")
+    config = require("Buffer Modules.Config")
 
     data.init_hooks()
 end
