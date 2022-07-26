@@ -72,11 +72,11 @@ function data.init_hooks()
 
     end, utils.nothing())
 
-    sdk.hook(sdk.find_type_definition("snow.data.bulletSlider.BottleSliderFunc"):get_method("notifyConsumeItem"), function(args)
+    sdk.hook(sdk.find_type_definition("snow.data.bulletSlider.BottleSliderFunc"):get_method("consumeItem"), function(args)
         if data.ammo_and_coatings.unlimited_coatings then return sdk.PreHookResult.SKIP_ORIGINAL end
     end, utils.nothing())
 
-    sdk.hook(sdk.find_type_definition("snow.data.bulletSlider.BulletSliderFunc"):get_method("notifyConsumeItem"), function(args)
+    sdk.hook(sdk.find_type_definition("snow.data.bulletSlider.BulletSliderFunc"):get_method("consumeItem"), function(args)
         if data.ammo_and_coatings.unlimited_ammo then return sdk.PreHookResult.SKIP_ORIGINAL end
     end, utils.nothing())
 
@@ -155,6 +155,7 @@ function data.init_hooks()
             end
         end
     end, utils.nothing())
+    
 end
 
 function data.draw()
