@@ -20,7 +20,7 @@ function data.init_hooks()
     sdk.hook(sdk.find_type_definition("snow.player.LightBowgun"):get_method("update"), function(args)
         local managed = sdk.to_managed_object(args[2])
 
-        if misc.auto_reload then managed:call("resetBulletNum") end
+        if misc.ammo_and_coatings.auto_reload then managed:call("resetBulletNum") end
         if data.fanning_maneuver then managed:set_field("LightBowgunWireBuffTimer", 1200) end
     end, utils.nothing())
 

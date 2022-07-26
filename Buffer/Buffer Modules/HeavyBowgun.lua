@@ -25,7 +25,7 @@ function data.init_hooks()
             managed:set_field("_ShotChargeLv", data.charge_level)
             managed:set_field("_ShotChargeFrame", 30 * data.charge_level)
         end
-        if misc.auto_reload then managed:call("resetBulletNum") end
+        if misc.ammo_and_coatings.auto_reload then managed:call("resetBulletNum") end
     end, utils.nothing())
 
     sdk.hook(sdk.find_type_definition("snow.player.PlayerManager"):get_method("update"), function(args)
