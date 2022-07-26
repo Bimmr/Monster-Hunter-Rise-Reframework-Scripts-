@@ -3,8 +3,9 @@ local data = {
     title = "Light Bowgun",
     -- unlimited_ammo -- In Misc
     -- auto_reload   -- In Misc
-    wyvern_blast = false
-    -- no_deviation  -- In Misc
+    wyvern_blast = false,
+    fanning_maneuver = false
+    -- no_deviation  -- In Misc,
 }
 
 function data.init()
@@ -20,6 +21,7 @@ function data.init_hooks()
         local managed = sdk.to_managed_object(args[2])
 
         if misc.auto_reload then managed:call("resetBulletNum") end
+        if data.fanning_maneuver then managed:set_field("LightBowgunWireBuffTimer", 1200) end
     end, utils.nothing())
 
     sdk.hook(sdk.find_type_definition("snow.player.PlayerManager"):get_method("update"), function(args)
@@ -42,6 +44,8 @@ function data.draw()
     misc_changed = changed or misc_changed
     changed, data.wyvern_blast = imgui.checkbox("Unlimited Wyvern Blast", data.wyvern_blast)
     any_changed = changed or any_changed
+    changed, data.fanning_maneuver = imgui.checkbox("Fanning Maneuver", data.fanning_maneuver)
+    any_changed = changed or any_changed
     changed, misc.ammo_and_coatings.no_deviation = imgui.checkbox("No Deviation ", misc.ammo_and_coatings.no_deviation)
     misc_changed = changed or misc_changed
 
@@ -52,7 +56,8 @@ end
 function data.create_config_section()
     return {
         [data.title] = {
-            wyvern_blast = data.wyvern_blast
+            wyvern_blast = data.wyvern_blast,
+            fanning_maneuver = data.fanning_maneuver
         }
     }
 end
@@ -60,6 +65,7 @@ end
 function data.load_from_config(config_section)
     if not config_section then return end
     data.wyvern_blast = config_section.wyvern_blast or data.wyvern_blast
+    data.fanning_maneuver = config_section.fanning_maneuver or data.fanning_maneuver
 end
 
 return data
