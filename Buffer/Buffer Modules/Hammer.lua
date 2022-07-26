@@ -30,8 +30,8 @@ end
 function data.draw()
     
     local changed, any_changed = false, false
-    changed, data.charge_level = imgui.slider_int("Charge Level ", data.charge_level, -1, 3,
-                                                    data.charge_level > -1 and "Level %d" or "Off")
+    changed, data.charge_level = imgui.slider_int("Charge Level ", data.charge_level, -1, 2,
+                                                    data.charge_level > -1 and "Level "..(data.charge_level+1) or "Off")
     any_changed = changed or any_changed
     changed, data.impact_burst = imgui.checkbox("Impact Burst", data.impact_burst)
     any_changed = changed or any_changed
