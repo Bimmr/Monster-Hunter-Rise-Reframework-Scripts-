@@ -74,24 +74,25 @@ function data.init_hooks()
         end
 
         if data.health.max_dragonheart then
-            local playerData = utils.getPlayerData()
-            if not playerData then return end
-
             local max = playerData:get_field("_vitalMax")
             local playerSkills = playerBase:call("get_PlayerSkillList")
-            if not playerSkills then return end
-            local dhSkill = playerSkills:call("getSkillData", 103) -- Dragonheart Skill ID
-            if not dhSkill then return end
-            local dhLevel = dhSkill:get_field("SkillLv")
+            if playerSkills then
+                local dhSkill = playerSkills:call("getSkillData", 103) -- Dragonheart Skill ID
+                if dhSkill then
+                    local dhLevel = dhSkill:get_field("SkillLv")
 
-            -- Depending on level set health percent
-            local newHealth = max
-            if dhLevel == 1 or dhLevel == 2 then newHealth = math.floor(max * 0.5) end
-            if dhLevel == 3 or dhLevel == 4 then newHealth = math.floor(max * 0.7) end
-            if dhLevel == 5 then newHealth = math.floor(max * 0.8) end
+                    if dhLevel > 0 then
+                        -- Depending on level set health percent
+                        local newHealth = max
+                        if dhLevel == 1 or dhLevel == 2 then newHealth = math.floor(max * 0.5) end
+                        if dhLevel == 3 or dhLevel == 4 then newHealth = math.floor(max * 0.7) end
+                        if dhLevel == 5 then newHealth = math.floor(max * 0.8) end
 
-            playerData:set_field("_r_Vital", math.min(max, newHealth) + .0)
-            playerData:call("set__vital", math.min(max, newHealth) + .0)
+                        playerData:set_field("_r_Vital", math.min(max, newHealth) + .0)
+                        playerData:call("set__vital", math.min(max, newHealth) + .0)
+                    end
+                end
+            end
         end
 
         if data.health.max_heroics then
@@ -220,7 +221,7 @@ function data.init_hooks()
 end
 
 function data.draw()
-    
+
     local changed, any_changed = false, false
     changed, data.unlimited_stamina = imgui.checkbox("Unlimited Stamina", data.unlimited_stamina)
     any_changed = any_changed or changed
@@ -268,7 +269,8 @@ function data.draw()
             any_changed = any_changed or changed
             changed, data.conditions_and_blights.conditions.qurio = imgui.checkbox("Qurio", data.conditions_and_blights.conditions.qurio)
             any_changed = any_changed or changed
-            changed, data.conditions_and_blights.conditions.defence_and_resistance = imgui.checkbox("Defence & Resistance", data.conditions_and_blights.conditions.defence_and_resistance)
+            changed, data.conditions_and_blights.conditions.defence_and_resistance = imgui.checkbox("Defence & Resistance",
+                                                                                                    data.conditions_and_blights.conditions.defence_and_resistance)
             any_changed = any_changed or changed
             changed, data.conditions_and_blights.conditions.hellfire_and_stentch = imgui.checkbox("Hellfire & Stench", data.conditions_and_blights.conditions.hellfire_and_stentch)
             any_changed = any_changed or changed
@@ -282,17 +284,13 @@ function data.draw()
         local attack_max, defence_max = 2600, 3100
         local stepped_attack_max, stepped_defence_max = math.floor(attack_max / step), math.floor(defence_max / step)
         local stepped_attack_value, stepped_defence_value = -1, -1
-        if data.stats.attack > -1 then
-            stepped_attack_value = math.floor(data.stats.attack / step)
-        end
-        if data.stats.defence > -1 then
-            stepped_defence_value = math.floor(data.stats.defence / step)
-        end
+        if data.stats.attack > -1 then stepped_attack_value = math.floor(data.stats.attack / step) end
+        if data.stats.defence > -1 then stepped_defence_value = math.floor(data.stats.defence / step) end
         local attack_slider, defence_slider
-        changed, attack_slider = imgui.slider_int("Attack", stepped_attack_value, -1, stepped_attack_max, stepped_attack_value > -1 and stepped_attack_value*step or "Off")
+        changed, attack_slider = imgui.slider_int("Attack", stepped_attack_value, -1, stepped_attack_max, stepped_attack_value > -1 and stepped_attack_value * step or "Off")
         any_changed = any_changed or changed
         utils.tooltip("Drag slider to the left to reset if the stat break")
-        changed, defence_slider = imgui.slider_int("Defence", stepped_defence_value, -1, stepped_defence_max, stepped_defence_value > -1 and stepped_defence_value*step or "Off")
+        changed, defence_slider = imgui.slider_int("Defence", stepped_defence_value, -1, stepped_defence_max, stepped_defence_value > -1 and stepped_defence_value * step or "Off")
         any_changed = any_changed or changed
         utils.tooltip("Drag slider to the left to reset if the stat break")
         data.stats.attack = attack_slider * step
@@ -328,7 +326,7 @@ function data.create_config_section()
                 insta_healing = data.health.insta_healing,
                 max_dragonheart = data.health.max_dragonheart,
                 max_heroics = data.health.max_heroics,
-                max_adrenaline = data.health.max_adrenaline,
+                max_adrenaline = data.health.max_adrenaline
 
             },
             conditions_and_blights = {
@@ -337,9 +335,9 @@ function data.create_config_section()
                     water = data.conditions_and_blights.blights.water,
                     ice = data.conditions_and_blights.blights.ice,
                     thunder = data.conditions_and_blights.blights.thunder,
-                    dragon= data.conditions_and_blights.blights.dragon,
+                    dragon = data.conditions_and_blights.blights.dragon,
                     bubble = data.conditions_and_blights.blights.bubble,
-                    blast = data.conditions_and_blights.blights.blast,
+                    blast = data.conditions_and_blights.blights.blast
                 },
                 conditions = {
                     bleeding = data.conditions_and_blights.conditions.bleeding,
@@ -349,12 +347,12 @@ function data.create_config_section()
                     frenzy = data.conditions_and_blights.conditions.frenzy,
                     qurio = data.conditions_and_blights.conditions.qurio,
                     defence_and_resistance = data.conditions_and_blights.conditions.defence_and_resistance,
-                    hellfire_and_stentch = data.conditions_and_blights.conditions.hellfire_and_stentch,
+                    hellfire_and_stentch = data.conditions_and_blights.conditions.hellfire_and_stentch
                 }
             },
             stats = {
                 attack = data.stats.attack,
-                defence = data.stats.defence,
+                defence = data.stats.defence
             }
         }
     }
@@ -367,7 +365,5 @@ function data.load_from_config(config_section)
     data.conditions_and_blights = config_section.conditions_and_blights or data.conditions_and_blights
     data.stats = config_section.stats or data.stats
 end
- 
-
 
 return data
