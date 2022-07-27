@@ -1,4 +1,4 @@
-name: Update Release (Manual)
+name: Update Buffer
 on:
   workflow_dispatch
   #push:
@@ -28,5 +28,6 @@ jobs:
         artifacts: "Buffer.zip"
         allowUpdates: true
         tag: 'Buffer'
+        body: 'Buffer Update - Check Commits for changelog'
         replacesArtifacts: true
         token: ${{ secrets.TOKEN }}
