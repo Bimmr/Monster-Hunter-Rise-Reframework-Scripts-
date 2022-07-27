@@ -25,6 +25,7 @@ local data = {
             poison = false,
             sleep = false,
             frenzy = false,
+            qurio = false,
             defence_and_resistance = false,
             hellfire_and_stentch = false
         }
@@ -95,7 +96,7 @@ function data.init_hooks()
 
         if data.health.max_heroics then
             local max = playerData:get_field("_vitalMax")
-            local newHealth = math.floor(max * 0.3)
+            local newHealth = math.floor(max * 0.35)
 
             playerData:set_field("_r_Vital", math.min(max, newHealth) + .0)
             playerData:call("set__vital", math.min(max, newHealth) + .0)
@@ -162,6 +163,11 @@ function data.init_hooks()
             playerBase:set_field("_IsVirusLatency", false) -- The frenzy virus
             playerBase:set_field("_VirusTimer", 0) -- How long till the next frenzy virus tick
             playerBase:set_field("_VirusAccumulator", 0) -- Total ticks of Frenzy
+        end
+
+        if data.conditions_and_blights.conditions.qurio then
+            playerBase:set_field("_MysteryDebuffTimer", 0) -- The qurio timer
+            playerBase:set_field("_MysteryDebuffDamageTimer", 0) -- The qurio damage timer")
         end
 
         if data.conditions_and_blights.conditions.defence_and_resistance then
@@ -260,6 +266,8 @@ function data.draw()
             any_changed = any_changed or changed
             changed, data.conditions_and_blights.conditions.frenzy = imgui.checkbox("Frenzy", data.conditions_and_blights.conditions.frenzy)
             any_changed = any_changed or changed
+            changed, data.conditions_and_blights.conditions.qurio = imgui.checkbox("Qurio", data.conditions_and_blights.conditions.qurio)
+            any_changed = any_changed or changed
             changed, data.conditions_and_blights.conditions.defence_and_resistance = imgui.checkbox("Defence & Resistance", data.conditions_and_blights.conditions.defence_and_resistance)
             any_changed = any_changed or changed
             changed, data.conditions_and_blights.conditions.hellfire_and_stentch = imgui.checkbox("Hellfire & Stench", data.conditions_and_blights.conditions.hellfire_and_stentch)
@@ -328,7 +336,7 @@ function data.create_config_section()
                     fire = data.conditions_and_blights.blights.fire,
                     water = data.conditions_and_blights.blights.water,
                     ice = data.conditions_and_blights.blights.ice,
-                  thunder = data.conditions_and_blights.blights.thunder,
+                    thunder = data.conditions_and_blights.blights.thunder,
                     dragon= data.conditions_and_blights.blights.dragon,
                     bubble = data.conditions_and_blights.blights.bubble,
                     blast = data.conditions_and_blights.blights.blast,
@@ -339,6 +347,7 @@ function data.create_config_section()
                     poison = data.conditions_and_blights.conditions.poison,
                     sleep = data.conditions_and_blights.conditions.sleep,
                     frenzy = data.conditions_and_blights.conditions.frenzy,
+                    qurio = data.conditions_and_blights.conditions.qurio,
                     defence_and_resistance = data.conditions_and_blights.conditions.defence_and_resistance,
                     hellfire_and_stentch = data.conditions_and_blights.conditions.hellfire_and_stentch,
                 }
