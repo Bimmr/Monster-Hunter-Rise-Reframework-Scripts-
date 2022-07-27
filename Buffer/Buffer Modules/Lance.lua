@@ -17,7 +17,7 @@ function data.init_hooks()
 
         if data.anchor_rage > -1 then
             managed:set_field("_GuardRageTimer", 3000)
-            managed:set_field("_GuardRageBuffType", data[1].value)
+            managed:set_field("_GuardRageBuffType", data.anchor_rage)
         end
     end, utils.nothing())
 
