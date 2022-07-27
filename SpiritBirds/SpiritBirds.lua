@@ -22,8 +22,8 @@ local function loadConfig()
     if json ~= nil then
         local file = json.load_file(configPath)
         if file then
-            autospawn.enabled = file.autospawn or true
-            isWindowOpen = file.isWindowOpen or false
+            autospawn.enabled = file.autospawn
+            isWindowOpen = file.isWindowOpen
         end
     end
 end
