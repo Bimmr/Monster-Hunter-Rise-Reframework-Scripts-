@@ -1,4 +1,4 @@
-name: Update Release (Manual)
+name: Update Buffer
 on:
   workflow_dispatch
   #push:
