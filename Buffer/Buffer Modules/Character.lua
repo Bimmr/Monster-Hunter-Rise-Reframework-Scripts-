@@ -81,16 +81,14 @@ function data.init_hooks()
                 if dhSkill then
                     local dhLevel = dhSkill:get_field("SkillLv")
 
-                    if dhLevel > 0 then
-                        -- Depending on level set health percent
-                        local newHealth = max
-                        if dhLevel == 1 or dhLevel == 2 then newHealth = math.floor(max * 0.5) end
-                        if dhLevel == 3 or dhLevel == 4 then newHealth = math.floor(max * 0.7) end
-                        if dhLevel == 5 then newHealth = math.floor(max * 0.8) end
+                    -- Depending on level set health percent
+                    local newHealth = max
+                    if dhLevel == 1 or dhLevel == 2 then newHealth = math.floor(max * 0.5) end
+                    if dhLevel == 3 or dhLevel == 4 then newHealth = math.floor(max * 0.7) end
+                    if dhLevel == 5 then newHealth = math.floor(max * 0.8) end
 
-                        playerData:set_field("_r_Vital", math.min(max, newHealth) + .0)
-                        playerData:call("set__vital", math.min(max, newHealth) + .0)
-                    end
+                    playerData:set_field("_r_Vital", math.min(max, newHealth) + .0)
+                    playerData:call("set__vital", math.min(max, newHealth) + .0)
                 end
             end
         end
