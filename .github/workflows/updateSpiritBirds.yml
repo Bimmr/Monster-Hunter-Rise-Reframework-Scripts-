@@ -1,8 +1,9 @@
-name: Update Release (Auto)
+name: Update SpiritBirds
 on:
-  push:
-    paths:
-      - Buffer/**
+  workflow_dispatch
+  #push:
+   # tags:
+    #- '*'
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -10,7 +11,7 @@ jobs:
     - uses: dev-drprasad/delete-tag-and-release@v0.2.0
       with:
         delete_release: true # default: false
-        tag_name: Buffer # tag name to delete
+        tag_name: SpiritBirds # tag name to delete
       env:
         GITHUB_TOKEN: ${{ secrets.TOKEN }}
     - uses: actions/checkout@master
@@ -18,14 +19,14 @@ jobs:
       uses: thedoctor0/zip-release@main
       with:
         type: 'zip'
-        path: 'Buffer/'
-        filename: 'Buffer.zip'
-        exclusions: 'README.md'
+        path: 'SpiritBirds/'
+        filename: 'SpiritBirds.zip'
+        exclusions: '*.md /SpiritBirds/*.md'
     - name: Upload Release
       uses: ncipollo/release-action@v1
       with:
-        artifacts: "Buffer.zip"
+        artifacts: "SpiritBirds.zip"
         allowUpdates: true
-        tag: 'Buffer'
+        tag: 'SpiritBirds'
         replacesArtifacts: true
         token: ${{ secrets.TOKEN }}
