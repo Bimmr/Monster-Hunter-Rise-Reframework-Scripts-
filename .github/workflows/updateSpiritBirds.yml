@@ -28,5 +28,6 @@ jobs:
         artifacts: "SpiritBirds.zip"
         allowUpdates: true
         tag: 'SpiritBirds'
+        body: 'SpiritBirds Update - Check Commits for changelog'
         replacesArtifacts: true
         token: ${{ secrets.TOKEN }}
