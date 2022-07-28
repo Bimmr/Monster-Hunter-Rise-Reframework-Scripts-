@@ -2,7 +2,10 @@ local utils, config
 local lightBowgun, heavyBowgun, bow
 local data = {
     title = "Miscellaneous",
-    unlimited_consumables = false,
+    consumables = {
+        items = false,
+        endemic_life = false
+    },
     sharpness_level = -1,
     old_sharpness_level = -1,
     ammo_and_coatings = {
@@ -40,8 +43,21 @@ function data.init()
 end
 
 function data.init_hooks()
-    sdk.hook(sdk.find_type_definition("snow.data.ItemSlider"):get_method("notifyConsumeItem"), function(args)
-        if data.unlimited_consumables then return sdk.PreHookResult.SKIP_ORIGINAL end
+    sdk.hook(sdk.find_type_definition("snow.data.ItemSlider"):get_method("notifyConsumeItem(snow.data.ContentsIdSystem.ItemId, System.Boolean)"), function(args)
+        local item_id = sdk.to_int64(args[3])
+        -- Marionette Spider = 69206037
+        -- Ec Item = 69206016 - 69206040
+        if data.consumables.endemic_life and ((item_id >= 69206016 and item_id <= 69206040 ) or (item_id == 69206037)) then
+            if item_id == 69206037 then -- Needs to be reset otherwise it will be stuck in the "consumed" state
+                local creature_manager = sdk.get_managed_singleton("snow.envCreature.EnvironmentCreatureManager")
+                local playerBase = utils.getPlayerBase()
+                creature_manager:call("setEc057UseCount", playerBase:get_field("_PlayerIndex"), 0)
+            end
+            return sdk.PreHookResult.SKIP_ORIGINAL 
+        elseif data.consumables.items and not ((item_id >= 69206016 and item_id <= 69206040 ) or (item_id == 69206037)) then
+            return sdk.PreHookResult.SKIP_ORIGINAL 
+        end
+
     end, utils.nothing())
 
     sdk.hook(sdk.find_type_definition("snow.player.PlayerManager"):get_method("update"), function(args)
@@ -155,18 +171,24 @@ function data.init_hooks()
             end
         end
     end, utils.nothing())
-    
+
 end
 
 function data.draw()
 
     local changed, any_changed = false, false
-    changed, data.unlimited_consumables = imgui.checkbox("Unlimited Consumables", data.unlimited_consumables)
-    any_changed = any_changed or changed
+    
     local sharpness_display = {"Off", "Red", "Orange", "Yellow", "Green", "Blue", "White", "Purple"}
     changed, data.sharpness_level = imgui.slider_int("Sharpness Level", data.sharpness_level, -1, 6, sharpness_display[data.sharpness_level + 2])
     utils.tooltip("The sharpness bar will still move, but the sharpness level won't change")
     any_changed = any_changed or changed
+    if imgui.tree_node("Consumables") then
+        changed, data.consumables.items = imgui.checkbox("Unlimited Items", data.consumables.items)
+        any_changed = any_changed or changed
+        changed, data.consumables.endemic_life = imgui.checkbox("Unlimited Endemic Life", data.consumables.endemic_life)
+        any_changed = any_changed or changed
+        imgui.tree_pop()
+    end
     if imgui.tree_node("Ammo & Coating") then
         changed, data.ammo_and_coatings.unlimited_coatings = imgui.checkbox("Unlimited Coatings (Bow)", data.ammo_and_coatings.unlimited_coatings)
         any_changed = any_changed or changed
@@ -206,36 +228,30 @@ end
 function data.create_config_section()
     return {
         [data.title] = {
-            unlimited_consumables = data.unlimited_consumables,
+            consumables = data.consumables,
             sharpness_level = data.sharpness_level,
-            ammo_and_coatings = {
-                unlimited_coatings = data.ammo_and_coatings.unlimited_coatings,
-                unlimited_ammo = data.ammo_and_coatings.unlimited_ammo,
-                auto_reload = data.ammo_and_coatings.auto_reload,
-                no_deviation = data.ammo_and_coatings.no_deviation
-            },
-            wirebugs = {
-                unlimited_ooc = data.wirebugs.unlimited_ooc,
-                unlimited = data.wirebugs.unlimited,
-                give_3 = data.wirebugs.give_3,
-                unlimited_powerup = data.wirebugs.unlimited_powerup
-            },
-            canteen = {
-                dango_100_no_ticket = data.canteen.dango_100_no_ticket,
-                dango_100_ticket = data.canteen.dango_100_ticket,
-                level_4 = data.canteen.level_4
-            }
+            ammo_and_coatings = data.ammo_and_coatings,
+            wirebugs = data.wirebugs,
+            canteen = data.canteen
         }
     }
 end
 
 function data.load_from_config(config_section)
     if not config_section then return end
-    data.unlimited_consumables = config_section.unlimited_consumables or data.unlimited_consumables
+
+    data.consumables = config_section.consumables or data.consumables
     data.sharpness_level = config_section.sharpness_level or data.sharpness_level
     data.ammo_and_coatings = config_section.ammo_and_coatings or data.ammo_and_coatings
     data.wirebugs = config_section.wirebugs or data.wirebugs
     data.canteen = config_section.canteen or data.canteen
+
+    -- Old config format helper
+    if config_section.unlimited_consumables then
+        data.consumables.items = config_section.unlimited_consumables
+        data.consumables.endemic_life = config_section.unlimited_consumables
+    end
+
 end
 
 return data
