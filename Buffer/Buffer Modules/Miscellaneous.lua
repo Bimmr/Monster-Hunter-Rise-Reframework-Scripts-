@@ -66,7 +66,7 @@ function data.init_hooks()
 
         if data.sharpness_level > -1 then
             if data.data.sharpness_level_old == -1 then data.data.sharpness_level_old = playerBase:get_field("<SharpnessLv>k__BackingField") end
-            -- 0=Red | 1=Orange | 2=Yellow | 3=Green | 4=Blue | 5=White | 6=Purple
+            -- | 0=Red | 1=Orange | 2=Yellow | 3=Green | 4=Blue | 5=White | 6=Purple |
             playerBase:set_field("<SharpnessLv>k__BackingField", data.sharpness_level) -- Sharpness Level of Purple
             -- playerBase:set_field("<SharpnessGauge>k__BackingField", 400) -- Sharpness Value
             -- playerBase:set_field("<SharpnessGaugeMax>k__BackingField", 400) -- Max Sharpness
