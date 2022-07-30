@@ -27,22 +27,26 @@ local bow = require("Buffer Modules.Bow")
 local modules = {miscellaneous, character, greatSword, longSword, shortSword, dualBlades, hammer, lance, gunlance, huntingHorn, switchAxe, chargeBlade, insectGlaive, lightBowgun,
                  heavyBowgun, bow}
 
--- Init the modules
+-- Init the modules, and load their config sections
 for i, module in pairs(modules) do
     if module.init ~= nil then module.init() end
     if module.load_from_config ~= nil then module.load_from_config(config.get_section(module.title)) end
 end
 
+-- Check if the window was last open
 if config.get("is_window_open") == true then
     isWindowOpen = true
 end
 
 -- Add the menu to the REFramework Script Generated UI
 re.on_draw_ui(function()
+
+    -- Draw button to toggle window state
     if imgui.button("Toggle Buffer GUI") then
         isWindowOpen = not isWindowOpen
         config.set("is_window_open", isWindowOpen)
     end
+
     if isWindowOpen then
         wasOpen = true
         imgui.set_next_window_size(Vector2f.new(520, 450), 4)
@@ -58,6 +62,9 @@ re.on_draw_ui(function()
         end
         imgui.spacing()
         imgui.end_window()
+
+    -- If the window is closed, but was just open. 
+    -- This is needed because of the close icon on the window not triggering a save to the config
     elseif wasOpen then
         wasOpen = false
         config.set("is_window_open", isWindowOpen)

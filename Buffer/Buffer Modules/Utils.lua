@@ -10,7 +10,7 @@ function utils.nothing(retval)
     return retval
 end
 
--- Get Player Base
+-- Get Player Base, player input is used to ensure the player is the one making the inputs so things work on when not the master player(host)
 function utils.getPlayerBase()
     if not playerInput then
         local inputManager = sdk.get_managed_singleton("snow.StmInputManager")
@@ -56,7 +56,7 @@ function utils.getLength(obj)
     return count
 end
 
--- Check if player is in battle, base code by raffRun
+-- Check if player is in battle, code by raffRun
 function utils.checkIfInBattle()
 
     if not musicManager then musicManager = sdk.get_managed_singleton("snow.wwise.WwiseMusicManager") end
@@ -78,7 +78,8 @@ function utils.checkIfInBattle()
     return inBattle and not isQuestComplete
 end
 
--- Custom tooltip
+-- Custom tooltip, adds a spacing before the end of window by default,
+-- but by using an empty text on the top and bottom it makes it even
 function utils.tooltip(text)
     imgui.same_line()
     imgui.text("(?)")
