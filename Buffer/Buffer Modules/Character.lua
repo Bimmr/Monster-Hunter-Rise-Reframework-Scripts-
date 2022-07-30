@@ -226,10 +226,13 @@ function data.draw()
     if imgui.tree_node("Health Options") then
         changed, data.health.healing = imgui.checkbox("Constant Healing", data.health.healing)
         any_changed = any_changed or changed
+        utils.tooltip("Any missing health will become recoverable.")
         changed, data.health.insta_healing = imgui.checkbox("Instant Healing", data.health.insta_healing)
         any_changed = any_changed or changed
+        utils.tooltip("When you take damage, you will instantly heal back to full health.")
         changed, data.health.max_dragonheart = imgui.checkbox("Max Dragonheart Health", data.health.max_dragonheart)
         any_changed = any_changed or changed
+        utils.tooltip("Will adjust health depending on the level of Dragonheart.")
         changed, data.health.max_heroics = imgui.checkbox("Max Heroics Health", data.health.max_heroics)
         any_changed = any_changed or changed
         changed, data.health.max_adrenaline = imgui.checkbox("Max Adrenaline Health", data.health.max_adrenaline)
@@ -237,7 +240,7 @@ function data.draw()
         imgui.tree_pop()
     end
     if imgui.tree_node("Conditions, Ailments, & Blights") then
-        if imgui.tree_node("Blights") then
+        if imgui.tree_node("Prevent Blights") then
             changed, data.conditions_and_blights.blights.fire = imgui.checkbox("Fire", data.conditions_and_blights.blights.fire)
             any_changed = any_changed or changed
             changed, data.conditions_and_blights.blights.water = imgui.checkbox("Water", data.conditions_and_blights.blights.water)
@@ -254,7 +257,7 @@ function data.draw()
             any_changed = any_changed or changed
             imgui.tree_pop()
         end
-        if imgui.tree_node("Conditions") then
+        if imgui.tree_node("Prevent Conditions") then
             changed, data.conditions_and_blights.conditions.bleeding = imgui.checkbox("Bleeding", data.conditions_and_blights.conditions.bleeding)
             any_changed = any_changed or changed
             changed, data.conditions_and_blights.conditions.stun = imgui.checkbox("Stun", data.conditions_and_blights.conditions.stun)
@@ -291,8 +294,8 @@ function data.draw()
         changed, defence_slider = imgui.slider_int("Defence", stepped_defence_value, -1, stepped_defence_max, stepped_defence_value > -1 and stepped_defence_value * step or "Off")
         any_changed = any_changed or changed
         utils.tooltip("Drag slider to the left to reset if the stat break")
-        data.stats.attack = attack_slider * step
-        data.stats.defence = defence_slider * step
+        data.stats.attack = attack_slider > -1 and attack_slider * step or -1
+        data.stats.defence = defence_slider > -1 and defence_slider * step or -1
         imgui.tree_pop()
 
     end
