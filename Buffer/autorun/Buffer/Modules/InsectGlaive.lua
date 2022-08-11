@@ -1,6 +1,6 @@
-local utils, config
+local utils, config, language
 local data = {
-    title = "Insect Glaive",
+    title = "insect_glaive",
     red_extract = false,
     white_extract = false,
     orange_extract = false,
@@ -8,8 +8,9 @@ local data = {
     kinsect_stamina = false
 }
 function data.init()
-    utils = require("Buffer Modules.Utils")
-    config = require("Buffer Modules.Config")
+    utils = require("Buffer.Misc.Utils")
+    config = require("Buffer.Misc.Config")
+    language = require("Buffer.Misc.Language")
 
     data.init_hooks()
 end
@@ -28,25 +29,34 @@ function data.init_hooks()
         local managed = sdk.to_managed_object(args[2])
 
         if data.kinsect_stamina then managed:set_field("<_Stamina>k__BackingField", 100) end -- not working?
-    
+
     end, utils.nothing())
 end
 
 function data.draw()
 
     local changed, any_changed = false, false
-    changed, data.red_extract = imgui.checkbox("Red Extract", data.red_extract)
-    any_changed = changed or any_changed
-    changed, data.white_extract = imgui.checkbox("White Extract", data.white_extract)
-    any_changed = changed or any_changed
-    changed, data.orange_extract = imgui.checkbox("Orange Extract", data.orange_extract)
-    any_changed = changed or any_changed
-    changed, data.aerials = imgui.checkbox("Unlimited Aerials ", data.aerials)
-    any_changed = changed or any_changed
-    changed, data.kinsect_stamina = imgui.checkbox("Unlimited Kinsect Stamina", data.kinsect_stamina)
-    any_changed = changed or any_changed
+    local languagePrefix = data.title .. "."
 
-    if any_changed then config.save_section(data.create_config_section()) end
+    if imgui.collapsing_header(language.get(languagePrefix .. "title")) then
+        imgui.indent(10)
+
+        changed, data.red_extract = imgui.checkbox(language.get(languagePrefix .. "red_extract"), data.red_extract)
+        any_changed = changed or any_changed
+        changed, data.white_extract = imgui.checkbox(language.get(languagePrefix .. "white_extract"), data.white_extract)
+        any_changed = changed or any_changed
+        changed, data.orange_extract = imgui.checkbox(language.get(languagePrefix .. "orange_extract"), data.orange_extract)
+        any_changed = changed or any_changed
+        changed, data.aerials = imgui.checkbox(language.get(languagePrefix .. "aerials"), data.aerials)
+        any_changed = changed or any_changed
+        changed, data.kinsect_stamina = imgui.checkbox(language.get(languagePrefix .. "kinsect_stamina"), data.kinsect_stamina)
+        any_changed = changed or any_changed
+
+        if any_changed then config.save_section(data.create_config_section()) end
+        imgui.unindent(10)
+        imgui.separator()
+        imgui.spacing()
+    end
 end
 
 function data.create_config_section()

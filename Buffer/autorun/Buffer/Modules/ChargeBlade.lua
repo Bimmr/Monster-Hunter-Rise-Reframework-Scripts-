@@ -1,15 +1,16 @@
-local utils, config
+local utils, config, language
 
 local data = {
-    title = "Charge Blade",
+    title = "charge_blade",
     full_bottles = false,
     sword_charged = false,
     shield_charged = false
 }
 
 function data.init()
-    utils = require("Buffer Modules.Utils")
-    config = require("Buffer Modules.Config")
+    utils = require("Buffer.Misc.Utils")
+    config = require("Buffer.Misc.Config")
+    language = require("Buffer.Misc.Language")
 
     data.init_hooks()
 end
@@ -29,14 +30,23 @@ end
 
 function data.draw()
     local changed, any_changed = false, false
-    changed, data.full_bottles = imgui.checkbox("Full Bottles", data.full_bottles)
-    any_changed = changed or any_changed
-    changed, data.sword_charged = imgui.checkbox("Sword Charged", data.sword_charged)
-    any_changed = changed or any_changed
-    changed, data.shield_charged = imgui.checkbox("Shield Charged", data.shield_charged)
-    any_changed = changed or any_changed
-    
-    if any_changed then config.save_section(data.create_config_section()) end
+    local languagePrefix = data.title .. "."
+
+    if imgui.collapsing_header(language.get(languagePrefix .. "title")) then
+        imgui.indent(10)
+
+        changed, data.full_bottles = imgui.checkbox(language.get(languagePrefix .. "full_bottles"), data.full_bottles)
+        any_changed = changed or any_changed
+        changed, data.sword_charged = imgui.checkbox(language.get(languagePrefix .. "sword_charged"), data.sword_charged)
+        any_changed = changed or any_changed
+        changed, data.shield_charged = imgui.checkbox(language.get(languagePrefix .. "shield_charged"), data.shield_charged)
+        any_changed = changed or any_changed
+
+        if any_changed then config.save_section(data.create_config_section()) end
+        imgui.unindent(10)
+        imgui.separator()
+        imgui.spacing()
+    end
 end
 
 

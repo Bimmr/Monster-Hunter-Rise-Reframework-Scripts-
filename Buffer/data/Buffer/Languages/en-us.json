@@ -1,0 +1,192 @@
+{
+    "_IMPORTANT NOTE": "If multiple items have the same value but control different things, you need to make them different by using spaces",
+    "bow": {
+        "title": "Bow",
+        "charge_level": "Charge Level   ",
+        "charge_level_prefix": "Level",
+        "charge_level_disabled": "Off",
+        "unlimited_arrows": "Unlimited Arrows",
+        "herculean_draw": "Herculean Draw",
+        "herculean_draw_tooltip": "No effect will appear on the weapon",
+        "bolt_boost": "Bolt Boost"
+    },
+    "character": {
+        "title": "Character",
+        "conditions_and_blights": {
+            "title": "Conditions, Ailments, & Blights",
+            "blights": {
+                "title": "Prevent Blights",
+                "blast": "Blast",
+                "bubble": "Bubble",
+                "dragon": "Dragon",
+                "fire": "Fire",
+                "ice": "Ice",
+                "thunder": "Thunder",
+                "water": "Water"
+            },
+            "conditions": {
+                "title": "Prevent Conditions",
+                "bleeding": "Bleeding",
+                "defence_and_resistance": "Defence and Resistance",
+                "frenzy": "Frenzy",
+                "hellfire_and_stentch": "Hellfire and Stench",
+                "poison": "Poison",
+                "qurio": "Qurio",
+                "sleep": "Sleep",
+                "still_working_on": "Still working on Stun, Paralyze and Web"
+            }
+        },
+        "health": {
+            "title": "Health",
+            "healing": "Constant Healing",
+            "healing_tooltip": "Any missing health will become recoverable.",
+            "insta_healing": "Instant Healing",
+            "insta_healing_tooltip": "When you take damage, you will instantly heal back to full health.",
+            "max_adrenaline": "Max Adrenaline Health",
+            "max_dragonheart": "Max Dragonheart Health",
+            "max_dragonheart_tooltip": "Will adjust health depending on the level of Dragonheart.",
+            "max_heroics": "Max Heroics Health"
+        },
+        "stats": {
+            "title": "Stats",
+            "attack": "Attack",
+            "attack_disabled": "Off",
+            "attack_tooltip": "Drag slider to the left to reset if the stat break",
+            "defence": "Defence",
+            "defence_disabled": "Off",
+            "defence_tooltip": "Drag slider to the left to reset if the stat break"
+        },
+        "unlimited_stamina": "Unlimited Stamina"
+    },
+    "great_sword": {
+        "title": "Great Sword",
+        "charge_level": "Charge Level",
+        "charge_level_prefix": "Level",
+        "charge_level_disabled": "Off",
+        "power_sheathe": "Power Sheathe",
+        "power_sheathe_tooltip": "No effect will appear on the weapon"
+    },
+    "hammer": {
+        "title": "Hammer",
+        "charge_level": "Charge Level ",
+        "charge_level_prefix": "Level",
+        "charge_level_disabled": "Off",
+        "impact_burst": "Impact Burst"
+    },
+    "heavy_bowgun": {
+        "title": "Heavy Bowgun",
+        "charge_level": "Charge Level  ",
+        "unlimited_ammo": "Unlimited Ammo ",
+        "auto_reload": "Auto Reload  ",
+        "overheat": "Prevent Overheat",
+        "wyvern_machine_gun": "Unlimited Wyvern Machine Gun",
+        "wyvern_sniper": "Unlimited Wyvern Sniper",
+        "no_deviation": "No Deviation  "
+    },
+    "insect_glaive": {
+        "title": "Insect Glaive",
+        "aerials": "Unlimited Aerials ",
+        "kinsect_stamina": "Unlimited Kinsect Stamina",
+        "orange_extract": "Orange Extract",
+        "red_extract": "Red Extract",
+        "white_extract": "White Extract"
+    },
+    "lance": {
+        "title": "Lance",
+        "anchor_rage": "Anchor Rage",
+        "anchor_rage_prefix": "Level",
+        "anchor_rage_disabled": "Off"
+    },
+    "light_bowgun": {
+        "title": "Light Bowgun",
+        "unlimited_ammo": "Unlimited Ammo",
+        "auto_reload": "Auto Reload ",
+        "fanning_maneuver": "Fanning Maneuver",
+        "wyvern_blast": "Unlimited Wyvern Blast",
+        "no_deviation": "No Deviation "
+    },
+    "long_sword": {
+        "title": "Long Sword",
+        "guage_level": "Spirit Level",
+        "guage_level_prefix": "Level",
+        "guage_level_disabled": "Off",
+        "guage_max": "Spirit Guage Max"
+    },
+    "miscellaneous": {
+        "title": "Miscellaneous",
+        "ammo_and_coatings": {
+            "title": "Ammo and Coatings",
+            "auto_reload": "Auto Reload",
+            "no_deviation": "No Deviation",
+            "unlimited_ammo": "Unlimited Ammo (Bowguns)",
+            "unlimited_coatings": "Unlimited Coatings (Bow)"
+        },
+        "canteen": {
+            "title": "Canteen",
+            "dango_100_no_ticket": "Dango Skill 100% (No Ticket)",
+            "dango_100_ticket": "Dango Skill 100% (Ticket)",
+            "level_4": "Level 4 Dango",
+            "level_4_tooltip": "GUI won't show level 4, but it will give you the level 4 skill"
+        },
+        "consumables": {
+            "title": "Consumables",
+            "endemic_life": "Unlimited Endemic Life",
+            "items": "Unlimited Items"
+        },
+        "sharpness_level": "Sharpness Level",
+        "sharpness_level_tooltip": "The sharpness bar will still move, but the sharpness level won't change",
+        "sharpness_levels": {
+            "disabled":"Off", 
+            "red": "Red", 
+            "orange": "Orange", 
+            "yellow": "Yellow", 
+            "green": "Green", 
+            "blue": "Blue", 
+            "white": "White", 
+            "purple": "Purple"
+        },
+        "wirebugs": {
+            "title": "Wirebugs",
+            "give_3": "Give 3 Wirebugs",
+            "unlimited": "Unlimited Wirebugs",
+            "unlimited_ooc": "Unlimited Wirebugs (Out of Combat)",
+            "unlimited_powerup": "Unlimited Powerup",
+            "unlimited_powerup_tooltip": "Requires you to pick up a red or yellow wirebug first"
+        }
+    },
+    "charge_blade": {
+        "title": "Charge Blade",
+        "full_bottles": "Full Bottles",
+        "shield_charged": "Shield Charged",
+        "sword_charged": "Sword Charged"
+    },
+    "dual_blades": {
+        "title": "Dual Blades",
+        "archdemon_mode": "ArchDemon Mode",
+        "ironshine_silk": "Ironshine Silk"
+    },
+    "gun_lance": {
+        "title": "Gun Lance",
+        "aerials": "Unlimited Aerials",
+        "auto_reload": "Auto Reload",
+        "dragon_cannon": "Unlimited Dragon Cannon",
+        "errupting_cannon": "Errupting Cannon",
+        "ground_splitter": "Ground Splitter"
+    },
+    "hunting_horn": {
+        "title": "Hunting Horn",
+        "infernal_mode": "Infernal Mode",
+        "skillbind_shockwave": "Skillbind Shockwave"
+    },
+    "switch_axe": {
+        "title": "Switch Axe",
+        "max_charge": "Max Charge",
+        "max_sword_ammo": "Max Sword Ammo",
+        "power_axe": "Power Axe",
+        "switch_charger": "Switch Charger"
+    },
+    "sword_and_shield": {
+        "title": "Sword & Shield",
+        "destroyer_oil": "Destroyer Oil"
+    }
+}

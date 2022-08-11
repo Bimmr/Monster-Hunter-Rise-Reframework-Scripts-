@@ -1,6 +1,6 @@
-local utils, config
+local utils, config, language
 local data = {
-    title = "Character",
+    title = "character",
     unlimited_stamina = false,
     health = {
         healing = false,
@@ -21,7 +21,7 @@ local data = {
         },
         conditions = {
             bleeding = false,
-            stun = false,
+            -- stun = false,
             poison = false,
             sleep = false,
             frenzy = false,
@@ -41,8 +41,9 @@ local data = {
 }
 
 function data.init()
-    utils = require("Buffer Modules.Utils")
-    config = require("Buffer Modules.Config")
+    utils = require("Buffer.Misc.Utils")
+    config = require("Buffer.Misc.Config")
+    language = require("Buffer.Misc.Language")
 
     data.init_hooks()
 end
@@ -143,9 +144,9 @@ function data.init_hooks()
             playerBase:set_field("_BleedingDebuffTimer", 0) -- The bleeding timer
         end
 
-        if data.conditions_and_blights.conditions.stun then
-            playerBase:set_field("_StunDurationTimer", 0) -- The stun timer
-        end
+        -- if data.conditions_and_blights.conditions.stun then
+        --     playerBase:set_field("_StunDurationTimer", 0) -- The stun timer
+        -- end
 
         if data.conditions_and_blights.conditions.poison then
             playerBase:set_field("_PoisonDurationTimer", 0) -- The poison timer
@@ -178,6 +179,14 @@ function data.init_hooks()
             playerBase:set_field("_OniBombDurationTimer", 0) -- The hellfire timer
             playerBase:set_field("_StinkDurationTimer", 0) -- The putrid gas damage timer
         end
+        -- if true then
+        --       playerBase:set_field("_ParalyzeDurationTimer", 0) -- The paralysis recovery timer -- DOESN'T REMOVE ANIMATION TIME
+        --         -- playerBase:set_field("_BetoDurationTimer", 0) -- The covered in spider web recovery timer -- DOESN'T REMOVE ANIMATION TIME
+        --         -- playerBase:call("endParalyse(snow.player.PlayerQuestBase.EndPerformType)", 1)
+        --         playerBase:call("reduceParalyzeDurationTimer(System.Single)", 60)
+
+        --     playerBase:call("clearParalyzeRequest")
+        -- end
 
         if data.stats.attack > -1 then
             -- Set the original attack value
@@ -221,85 +230,105 @@ end
 function data.draw()
 
     local changed, any_changed = false, false
-    changed, data.unlimited_stamina = imgui.checkbox("Unlimited Stamina", data.unlimited_stamina)
-    any_changed = any_changed or changed
-    if imgui.tree_node("Health Options") then
-        changed, data.health.healing = imgui.checkbox("Constant Healing", data.health.healing)
-        any_changed = any_changed or changed
-        utils.tooltip("Any missing health will become recoverable.")
-        changed, data.health.insta_healing = imgui.checkbox("Instant Healing", data.health.insta_healing)
-        any_changed = any_changed or changed
-        utils.tooltip("When you take damage, you will instantly heal back to full health.")
-        changed, data.health.max_dragonheart = imgui.checkbox("Max Dragonheart Health", data.health.max_dragonheart)
-        any_changed = any_changed or changed
-        utils.tooltip("Will adjust health depending on the level of Dragonheart.")
-        changed, data.health.max_heroics = imgui.checkbox("Max Heroics Health", data.health.max_heroics)
-        any_changed = any_changed or changed
-        changed, data.health.max_adrenaline = imgui.checkbox("Max Adrenaline Health", data.health.max_adrenaline)
-        any_changed = any_changed or changed
-        imgui.tree_pop()
-    end
-    if imgui.tree_node("Conditions, Ailments, & Blights") then
-        if imgui.tree_node("Prevent Blights") then
-            changed, data.conditions_and_blights.blights.fire = imgui.checkbox("Fire", data.conditions_and_blights.blights.fire)
-            any_changed = any_changed or changed
-            changed, data.conditions_and_blights.blights.water = imgui.checkbox("Water", data.conditions_and_blights.blights.water)
-            any_changed = any_changed or changed
-            changed, data.conditions_and_blights.blights.ice = imgui.checkbox("Ice", data.conditions_and_blights.blights.ice)
-            any_changed = any_changed or changed
-            changed, data.conditions_and_blights.blights.thunder = imgui.checkbox("Thunder", data.conditions_and_blights.blights.thunder)
-            any_changed = any_changed or changed
-            changed, data.conditions_and_blights.blights.dragon = imgui.checkbox("Dragon", data.conditions_and_blights.blights.dragon)
-            any_changed = any_changed or changed
-            changed, data.conditions_and_blights.blights.bubble = imgui.checkbox("Bubble", data.conditions_and_blights.blights.bubble)
-            any_changed = any_changed or changed
-            changed, data.conditions_and_blights.blights.blast = imgui.checkbox("Blast", data.conditions_and_blights.blights.blast)
-            any_changed = any_changed or changed
-            imgui.tree_pop()
-        end
-        if imgui.tree_node("Prevent Conditions") then
-            changed, data.conditions_and_blights.conditions.bleeding = imgui.checkbox("Bleeding", data.conditions_and_blights.conditions.bleeding)
-            any_changed = any_changed or changed
-            changed, data.conditions_and_blights.conditions.stun = imgui.checkbox("Stun", data.conditions_and_blights.conditions.stun)
-            any_changed = any_changed or changed
-            changed, data.conditions_and_blights.conditions.poison = imgui.checkbox("Poison", data.conditions_and_blights.conditions.poison)
-            any_changed = any_changed or changed
-            changed, data.conditions_and_blights.conditions.sleep = imgui.checkbox("Sleep", data.conditions_and_blights.conditions.sleep)
-            any_changed = any_changed or changed
-            changed, data.conditions_and_blights.conditions.frenzy = imgui.checkbox("Frenzy", data.conditions_and_blights.conditions.frenzy)
-            any_changed = any_changed or changed
-            changed, data.conditions_and_blights.conditions.qurio = imgui.checkbox("Qurio", data.conditions_and_blights.conditions.qurio)
-            any_changed = any_changed or changed
-            changed, data.conditions_and_blights.conditions.defence_and_resistance = imgui.checkbox("Defence & Resistance",
-                                                                                                    data.conditions_and_blights.conditions.defence_and_resistance)
-            any_changed = any_changed or changed
-            changed, data.conditions_and_blights.conditions.hellfire_and_stentch = imgui.checkbox("Hellfire & Stench", data.conditions_and_blights.conditions.hellfire_and_stentch)
-            any_changed = any_changed or changed
-            imgui.tree_pop()
-        end
-        imgui.text("Still working on Paralyze and Web")
-        imgui.tree_pop()
-    end
-    if imgui.tree_node("Stat Modifiers") then
-        local step = 10
-        local attack_max, defence_max = 2600, 3100
-        local stepped_attack_max, stepped_defence_max = math.floor(attack_max / step), math.floor(defence_max / step)
-        local stepped_attack_value, stepped_defence_value = -1, -1
-        if data.stats.attack > -1 then stepped_attack_value = math.floor(data.stats.attack / step) end
-        if data.stats.defence > -1 then stepped_defence_value = math.floor(data.stats.defence / step) end
-        local attack_slider, defence_slider
-        changed, attack_slider = imgui.slider_int("Attack", stepped_attack_value, -1, stepped_attack_max, stepped_attack_value > -1 and stepped_attack_value * step or "Off")
-        any_changed = any_changed or changed
-        utils.tooltip("Drag slider to the left to reset if the stat break")
-        changed, defence_slider = imgui.slider_int("Defence", stepped_defence_value, -1, stepped_defence_max, stepped_defence_value > -1 and stepped_defence_value * step or "Off")
-        any_changed = any_changed or changed
-        utils.tooltip("Drag slider to the left to reset if the stat break")
-        data.stats.attack = attack_slider > -1 and attack_slider * step or -1
-        data.stats.defence = defence_slider > -1 and defence_slider * step or -1
-        imgui.tree_pop()
+    local languagePrefix = data.title.."."
+    if imgui.collapsing_header(language.get(languagePrefix .. "title")) then
+        imgui.indent(10)
 
+
+        changed, data.unlimited_stamina = imgui.checkbox(language.get(languagePrefix .. "unlimited_stamina"), data.unlimited_stamina)
+        any_changed = any_changed or changed
+        
+        languagePrefix = data.title..".health."
+        if imgui.tree_node(language.get(languagePrefix.."title")) then
+            changed, data.health.healing = imgui.checkbox(language.get(languagePrefix .. "healing"), data.health.healing)
+            any_changed = any_changed or changed
+            utils.tooltip(language.get(languagePrefix .. "healing_tooltip"))
+            changed, data.health.insta_healing = imgui.checkbox(language.get("Chracter.insta_healing"), data.health.insta_healing)
+            any_changed = any_changed or changed
+            utils.tooltip(language.get(languagePrefix .. "insta_healing_tooltip"))
+            changed, data.health.max_dragonheart = imgui.checkbox(language.get(languagePrefix .. "max_dragonheart"), data.health.max_dragonheart)
+            any_changed = any_changed or changed
+            utils.tooltip(language.get(languagePrefix .. "max_dragonheart_tooltip"))
+            changed, data.health.max_heroics = imgui.checkbox(language.get(languagePrefix .. "max_heroics"), data.health.max_heroics)
+            any_changed = any_changed or changed
+            changed, data.health.max_adrenaline = imgui.checkbox(language.get(languagePrefix .. "max_adrenaline"), data.health.max_adrenaline)
+            any_changed = any_changed or changed
+            imgui.tree_pop()
+        end
+        languagePrefix = data.title..".conditions_and_blights."
+        if imgui.tree_node(language.get(languagePrefix .. "title")) then
+
+            languagePrefix = data.title..".conditions_and_blights.blights."
+            if imgui.tree_node(language.get(languagePrefix .. "title")) then
+                changed, data.conditions_and_blights.blights.fire = imgui.checkbox(language.get(languagePrefix .. "fire"), data.conditions_and_blights.blights.fire)
+                any_changed = any_changed or changed
+                changed, data.conditions_and_blights.blights.water = imgui.checkbox(language.get(languagePrefix .. "water"), data.conditions_and_blights.blights.water)
+                any_changed = any_changed or changed
+                changed, data.conditions_and_blights.blights.ice = imgui.checkbox(language.get(languagePrefix .. "ice"), data.conditions_and_blights.blights.ice)
+                any_changed = any_changed or changed
+                changed, data.conditions_and_blights.blights.thunder = imgui.checkbox(language.get(languagePrefix .. "thunder"), data.conditions_and_blights.blights.thunder)
+                any_changed = any_changed or changed
+                changed, data.conditions_and_blights.blights.dragon = imgui.checkbox(language.get(languagePrefix .. "dragon"), data.conditions_and_blights.blights.dragon)
+                any_changed = any_changed or changed
+                changed, data.conditions_and_blights.blights.bubble = imgui.checkbox(language.get(languagePrefix .. "bubble"), data.conditions_and_blights.blights.bubble)
+                any_changed = any_changed or changed
+                changed, data.conditions_and_blights.blights.blast = imgui.checkbox(language.get(languagePrefix .. "blast"), data.conditions_and_blights.blights.blast)
+                any_changed = any_changed or changed
+                imgui.tree_pop()
+            end
+            languagePrefix = data.title..".conditions_and_blights.conditions."
+            if imgui.tree_node(language.get(languagePrefix .. "title")) then
+                changed, data.conditions_and_blights.conditions.bleeding = imgui.checkbox(language.get(languagePrefix .. "bleeding"),
+                                                                                          data.conditions_and_blights.conditions.bleeding)
+                any_changed = any_changed or changed
+                -- changed, data.conditions_and_blights.conditions.stun = imgui.checkbox("Stun", data.conditions_and_blights.conditions.stun)
+                -- any_changed = any_changed or changed
+                changed, data.conditions_and_blights.conditions.poison = imgui.checkbox(language.get(languagePrefix .. "poison"), data.conditions_and_blights.conditions.poison)
+                any_changed = any_changed or changed
+                changed, data.conditions_and_blights.conditions.sleep = imgui.checkbox(language.get(languagePrefix .. "sleep"), data.conditions_and_blights.conditions.sleep)
+                any_changed = any_changed or changed
+                changed, data.conditions_and_blights.conditions.frenzy = imgui.checkbox(language.get(languagePrefix .. "frenzy"), data.conditions_and_blights.conditions.frenzy)
+                any_changed = any_changed or changed
+                changed, data.conditions_and_blights.conditions.qurio = imgui.checkbox(language.get(languagePrefix .. "qurio"), data.conditions_and_blights.conditions.qurio)
+                any_changed = any_changed or changed
+                changed, data.conditions_and_blights.conditions.defence_and_resistance = imgui.checkbox(language.get(languagePrefix .. "defence_and_resistance"),
+                                                                                                        data.conditions_and_blights.conditions.defence_and_resistance)
+                any_changed = any_changed or changed
+                changed, data.conditions_and_blights.conditions.hellfire_and_stentch = imgui.checkbox(language.get(languagePrefix .. "hellfire_and_stentch"),
+                                                                                                      data.conditions_and_blights.conditions.hellfire_and_stentch)
+                any_changed = any_changed or changed
+                imgui.text(language.get(languagePrefix .. "still_working_on"))
+                imgui.tree_pop()
+            end
+            imgui.tree_pop()
+        end
+        languagePrefix = data.title..".stats."
+        if imgui.tree_node(language.get(languagePrefix .. "title")) then
+            local step = 10
+            local attack_max, defence_max = 2600, 3100
+            local stepped_attack_max, stepped_defence_max = math.floor(attack_max / step), math.floor(defence_max / step)
+            local stepped_attack_value, stepped_defence_value = -1, -1
+            if data.stats.attack > -1 then stepped_attack_value = math.floor(data.stats.attack / step) end
+            if data.stats.defence > -1 then stepped_defence_value = math.floor(data.stats.defence / step) end
+            local attack_slider, defence_slider
+            changed, attack_slider = imgui.slider_int(language.get(languagePrefix .. "attack"), stepped_attack_value, -1, stepped_attack_max,
+                                                      stepped_attack_value > -1 and stepped_attack_value * step or language.get(languagePrefix .. "attack_disabled"))
+            any_changed = any_changed or changed
+            utils.tooltip(language.get(languagePrefix .. "attack_tooltip"))
+            changed, defence_slider = imgui.slider_int(language.get(languagePrefix .. "defence"), stepped_defence_value, -1, stepped_defence_max,
+                                                       stepped_defence_value > -1 and stepped_defence_value * step or language.get(languagePrefix .. "attack_disabled"))
+            any_changed = any_changed or changed
+            utils.tooltip(language.get(languagePrefix .. "defence_tooltip"))
+            data.stats.attack = attack_slider > -1 and attack_slider * step or -1
+            data.stats.defence = defence_slider > -1 and defence_slider * step or -1
+            imgui.tree_pop()
+        end
+        
+        if any_changed then config.save_section(data.create_config_section()) end
+        imgui.unindent(10)
+        imgui.separator()
+        imgui.spacing()
     end
-    if any_changed then config.save_section(data.create_config_section()) end
 end
 
 function data.reset()

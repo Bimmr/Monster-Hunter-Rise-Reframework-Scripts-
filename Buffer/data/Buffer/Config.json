@@ -1,0 +1,129 @@
+{
+    "bow": {
+        "bolt_boost": false,
+        "charge_level": -1,
+        "herculean_draw": false
+    },
+    "character": {
+        "conditions_and_blights": {
+            "blights": {
+                "blast": false,
+                "bubble": false,
+                "dragon": false,
+                "fire": false,
+                "ice": false,
+                "thunder": false,
+                "water": false
+            },
+            "conditions": {
+                "bleeding": false,
+                "defence_and_resistance": false,
+                "frenzy": false,
+                "hellfire_and_stentch": false,
+                "poison": false,
+                "qurio": false,
+                "sleep": false,
+                "stun": false
+            }
+        },
+        "health": {
+            "healing": false,
+            "insta_healing": false,
+            "max_adrenaline": false,
+            "max_dragonheart": false,
+            "max_heroics": false
+        },
+        "stats": {
+            "attack": -1,
+            "defence": -1
+        },
+        "unlimited_stamina": false
+    },
+    "great_sword": {
+        "charge_level": -1,
+        "power_sheathe": false
+    },
+    "hammer": {
+        "charge_level": -1,
+        "impact_burst": false
+    },
+    "heavy_bowgun": {
+        "charge_level": -1,
+        "overheat": false,
+        "wyvern_machine_gun": false,
+        "wyvern_sniper": false
+    },
+    "insect_glaive": {
+        "aerials": false,
+        "kinsect_stamina": false,
+        "orange_extract": false,
+        "red_extract": false,
+        "white_extract": false
+    },
+    "lance": {
+        "anchor_rage": -1
+    },
+    "light_bowgun": {
+        "fanning_maneuver": false,
+        "wyvern_blast": false
+    },
+    "long_sword": {
+        "guage_level": -1,
+        "guage_max": false
+    },
+    "miscellaneous": {
+        "ammo_and_coatings": {
+            "auto_reload": false,
+            "no_deviation": false,
+            "unlimited_ammo": false,
+            "unlimited_coatings": false
+        },
+        "canteen": {
+            "dango_100_no_ticket": false,
+            "dango_100_ticket": false,
+            "level_4": false
+        },
+        "consumables": {
+            "endemic_life": false,
+            "items": false
+        },
+        "sharpness_level": -1,
+        "wirebugs": {
+            "give_3": false,
+            "unlimited": false,
+            "unlimited_ooc": false,
+            "unlimited_powerup": false
+        }
+    },
+    "Charge Blade": {
+        "full_bottles": false,
+        "shield_charged": false,
+        "sword_charged": false
+    },
+    "Dual Blades": {
+        "archdemon_mode": false,
+        "ironshine_silk": false
+    },
+    "Gun Lance": {
+        "aerials": false,
+        "auto_reload": false,
+        "dragon_cannon": false,
+        "errupting_cannon": false,
+        "ground_splitter": false
+    },
+    "Hunting Horn": {
+        "infernal_mode": false,
+        "skillbind_shockwave": false
+    },
+    "Switch Axe": {
+        "max_charge": false,
+        "max_sword_ammo": false,
+        "power_axe": false,
+        "switch_charger": false
+    },
+    "Sword & Shield": {
+        "destroyer_oil": false
+    },
+    "is_window_open": true,
+    "language": "en-us"
+}

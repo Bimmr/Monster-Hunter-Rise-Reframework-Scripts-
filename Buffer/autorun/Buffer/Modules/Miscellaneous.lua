@@ -1,7 +1,7 @@
-local utils, config
+local utils, config, language
 local lightBowgun, heavyBowgun, bow
 local data = {
-    title = "Miscellaneous",
+    title = "miscellaneous",
     consumables = {
         items = false,
         endemic_life = false
@@ -33,11 +33,12 @@ local data = {
 }
 
 function data.init()
-    utils = require("Buffer Modules.Utils")
-    config = require("Buffer Modules.Config")
-    lightBowgun = require("Buffer Modules.LightBowgun")
-    heavyBowgun = require("Buffer Modules.HeavyBowgun")
-    bow = require("Buffer Modules.Bow")
+    utils = require("Buffer.Misc.Utils")
+    config = require("Buffer.Misc.Config")
+    language = require("Buffer.Misc.Language")
+    lightBowgun = require("Buffer.Modules.LightBowgun")
+    heavyBowgun = require("Buffer.Modules.HeavyBowgun")
+    bow = require("Buffer.Modules.Bow")
 
     data.init_hooks()
 end
@@ -47,15 +48,15 @@ function data.init_hooks()
         local item_id = sdk.to_int64(args[3])
         -- Marionette Spider = 69206037
         -- Ec Item = 69206016 - 69206040
-        if data.consumables.endemic_life and ((item_id >= 69206016 and item_id <= 69206040 ) or (item_id == 69206037)) then
+        if data.consumables.endemic_life and ((item_id >= 69206016 and item_id <= 69206040) or (item_id == 69206037)) then
             if item_id == 69206037 then -- Needs to be reset otherwise it will be stuck in the "consumed" state
                 local creature_manager = sdk.get_managed_singleton("snow.envCreature.EnvironmentCreatureManager")
                 local playerBase = utils.getPlayerBase()
                 creature_manager:call("setEc057UseCount", playerBase:get_field("_PlayerIndex"), 0)
             end
-            return sdk.PreHookResult.SKIP_ORIGINAL 
-        elseif data.consumables.items and not ((item_id >= 69206016 and item_id <= 69206040 ) or (item_id == 69206037)) then
-            return sdk.PreHookResult.SKIP_ORIGINAL 
+            return sdk.PreHookResult.SKIP_ORIGINAL
+        elseif data.consumables.items and not ((item_id >= 69206016 and item_id <= 69206040) or (item_id == 69206037)) then
+            return sdk.PreHookResult.SKIP_ORIGINAL
         end
 
     end, utils.nothing())
@@ -177,52 +178,71 @@ end
 function data.draw()
 
     local changed, any_changed = false, false
-    
-    local sharpness_display = {"Off", "Red", "Orange", "Yellow", "Green", "Blue", "White", "Purple"}
-    changed, data.sharpness_level = imgui.slider_int("Sharpness Level", data.sharpness_level, -1, 6, sharpness_display[data.sharpness_level + 2])
-    utils.tooltip("The sharpness bar will still move, but the sharpness level won't change")
-    any_changed = any_changed or changed
-    if imgui.tree_node("Consumables") then
-        changed, data.consumables.items = imgui.checkbox("Unlimited Items", data.consumables.items)
-        any_changed = any_changed or changed
-        changed, data.consumables.endemic_life = imgui.checkbox("Unlimited Endemic Life", data.consumables.endemic_life)
-        any_changed = any_changed or changed
-        imgui.tree_pop()
-    end
-    if imgui.tree_node("Ammo & Coating") then
-        changed, data.ammo_and_coatings.unlimited_coatings = imgui.checkbox("Unlimited Coatings (Bow)", data.ammo_and_coatings.unlimited_coatings)
-        any_changed = any_changed or changed
-        changed, data.ammo_and_coatings.unlimited_ammo = imgui.checkbox("Unlimited Ammo (Bowguns)", data.ammo_and_coatings.unlimited_ammo)
-        any_changed = any_changed or changed
-        changed, data.ammo_and_coatings.auto_reload = imgui.checkbox("Auto Reload", data.ammo_and_coatings.auto_reload)
-        any_changed = any_changed or changed
-        changed, data.ammo_and_coatings.no_deviation = imgui.checkbox("No Deviation", data.ammo_and_coatings.no_deviation)
-        any_changed = any_changed or changed
-        imgui.tree_pop()
-    end
-    if imgui.tree_node("Wirebugs") then
-        changed, data.wirebugs.unlimited_ooc = imgui.checkbox("Unlimited Wirebugs (Out of Combat)", data.wirebugs.unlimited_ooc)
-        any_changed = any_changed or changed
-        changed, data.wirebugs.unlimited = imgui.checkbox("Unlimited Wirebugs", data.wirebugs.unlimited)
-        any_changed = any_changed or changed
-        changed, data.wirebugs.give_3 = imgui.checkbox("Give 3 Wirebugs", data.wirebugs.give_3)
-        any_changed = any_changed or changed
-        changed, data.wirebugs.unlimited_powerup = imgui.checkbox("Unlimited Powerup", data.wirebugs.unlimited_powerup)
-        any_changed = any_changed or changed
-        imgui.tree_pop()
-    end
-    if imgui.tree_node("Canteen") then
-        changed, data.canteen.dango_100_no_ticket = imgui.checkbox("Dango Skill 100% (No Ticket)", data.canteen.dango_100_no_ticket)
-        any_changed = any_changed or changed
-        changed, data.canteen.dango_100_ticket = imgui.checkbox("Dango Skill 100% (Ticket)", data.canteen.dango_100_ticket)
-        any_changed = any_changed or changed
-        changed, data.canteen.level_4 = imgui.checkbox("Level 4 Dango", data.canteen.level_4)
-        utils.tooltip("GUI won't show level 4, but it will give you the level 4 skill")
-        any_changed = any_changed or changed
-        imgui.tree_pop()
-    end
+    local languagePrefix = data.title .. "."
 
-    if any_changed then config.save_section(data.create_config_section()) end
+    if imgui.collapsing_header(language.get(languagePrefix .. "title")) then
+        imgui.indent(10)
+
+        languagePrefix = data.title .. ".sharpness_levels."
+        local sharpness_display = {language.get(languagePrefix .. "disabled"), language.get(languagePrefix .. "red"), language.get(languagePrefix .. "orange"),
+                                   language.get(languagePrefix .. "yellow"), language.get(languagePrefix .. "green"), language.get(languagePrefix .. "blue"),
+                                   language.get(languagePrefix .. "white"), language.get(languagePrefix .. "purple")}
+
+        local languagePrefix = data.title .. "."
+        changed, data.sharpness_level =
+            imgui.slider_int(language.get(languagePrefix .. "sharpness_level"), data.sharpness_level, -1, 6, sharpness_display[data.sharpness_level + 2])
+        utils.tooltip(language.get(languagePrefix .. "sharpness_level_tooltip"))
+        any_changed = any_changed or changed
+        languagePrefix = data.title .. ".consumables."
+        if imgui.tree_node(language.get(languagePrefix .. "title")) then
+            changed, data.consumables.items = imgui.checkbox(language.get(languagePrefix .. "items"), data.consumables.items)
+            any_changed = any_changed or changed
+            changed, data.consumables.endemic_life = imgui.checkbox(language.get(languagePrefix .. "endemic_life"), data.consumables.endemic_life)
+            any_changed = any_changed or changed
+            imgui.tree_pop()
+        end
+        languagePrefix = data.title .. ".ammo_and_coatings."
+        if imgui.tree_node(language.get(languagePrefix .. "title")) then
+            changed, data.ammo_and_coatings.unlimited_coatings = imgui.checkbox(language.get(languagePrefix .. "unlimited_coatings"), data.ammo_and_coatings.unlimited_coatings)
+            any_changed = any_changed or changed
+            changed, data.ammo_and_coatings.unlimited_ammo = imgui.checkbox(language.get(languagePrefix .. "unlimited_ammo"), data.ammo_and_coatings.unlimited_ammo)
+            any_changed = any_changed or changed
+            changed, data.ammo_and_coatings.auto_reload = imgui.checkbox(language.get(languagePrefix .. "auto_reload"), data.ammo_and_coatings.auto_reload)
+            any_changed = any_changed or changed
+            changed, data.ammo_and_coatings.no_deviation = imgui.checkbox(language.get(languagePrefix .. "no_deviation"), data.ammo_and_coatings.no_deviation)
+            any_changed = any_changed or changed
+            imgui.tree_pop()
+        end
+        languagePrefix = data.title .. ".wirebugs."
+        if imgui.tree_node(language.get(languagePrefix .. "title")) then
+            changed, data.wirebugs.unlimited_ooc = imgui.checkbox(language.get(languagePrefix .. "unlimited_ooc"), data.wirebugs.unlimited_ooc)
+            any_changed = any_changed or changed
+            changed, data.wirebugs.unlimited = imgui.checkbox(language.get(languagePrefix .. "unlimited"), data.wirebugs.unlimited)
+            any_changed = any_changed or changed
+            changed, data.wirebugs.give_3 = imgui.checkbox(language.get(languagePrefix .. "give_3"), data.wirebugs.give_3)
+            any_changed = any_changed or changed
+            changed, data.wirebugs.unlimited_powerup = imgui.checkbox(language.get(languagePrefix .. "unlimited_powerup"), data.wirebugs.unlimited_powerup)
+            utils.tooltip(language.get(languagePrefix .. "unlimited_powerup_tooltip"))
+            any_changed = any_changed or changed
+            imgui.tree_pop()
+        end
+        languagePrefix = data.title .. ".canteen."
+        if imgui.tree_node(language.get(languagePrefix .. "title")) then
+            changed, data.canteen.dango_100_no_ticket = imgui.checkbox(language.get(languagePrefix .. "dango_100_no_ticket"), data.canteen.dango_100_no_ticket)
+            any_changed = any_changed or changed
+            changed, data.canteen.dango_100_ticket = imgui.checkbox(language.get(languagePrefix .. "dango_100_ticket"), data.canteen.dango_100_ticket)
+            any_changed = any_changed or changed
+            changed, data.canteen.level_4 = imgui.checkbox(language.get(languagePrefix .. "level_4"), data.canteen.level_4)
+            utils.tooltip(language.get(languagePrefix .. "level_4_tooltip"))
+            any_changed = any_changed or changed
+            imgui.tree_pop()
+        end
+
+        if any_changed then config.save_section(data.create_config_section()) end
+        imgui.unindent(10)
+        imgui.separator()
+        imgui.spacing()
+    end
 end
 
 function data.create_config_section()

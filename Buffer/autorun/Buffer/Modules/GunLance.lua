@@ -1,6 +1,6 @@
-local utils, config
+local utils, config, language
 local data = {
-    title = "Gun Lance",
+    title = "gun_lance",
     dragon_cannon = false,
     aerials = false,
     auto_reload = false,
@@ -9,8 +9,9 @@ local data = {
 }
 
 function data.init()
-    utils = require("Buffer Modules.Utils")
-    config = require("Buffer Modules.Config")
+    utils = require("Buffer.Misc.Utils")
+    config = require("Buffer.Misc.Config")
+    language = require("Buffer.Misc.Language")
 
     data.init_hooks()
 end
@@ -40,18 +41,29 @@ end
 
 function data.draw()
     local changed, any_changed = false, false
-    changed, data.dragon_cannon = imgui.checkbox("Unlimited Dragon Cannon", data.dragon_cannon)
-    any_changed = changed or any_changed
-    changed, data.aerials = imgui.checkbox("Unlimited Aerials", data.aerials)
-    any_changed = changed or any_changed
-    changed, data.auto_reload = imgui.checkbox("Auto Reload", data.auto_reload)
-    any_changed = changed or any_changed
-    changed, data.ground_splitter = imgui.checkbox("Ground Splitter", data.ground_splitter)
-    any_changed = changed or any_changed
-    changed, data.errupting_cannon = imgui.checkbox("Errupting Cannon", data.errupting_cannon)
-    any_changed = changed or any_changed
+    local languagePrefix = data.title .. "."
 
-    if any_changed then config.save_section(data.create_config_section()) end
+    if imgui.collapsing_header(language.get(languagePrefix .. "title")) then
+        imgui.indent(10)
+
+        changed, data.dragon_cannon = imgui.checkbox(language.get(languagePrefix .. "dragon_cannon"), data.dragon_cannon)
+        any_changed = changed or any_changed
+        changed, data.aerials = imgui.checkbox(language.get(languagePrefix .. "aerials"), data.aerials)
+        any_changed = changed or any_changed
+        changed, data.auto_reload = imgui.checkbox(language.get(languagePrefix .. "auto_reload"), data.auto_reload)
+        any_changed = changed or any_changed
+        changed, data.ground_splitter = imgui.checkbox(language.get(languagePrefix .. "ground_splitter"), data.ground_splitter)
+        any_changed = changed or any_changed
+        changed, data.errupting_cannon = imgui.checkbox(language.get(languagePrefix .. "errupting_cannon"), data.errupting_cannon)
+        any_changed = changed or any_changed
+        
+        if any_changed then config.save_section(data.create_config_section()) end
+         
+        imgui.unindent(10)
+        imgui.separator()
+        imgui.spacing()
+    end
+
 end
 
 

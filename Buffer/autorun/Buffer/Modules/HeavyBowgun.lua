@@ -1,6 +1,7 @@
-local utils, misc, config
+local utils, config, language
+local misc
 local data = {
-    title = "Heavy Bowgun",
+    title = "heavy_bowgun",
     charge_level = -1,
     -- unlimited_ammo - In Misc
     -- auto_reload  - In Misc
@@ -10,9 +11,11 @@ local data = {
 }
 
 function data.init()
-    utils = require("Buffer Modules.Utils")
-    misc = require("Buffer Modules.Miscellaneous")
-    config = require("Buffer Modules.Config")
+    utils = require("Buffer.Misc.Utils")
+    config = require("Buffer.Misc.Config")
+    language = require("Buffer.Misc.Language")
+
+    misc = require("Buffer.Modules.Miscellaneous")
 
     data.init_hooks()
 end
@@ -47,23 +50,33 @@ end
 function data.draw()
 
     local changed, any_changed, misc_changed = false, false, false
-    changed, data.charge_level = imgui.slider_int("Charge Level  ", data.charge_level, -1, 3, data.charge_level > -1 and "Level %d" or "Off")
-    any_changed = changed or any_changed
-    changed, misc.ammo_and_coatings.unlimited_ammo = imgui.checkbox("Unlimited Ammo ", misc.ammo_and_coatings.unlimited_ammo)
-    misc_changed = changed or misc_changed
-    changed, misc.ammo_and_coatings.auto_reload = imgui.checkbox("Auto Reload  ", misc.ammo_and_coatings.auto_reload)
-    misc_changed = changed or misc_changed
-    changed, data.wyvern_sniper = imgui.checkbox("Unlimited Wyvern Sniper", data.wyvern_sniper)
-    any_changed = changed or any_changed
-    changed, data.wyvern_machine_gun = imgui.checkbox("Unlimited Wyvern Machine Gun", data.wyvern_machine_gun)
-    any_changed = changed or any_changed
-    changed, data.overheat = imgui.checkbox("Prevent Overheat", data.overheat)
-    any_changed = changed or any_changed
-    changed, misc.ammo_and_coatings.no_deviation = imgui.checkbox("No Deviation  ", misc.ammo_and_coatings.no_deviation)
-    misc_changed = changed or misc_changed
+    local languagePrefix = data.title .. "."
 
-    if any_changed then config.save_section(data.create_config_section()) end
-    if misc_changed then config.save_section(misc.create_config_section()) end
+    if imgui.collapsing_header(language.get(languagePrefix .. "title")) then
+        imgui.indent(10)
+
+        changed, data.charge_level = imgui.slider_int(language.get(languagePrefix .. "charge_level"), data.charge_level, -1, 3, data.charge_level > -1 and "Level %d" or "Off")
+        any_changed = changed or any_changed
+        changed, misc.ammo_and_coatings.unlimited_ammo = imgui.checkbox(language.get(languagePrefix .. "unlimited_ammo"), misc.ammo_and_coatings.unlimited_ammo)
+        misc_changed = changed or misc_changed
+        changed, misc.ammo_and_coatings.auto_reload = imgui.checkbox(language.get(languagePrefix .. "auto_reload"), misc.ammo_and_coatings.auto_reload)
+        misc_changed = changed or misc_changed
+        changed, data.wyvern_sniper = imgui.checkbox(language.get(languagePrefix .. "wyvern_sniper"), data.wyvern_sniper)
+        any_changed = changed or any_changed
+        changed, data.wyvern_machine_gun = imgui.checkbox(language.get(languagePrefix .. "wyvern_machine_gun"), data.wyvern_machine_gun)
+        any_changed = changed or any_changed
+        changed, data.overheat = imgui.checkbox(language.get(languagePrefix .. "overheat"), data.overheat)
+        any_changed = changed or any_changed
+        changed, misc.ammo_and_coatings.no_deviation = imgui.checkbox(language.get(languagePrefix .. "no_deviation"), misc.ammo_and_coatings.no_deviation)
+        misc_changed = changed or misc_changed
+
+        if any_changed then config.save_section(data.create_config_section()) end
+        if misc_changed then config.save_section(misc.create_config_section()) end
+        imgui.unindent(10)
+        imgui.separator()
+        imgui.spacing()
+    end
+
 end
 
 function data.create_config_section()

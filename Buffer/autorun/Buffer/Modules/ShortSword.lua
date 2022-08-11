@@ -1,12 +1,13 @@
-local utils, config
+local utils, config, language
 local data = {
-    title = "Sword & Shield",
+    title = "sword_and_shield",
     destroyer_oil = false
 }
 
 function data.init()
-    utils = require("Buffer Modules.Utils")
-    config = require("Buffer Modules.Config")
+    utils = require("Buffer.Misc.Utils")
+    config = require("Buffer.Misc.Config")
+    language = require("Buffer.Misc.Language")
 
     data.init_hooks()
 end
@@ -25,10 +26,19 @@ end
 function data.draw()
 
     local changed, any_changed = false, false
-    changed, data.destroyer_oil = imgui.checkbox("Destroyer Oil", data.destroyer_oil)
-    any_changed = changed or any_changed
+    local languagePrefix = data.title .. "."
 
-    if any_changed then config.save_section(data.create_config_section()) end
+    if imgui.collapsing_header(language.get(languagePrefix .. "title")) then
+        imgui.indent(10)
+
+        changed, data.destroyer_oil = imgui.checkbox(language.get(languagePrefix .. "destroyer_oil"), data.destroyer_oil)
+        any_changed = changed or any_changed
+        
+        if any_changed then config.save_section(data.create_config_section()) end
+        imgui.unindent(10)
+        imgui.separator()
+        imgui.spacing()
+    end
 end
 
 function data.create_config_section()

@@ -1,13 +1,14 @@
-local utils, config
+local utils, config, language
 local data = {
-    title = "Dual Blades",
+    title = "dual_blades",
     archdemon_mode = false,
     ironshine_silk = false
 }
 
 function data.init()
-    utils = require("Buffer Modules.Utils")
-    config = require("Buffer Modules.Config")
+    utils = require("Buffer.Misc.Utils")
+    config = require("Buffer.Misc.Config")
+    language = require("Buffer.Misc.Language")
 
     data.init_hooks()
 end
@@ -24,13 +25,21 @@ end
 function data.draw()
     
     local changed, any_changed = false, false
-    changed, data.archdemon_mode = imgui.checkbox("ArchDemon Mode", data.archdemon_mode)
-    any_changed = changed or any_changed
-    changed, data.ironshine_silk = imgui.checkbox("Ironshine Silk", data.ironshine_silk)
-    any_changed = changed or any_changed
-    
-    if any_changed then config.save_section(data.create_config_section()) end
+    local languagePrefix = data.title .. "."
 
+    if imgui.collapsing_header(language.get(languagePrefix .. "title")) then
+        imgui.indent(10)
+
+        changed, data.archdemon_mode = imgui.checkbox(language.get(languagePrefix .. "archdemon_mode"), data.archdemon_mode)
+        any_changed = changed or any_changed
+        changed, data.ironshine_silk = imgui.checkbox(language.get(languagePrefix .. "ironshine_silk"), data.ironshine_silk)
+        any_changed = changed or any_changed
+        
+        if any_changed then config.save_section(data.create_config_section()) end
+        imgui.unindent(10)
+        imgui.separator()
+        imgui.spacing()
+    end
 end
 
 function data.create_config_section()

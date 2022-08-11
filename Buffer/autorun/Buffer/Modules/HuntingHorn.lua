@@ -1,13 +1,14 @@
-local utils, config
+local utils, config, language
 local data = {
-    title = "Hunting Horn",
+    title = "hunting_horn",
     infernal_mode = false,
     skillbind_shockwave = false
 }
 
 function data.init()
-    utils = require("Buffer Modules.Utils")
-    config = require("Buffer Modules.Config")
+    utils = require("Buffer.Misc.Utils")
+    config = require("Buffer.Misc.Config")
+    language = require("Buffer.Misc.Language")
 
     data.init_hooks()
 end
@@ -24,12 +25,21 @@ end
 function data.draw()
 
     local changed, any_changed = false, false
-    changed, data.infernal_mode = imgui.checkbox("Infernal Mode", data.infernal_mode)
-    any_changed = changed or any_changed
-    changed, data.skillbind_shockwave = imgui.checkbox("Skillbind Shockwave", data.skillbind_shockwave)
-    any_changed = changed or any_changed
+    local languagePrefix = data.title .. "."
 
-    if any_changed then config.save_section(data.create_config_section()) end
+    if imgui.collapsing_header(language.get(languagePrefix .. "title")) then
+        imgui.indent(10)
+
+        changed, data.infernal_mode = imgui.checkbox(language.get(languagePrefix .. "infernal_mode"), data.infernal_mode)
+        any_changed = changed or any_changed
+        changed, data.skillbind_shockwave = imgui.checkbox(language.get(languagePrefix .. "skillbind_shockwave"), data.skillbind_shockwave)
+        any_changed = changed or any_changed
+        
+        if any_changed then config.save_section(data.create_config_section()) end
+        imgui.unindent(10)
+        imgui.separator()
+        imgui.spacing()
+    end
 end
 
 function data.create_config_section()

@@ -96,4 +96,22 @@ function utils.tooltip(text)
     end
 end
 
+function utils.split(text, delim)
+    -- returns an array of fields based on text and delimiter (one character only)
+    local result = {}
+    local magic = "().%+-*?[]^$"
+
+    if delim == nil then
+        delim = "%s"
+    elseif string.find(delim, magic, 1, true) then
+        delim = "%"..delim
+    end
+
+    local pattern = "[^"..delim.."]+"
+    for w in string.gmatch(text, pattern) do
+        table.insert(result, w)
+    end
+    return result
+end
+
 return utils

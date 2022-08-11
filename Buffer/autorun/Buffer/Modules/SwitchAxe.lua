@@ -1,6 +1,6 @@
-local utils, config
+local utils, config, language
 local data = {
-    title = "Switch Axe",
+    title = "switch_axe",
     max_charge = false,
     max_sword_ammo = false,
     power_axe = false,
@@ -8,8 +8,9 @@ local data = {
 }
 
 function data.init()
-    utils = require("Buffer Modules.Utils")
-    config = require("Buffer Modules.Config")
+    utils = require("Buffer.Misc.Utils")
+    config = require("Buffer.Misc.Config")
+    language = require("Buffer.Misc.Language")
 
     data.init_hooks()
 end
@@ -28,16 +29,25 @@ end
 function data.draw()
 
     local changed, any_changed = false, false
-    changed, data.max_charge = imgui.checkbox("Max Charge", data.max_charge)
-    any_changed = changed or any_changed
-    changed, data.max_sword_ammo = imgui.checkbox("Max Sword Ammo", data.max_sword_ammo)
-    any_changed = changed or any_changed
-    changed, data.power_axe = imgui.checkbox("Power Axe", data.power_axe)
-    any_changed = changed or any_changed
-    changed, data.switch_charger = imgui.checkbox("Switch Charger", data.switch_charger)
-    any_changed = changed or any_changed
+    local languagePrefix = data.title .. "."
 
-    if any_changed then config.save_section(data.create_config_section()) end
+    if imgui.collapsing_header(language.get(languagePrefix .. "title")) then
+        imgui.indent(10)
+
+        changed, data.max_charge = imgui.checkbox(language.get(languagePrefix .. "max_charge"), data.max_charge)
+        any_changed = changed or any_changed
+        changed, data.max_sword_ammo = imgui.checkbox(language.get(languagePrefix .. "max_sword_ammo"), data.max_sword_ammo)
+        any_changed = changed or any_changed
+        changed, data.power_axe = imgui.checkbox(language.get(languagePrefix .. "power_axe"), data.power_axe)
+        any_changed = changed or any_changed
+        changed, data.switch_charger = imgui.checkbox(language.get(languagePrefix .. "switch_charger"), data.switch_charger)
+        any_changed = changed or any_changed
+        
+        if any_changed then config.save_section(data.create_config_section()) end
+        imgui.unindent(10)
+        imgui.separator()
+        imgui.spacing()
+    end
 end
 
 function data.create_config_section()
