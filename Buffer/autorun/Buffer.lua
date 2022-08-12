@@ -28,7 +28,6 @@ local bow = require("Buffer.Modules.Bow")
 local modules = {miscellaneous, character, greatSword, longSword, shortSword, dualBlades, hammer, lance, gunlance, huntingHorn, switchAxe, chargeBlade, insectGlaive, lightBowgun,
                  heavyBowgun, bow}
 
-                 
 -- Load the languages
 language.init()
 
@@ -39,9 +38,7 @@ for i, module in pairs(modules) do
 end
 
 -- Check if the window was last open
-if config.get("is_window_open") == true then
-    isWindowOpen = true
-end
+if config.get("is_window_open") == true then isWindowOpen = true end
 
 -- Add the menu to the REFramework Script Generated UI
 re.on_draw_ui(function()
@@ -56,16 +53,39 @@ re.on_draw_ui(function()
         wasOpen = true
         imgui.set_next_window_size(Vector2f.new(520, 450), 4)
 
-        isWindowOpen = imgui.begin_window("Modifiers & Settings", isWindowOpen, 0)
-        imgui.spacing()
-        for _, module in pairs(modules) do
-            if module.draw ~= nil then module.draw() end
+        isWindowOpen = imgui.begin_window("Modifiers & Settings", isWindowOpen, 1024)
+        if imgui.begin_menu_bar() then
+            if imgui.begin_menu("Language") then
+                imgui.spacing()
+                for lang, value in pairs(language.languages) do
+                    if imgui.menu_item("   " .. lang .. "   ", "", lang == language.current, lang ~= language.current) then language.current = lang end
+                end
+                imgui.spacing()
+                imgui.end_menu()
+            end
+           
+            if imgui.begin_menu("About") then
+                imgui.spacing()
+                imgui.text("   Author: Bimmr   ")
+                imgui.text("   Version: 2.15   ")
+                imgui.spacing()
+                imgui.end_menu()
+            end
+
+            imgui.end_menu_bar()
         end
+        imgui.separator()
+
+        imgui.spacing()
+        for _, module in pairs(modules) do if module.draw ~= nil then module.draw() end end
+
+        imgui.spacing()
+
         imgui.spacing()
         imgui.end_window()
 
-    -- If the window is closed, but was just open. 
-    -- This is needed because of the close icon on the window not triggering a save to the config
+        -- If the window is closed, but was just open. 
+        -- This is needed because of the close icon on the window not triggering a save to the config
     elseif wasOpen then
         wasOpen = false
         config.set("is_window_open", isWindowOpen)
