@@ -1,0 +1,192 @@
+{
+    "_IMPORTANT NOTE": "만약 각 항목들 중에 값이 중복될 경우, 공백을 붙여서 구분될 수 있도록 작성해야 함",
+    "bow": {
+        "title": "활",
+        "charge_level": "모으기 단계   ",
+        "charge_level_prefix": "단계",
+        "charge_level_disabled": "끄기",
+        "unlimited_arrows": "병 무한",
+        "herculean_draw": "강력 활시위 당기기 버프",
+        "herculean_draw_tooltip": "무기에 이펙트는 표시되지 않음",
+        "bolt_boost": "화살 강화 버프"
+    },
+    "character": {
+        "title": "캐릭터",
+        "conditions_and_blights": {
+            "title": "속성 피해/상태 이상",
+            "blights": {
+                "title": "속성 피해 방지",
+                "blast": "폭파 피해",
+                "bubble": "거품 상태",
+                "dragon": "용속성 피해",
+                "fire": "불속성 피해",
+                "ice": "얼음속성 피해",
+                "thunder": "번개속성 피해",
+                "water": "물속성 피해"
+            },
+            "conditions": {
+                "title": "상태 이상 방지",
+                "bleeding": "열상",
+                "defence_and_resistance": "방어력 DOWN/모든 내성 DOWN",
+                "frenzy": "광룡증",
+                "hellfire_and_stentch": "귀화 피해/일부 아이템 사용 불가",
+                "poison": "독",
+                "qurio": "겁혈 피해",
+                "sleep": "수면",
+                "still_working_on": "(개발중)스턴/마비/실 속박 상태"
+            }
+        },
+        "health": {
+            "title": "체력",
+            "healing": "지속적인 회복",
+            "healing_tooltip": "어떤 체력 감소도 회복 가능하게 됨",
+            "insta_healing": "즉시 회복",
+            "insta_healing_tooltip": "피해를 입으면 즉시 최대 체력으로 회복됨",
+            "max_adrenaline": "Max Adrenaline Health",
+            "max_dragonheart": "용기 활성 발동 체력",
+            "max_dragonheart_tooltip": "용기 활성 Lv에 따라 자동 조정",
+            "max_heroics": "재난대처능력 발동 체력"
+        },
+        "stats": {
+            "title": "스탯",
+            "attack": "공격력",
+            "attack_disabled": "끄기",
+            "attack_tooltip": "만약 스탯이 깨지면 슬라이더를 왼쪽으로 드래그하여 재설정",
+            "defence": "방어력",
+            "defence_disabled": "끄기",
+            "defence_tooltip": "만약 스탯이 깨지면 슬라이더를 왼쪽으로 드래그하여 재설정"
+        },
+        "unlimited_stamina": "스태미나 무한"
+    },
+    "great_sword": {
+        "title": "대검",
+        "charge_level": "모으기 단계",
+        "charge_level_prefix": "단계",
+        "charge_level_disabled": "끄기",
+        "power_sheathe": "강화 납도 버프",
+        "power_sheathe_tooltip": "무기에 이펙트는 표시되지 않음"
+    },
+    "hammer": {
+        "title": "해머",
+        "charge_level": "모으기 단계 ",
+        "charge_level_prefix": "단계",
+        "charge_level_disabled": "끄기",
+        "impact_burst": "임팩트 버스트 버프"
+    },
+    "heavy_bowgun": {
+        "title": "헤비보우건",
+        "charge_level": "모으기 단계  ",
+        "unlimited_ammo": "탄약 무한 ",
+        "auto_reload": "자동 장전  ",
+        "overheat": "오버히트 방지",
+        "wyvern_machine_gun": "기관 용탄 무한",
+        "wyvern_sniper": "저격 용탄 무한",
+        "no_deviation": "흔들림 없음  "
+    },
+    "insect_glaive": {
+        "title": "조충곤",
+        "aerials": "도약 무한 ",
+        "kinsect_stamina": "사냥벌레 스태미나 무한",
+        "orange_extract": "주황 진액 채취",
+        "red_extract": "빨강 진액 채취",
+        "white_extract": "하양 진액 채취"
+    },
+    "lance": {
+        "title": "랜스",
+        "anchor_rage": "앵커 레이지",
+        "anchor_rage_prefix": "단계",
+        "anchor_rage_disabled": "끄기"
+    },
+    "light_bowgun": {
+        "title": "라이트보우건",
+        "unlimited_ammo": "탄약 무한",
+        "auto_reload": "자동 장전 ",
+        "fanning_maneuver": "선회 이동 버프",
+        "wyvern_blast": "기폭 용탄 무한",
+        "no_deviation": "흔들림 없음 "
+    },
+    "long_sword": {
+        "title": "태도",
+        "guage_level": "연기 게이지 단계",
+        "guage_level_prefix": "단계",
+        "guage_level_disabled": "끄기",
+        "guage_max": "연기 게이지 최대"
+    },
+    "miscellaneous": {
+        "title": "기타",
+        "ammo_and_coatings": {
+            "title": "탄약/병",
+            "auto_reload": "자동 장전",
+            "no_deviation": "흔들림 없음",
+            "unlimited_ammo": "탄약 무한 (보우건)",
+            "unlimited_coatings": "병 무한 (활)"
+        },
+        "canteen": {
+            "title": "식당",
+            "dango_100_no_ticket": "경단 기술 100% (달인의 경단권 미사용)",
+            "dango_100_ticket": "경단 기술 100% (달인의 경단권 사용)",
+            "level_4": "Lv 4 경단",
+            "level_4_tooltip": "UI에서 Lv 4로 보이지는 않으나, Lv 4 효과를 제공함"
+        },
+        "consumables": {
+            "title": "소비 아이템",
+            "endemic_life": "환경 생물 사용 무한",
+            "items": "소비 아이템 사용 무한"
+        },
+        "sharpness_level": "예리도 단계",
+        "sharpness_level_tooltip": "예리도 게이지는 움직이지만, 예리도 단계는 변하지 않음",
+        "sharpness_levels": {
+            "disabled":"끄기", 
+            "red": "빨강", 
+            "orange": "주황", 
+            "yellow": "노랑", 
+            "green": "초록", 
+            "blue": "파랑", 
+            "white": "하양", 
+            "purple": "보라"
+        },
+        "wirebugs": {
+            "title": "밧줄벌레",
+            "give_3": "밧줄벌레 게이지 3개",
+            "unlimited": "밧줄벌레 무한",
+            "unlimited_ooc": "밧줄벌레 무한 (마을)",
+            "unlimited_powerup": "변환밧줄벌레 효과 무한",
+            "unlimited_powerup_tooltip": "변환밧줄벌레-홍/금을 먼저 소지해야 함"
+        }
+    },
+    "charge_blade": {
+        "title": "차지액스",
+        "full_bottles": "병 최대",
+        "shield_charged": "방패 속성강화 상태",
+        "sword_charged": "검 강화 상태"
+    },
+    "dual_blades": {
+        "title": "쌍검",
+        "archdemon_mode": "귀인 게이지 최대",
+        "ironshine_silk": "벌레철사 연마"
+    },
+    "gun_lance": {
+        "title": "건랜스",
+        "aerials": "도약 무한",
+        "auto_reload": "자동 장전",
+        "dragon_cannon": "용항포 무한",
+        "errupting_cannon": "폭항포 버프",
+        "ground_splitter": "지열참 버프"
+    },
+    "hunting_horn": {
+        "title": "수렵피리",
+        "infernal_mode": "기염의 선율 상태",
+        "skillbind_shockwave": "벌레철사 향타"
+    },
+    "switch_axe": {
+        "title": "슬래시액스",
+        "max_charge": "슬래시 게이지 최대",
+        "max_sword_ammo": "고출력 상태",
+        "power_axe": "도끼 강화 상태",
+        "switch_charger": "슬래시 차저 버프"
+    },
+    "sword_and_shield": {
+        "title": "한손검",
+        "destroyer_oil": "중격의 인약 버프"
+    }
+}
