@@ -2,11 +2,12 @@ local utils = require("Buffer.Misc.Utils")
 local config = require("Buffer.Misc.Config")
 
 local language = {
-    current_language = "en-us"
+    current = "en-us",
+    languages = {}
 }
 
 function language.init()
-    language.current_language = config.get("language")
+    language.current = config.get("language")
     language.load_languages()
 end
 
@@ -17,17 +18,18 @@ function language.load_languages()
         local file = files[i]
         local fileName = utils.split(file, "\\")[#utils.split(file, "\\")]
         local languageName = utils.split(fileName, ".")[1]
-        language[languageName] = json.load_file(file)
+        language.languages[languageName] = json.load_file(file)
+        log.debug("Loaded language " .. languageName)
     end
 end
 
 -- Get a single value from the language from the provided key
 function language.get(key)
-    if language[language.current_language] == nil then
+    if language.languages[language.current] == nil then
         return "Invalid Language Key: ".. key
     else
 
-        local language_data = language[language.current_language]
+        local language_data = language.languages[language.current]
         if language_data == nil then return nil end
         if string.find(key, ".") == nil then
             return language_data[key]
