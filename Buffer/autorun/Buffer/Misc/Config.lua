@@ -32,16 +32,19 @@ end
 -- If a key with a . is given, it will update it in the section
 function config.set(key, value)
     local current_config = config.get_config() or {}
-    if key.find(key, ".") == nil then
+    if string.find(key, ".") == nil then
         current_config[key] = value
     else
         local keys = utils.split(key, ".")
-        local value = current_config
+        local config_section = current_config
         for i = 1, #keys do
-            if value[keys[i]] == nil then value[keys[i]] = {} end
-            value[keys[i]] = value[keys[i]]
+            if i == #keys then
+                config_section[keys[i]] = value
+            else
+                if config_section[keys[i]] == nil then config_section[keys[i]] = {} end
+                config_section = config_section[keys[i]]
+            end
         end
-        value[keys[#keys]] = value[keys[#keys]]
     end
     json.dump_file(configPath, current_config)
 end
@@ -51,7 +54,7 @@ end
 function config.get(key)
     local current_config = config.get_config()
     if current_config == nil then return nil end
-    if key.find(key, ".") == nil then
+    if string.find(key, ".") == nil then
         return current_config[key]
     else
         local keys = utils.split(key, ".")
@@ -62,7 +65,6 @@ function config.get(key)
         end
         return value
     end
-    return current_config[key]
 end
 
 return config
