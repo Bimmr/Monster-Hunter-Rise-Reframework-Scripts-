@@ -2,15 +2,15 @@
     "_IMPORTANT_NOTE": "만약 각 항목들 중에 값이 중복될 경우, 공백을 붙여서 구분될 수 있도록 작성해야 함",
     "_USE_FONT": "NotoSansKR-Bold.otf",
     "window":{
-        "toggle_button": "Toggle Buffer GUI(Placeholder)",
-        "title": "Modifiers & Settings(Placeholder)",
-        "settings": "Settings(Placeholder)",
-        "language": "Language(Placeholder)",
-        "font_size": "Font Size(Placeholder)",
-        "font_size_apply": "Apply(Placeholder)",
-        "about": "About(Placeholder)",
-        "author": "Author(Placeholder)",
-        "version": "Version(Placeholder)"
+        "toggle_button": "Buffer GUI 켜기",
+        "title": "변경 & 설정",
+        "settings": "설정",
+        "language": "언어",
+        "font_size": "글꼴 크기",
+        "font_size_apply": "적용",
+        "about": "정보",
+        "author": "작성자",
+        "version": "버전"
     },
     "bow": {
         "title": "활",
@@ -54,7 +54,7 @@
             "healing_tooltip": "어떤 체력 감소도 회복 가능하게 됨",
             "insta_healing": "즉시 회복",
             "insta_healing_tooltip": "피해를 입으면 즉시 최대 체력으로 회복됨",
-            "max_adrenaline": "Max Adrenaline Health",
+            "max_adrenaline": "경단 재난대처능력 발동 체력",
             "max_dragonheart": "용기 활성 발동 체력",
             "max_dragonheart_tooltip": "용기 활성 Lv에 따라 자동 조정",
             "max_heroics": "재난대처능력 발동 체력"
