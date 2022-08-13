@@ -243,7 +243,7 @@ function data.draw()
             changed, data.health.healing = imgui.checkbox(language.get(languagePrefix .. "healing"), data.health.healing)
             any_changed = any_changed or changed
             utils.tooltip(language.get(languagePrefix .. "healing_tooltip"))
-            changed, data.health.insta_healing = imgui.checkbox(language.get("Chracter.insta_healing"), data.health.insta_healing)
+            changed, data.health.insta_healing = imgui.checkbox(language.get(languagePrefix .. "insta_healing"), data.health.insta_healing)
             any_changed = any_changed or changed
             utils.tooltip(language.get(languagePrefix .. "insta_healing_tooltip"))
             changed, data.health.max_dragonheart = imgui.checkbox(language.get(languagePrefix .. "max_dragonheart"), data.health.max_dragonheart)
