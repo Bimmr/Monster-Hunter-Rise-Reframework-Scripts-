@@ -2,15 +2,15 @@
     "_IMPORTANT_NOTE": "만약 각 항목들 중에 값이 중복될 경우, 공백을 붙여서 구분될 수 있도록 작성해야 함",
     "_USE_FONT": "NotoSansKR-Bold.otf",
     "window":{
-        "toggle_button": "Buffer GUI 켜기(Placeholder)",
-        "title": "변경 & 설정(Placeholder)",
-        "settings": "설정(Placeholder)",
-        "language": "언어(Placeholder)",
-        "font_size": "글꼴 크기(Placeholder)",
-        "font_size_apply": "적용(Placeholder)",
-        "about": "정보(Placeholder)",
-        "author": "작성자(Placeholder)",
-        "version": "버전(Placeholder)"
+        "toggle_button": "Buffer GUI 켜기",
+        "title": "변경 & 설정",
+        "settings": "설정",
+        "language": "언어",
+        "font_size": "글꼴 크기",
+        "font_size_apply": "적용",
+        "about": "정보",
+        "author": "작성자",
+        "version": "버전"
     },
     "bow": {
         "title": "활",
