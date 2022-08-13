@@ -1,5 +1,17 @@
 {
-    "_IMPORTANT NOTE": "If multiple items have the same value but control different things, you need to make them different by using spaces",
+    "_IMPORTANT_NOTE": "If multiple items have the same value but control different things, you need to make them different by using spaces",
+    "_USE_FONT": "NotoSans-Bold.ttf",
+    "window":{
+        "toggle_button": "Toggle Buffer GUI",
+        "title": "Modifiers & Settings",
+        "settings": "Settings",
+        "language": "Language",
+        "font_size": "Font Size",
+        "font_size_apply": "Apply",
+        "about": "About",
+        "author": "Author",
+        "version": "Version"
+    },
     "bow": {
         "title": "Bow",
         "charge_level": "Charge Level   ",

@@ -3,12 +3,30 @@ local config = require("Buffer.Misc.Config")
 
 local language = {
     current = "en-us",
+    font = {
+        name = nil,
+        data = nil,
+        size = 16
+    },
     languages = {}
 }
 
 function language.init()
-    language.current = config.get("language")
     language.load_languages()
+    language.current = config.get("window.language") or language.current
+    language.font_size = config.get("window.font_size") or language.font_size
+    language.change(language.current)
+end
+
+function language.change(new_language, new_font_size)
+    language.current = new_language
+    config.set("window.language", language.current)
+    if new_font_size ~= nil then
+        config.set("window.font_size", new_font_size)
+        language.font.size = new_font_size
+    end
+    language.font.name = language.languages[language.current]["_USE_FONT"]
+    language.font.data = imgui.load_font(language.font.name, language.font.size, {0x1, 0xFFFF, 0})
 end
 
 function language.load_languages()
@@ -19,7 +37,6 @@ function language.load_languages()
         local fileName = utils.split(file, "\\")[#utils.split(file, "\\")]
         local languageName = utils.split(fileName, ".")[1]
         language.languages[languageName] = json.load_file(file)
-        log.debug("Loaded language " .. languageName)
     end
 end
 
@@ -44,4 +61,5 @@ function language.get(key)
         end
     end
 end
+
 return language

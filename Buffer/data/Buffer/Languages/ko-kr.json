@@ -1,5 +1,6 @@
 {
-    "_IMPORTANT NOTE": "만약 각 항목들 중에 값이 중복될 경우, 공백을 붙여서 구분될 수 있도록 작성해야 함",
+    "_IMPORTANT_NOTE": "만약 각 항목들 중에 값이 중복될 경우, 공백을 붙여서 구분될 수 있도록 작성해야 함",
+    "_USE_FONT": "NotoSansKR-Bold.otf",
     "bow": {
         "title": "활",
         "charge_level": "모으기 단계   ",

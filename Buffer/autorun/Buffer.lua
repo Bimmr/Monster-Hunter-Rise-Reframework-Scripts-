@@ -38,39 +38,60 @@ for i, module in pairs(modules) do
 end
 
 -- Check if the window was last open
-if config.get("is_window_open") == true then isWindowOpen = true end
+if config.get("window.is_window_open") == true then isWindowOpen = true end
 
 -- Add the menu to the REFramework Script Generated UI
 re.on_draw_ui(function()
 
+    if language.font.data ~= nil then imgui.push_font(language.font.data) end
+    local languagePrefix = "window."
+
     -- Draw button to toggle window state
-    if imgui.button("Toggle Buffer GUI") then
+    if imgui.button(language.get(languagePrefix.."toggle_button")) then
         isWindowOpen = not isWindowOpen
-        config.set("is_window_open", isWindowOpen)
+        config.set("window.is_window_open", isWindowOpen)
     end
 
     if isWindowOpen then
         wasOpen = true
         imgui.set_next_window_size(Vector2f.new(520, 450), 4)
 
-        isWindowOpen = imgui.begin_window("Modifiers & Settings", isWindowOpen, 1024)
+
+        isWindowOpen = imgui.begin_window(language.get(languagePrefix.."title"), isWindowOpen, 1024)
         if imgui.begin_menu_bar() then
-            if imgui.begin_menu("Language") then
+            if imgui.begin_menu(language.get(languagePrefix.."settings")) then
                 imgui.spacing()
-                for lang, value in pairs(language.languages) do
-                    if imgui.menu_item("   " .. lang .. "   ", "", lang == language.current, lang ~= language.current) then 
-                        language.current = lang 
-                        config.set("language", lang)
+                if imgui.begin_menu(language.get(languagePrefix.."language")) then
+                    imgui.spacing()
+                    for lang, value in pairs(language.languages) do
+                        if imgui.menu_item("   " .. lang .. "   ", "", lang == language.current, lang ~= language.current) then
+                           language.change(lang)
+                        end
                     end
+                    imgui.spacing()
+                    imgui.end_menu()
+                end
+                if imgui.begin_menu(language.get(languagePrefix.."font_size")) then
+                    imgui.spacing()
+                    language.font.temp_size = language.font.temp_size or language.font.size
+                    local changed = false
+                    changed, language.font.temp_size = imgui.slider_int(language.get(languagePrefix.."font_size").." ", language.font.temp_size, 8, 24)
+                    imgui.same_line()
+                    if imgui.button(language.get(languagePrefix.."font_size_apply")) then
+                        language.change(language.current, language.font.temp_size)
+                        language.font.temp_size = nil
+                    end
+                    imgui.spacing()
+                    imgui.end_menu()
                 end
                 imgui.spacing()
                 imgui.end_menu()
             end
-           
-            if imgui.begin_menu("About") then
+
+            if imgui.begin_menu(language.get(languagePrefix.."about")) then
                 imgui.spacing()
-                imgui.text("   Author: Bimmr   ")
-                imgui.text("   Version: 2.15   ")
+                imgui.text("   "..language.get(languagePrefix.."author")..": Bimmr   ")
+                imgui.text("   "..language.get(languagePrefix.."version")..": 2.15   ")
                 imgui.spacing()
                 imgui.end_menu()
             end
@@ -91,8 +112,10 @@ re.on_draw_ui(function()
         -- This is needed because of the close icon on the window not triggering a save to the config
     elseif wasOpen then
         wasOpen = false
-        config.set("is_window_open", isWindowOpen)
+        config.set("window.is_window_open", isWindowOpen)
     end
+
+    if language.font.data ~= nil then imgui.pop_font() end
 end)
 
 -- On script reset, reset anything that needs to be reset
