@@ -169,7 +169,8 @@
         "title": "Charge Blade",
         "full_bottles": "Full Bottles",
         "shield_charged": "Shield Charged",
-        "sword_charged": "Sword Charged"
+        "sword_charged": "Sword Charged",
+        "chainsaw_buff": "Chainsaw Buff"
     },
     "dual_blades": {
         "title": "Dual Blades",

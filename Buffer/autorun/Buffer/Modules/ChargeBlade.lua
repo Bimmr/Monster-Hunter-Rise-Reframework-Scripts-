@@ -4,7 +4,8 @@ local data = {
     title = "charge_blade",
     full_bottles = false,
     sword_charged = false,
-    shield_charged = false
+    shield_charged = false,
+    chainsaw_buff = false,
 }
 
 function data.init()
@@ -25,6 +26,7 @@ function data.init_hooks()
         end
         if data.sword_charged then managed:set_field("_SwordBuffTimer", 500) end
         if data.shield_charged then managed:set_field("_ShieldBuffTimer", 1000) end
+        if data.chainsaw_buff then managed:set_field("_IsChainsawBuff", true) end
     end, utils.nothing())
 end
 
@@ -40,6 +42,8 @@ function data.draw()
         changed, data.sword_charged = imgui.checkbox(language.get(languagePrefix .. "sword_charged"), data.sword_charged)
         any_changed = changed or any_changed
         changed, data.shield_charged = imgui.checkbox(language.get(languagePrefix .. "shield_charged"), data.shield_charged)
+        any_changed = changed or any_changed
+        changed, data.chainsaw_buff = imgui.checkbox(language.get(languagePrefix .. "chainsaw_buff"), data.chainsaw_buff)
         any_changed = changed or any_changed
 
         if any_changed then config.save_section(data.create_config_section()) end
