@@ -1,3 +1,5 @@
+local version = "2.16"
+
 local isWindowOpen, wasOpen = false, false
 
 -- Utilities and Helpers
@@ -90,7 +92,7 @@ re.on_draw_ui(function()
             if imgui.begin_menu(language.get(languagePrefix.."about")) then
                 imgui.spacing()
                 imgui.text("   "..language.get(languagePrefix.."author")..": Bimmr   ")
-                imgui.text("   "..language.get(languagePrefix.."version")..": 2.15   ")
+                imgui.text("   "..language.get(languagePrefix.."version")..": "..version.."   ")
                 imgui.spacing()
                 imgui.end_menu()
             end
