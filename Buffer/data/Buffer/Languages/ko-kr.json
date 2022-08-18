@@ -170,7 +170,8 @@
         "title": "차지액스",
         "full_bottles": "병 최대",
         "shield_charged": "방패 속성강화 상태",
-        "sword_charged": "검 강화 상태"
+        "sword_charged": "검 강화 상태",
+        "chainsaw_buff": "Chainsaw Buff"
     },
     "dual_blades": {
         "title": "쌍검",
