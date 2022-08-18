@@ -18,6 +18,7 @@ function language.init()
     language.change(language.current)
 end
 
+-- Sets the language, and updates the font size
 function language.change(new_language, new_font_size)
     language.current = new_language
     config.set("window.language", language.current)
@@ -29,6 +30,7 @@ function language.change(new_language, new_font_size)
     language.font.data = imgui.load_font(language.font.name, language.font.size, {0x1, 0xFFFF, 0})
 end
 
+-- Loads all languages from the language folder
 function language.load_languages()
     local files = fs.glob([[Buffer\\Languages\\.*json]])
     if files == nil then return end

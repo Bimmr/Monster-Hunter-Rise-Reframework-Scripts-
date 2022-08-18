@@ -1,6 +1,5 @@
 {
     "_IMPORTANT_NOTE": "If multiple items have the same value but control different things, you need to make them different by using spaces",
-    "_USE_FONT": "NotoSans-Bold.ttf",
     "window":{
         "toggle_button": "Toggle Buffer GUI",
         "title": "Modifiers & Settings",

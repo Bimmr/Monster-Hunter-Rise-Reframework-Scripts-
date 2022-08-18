@@ -56,7 +56,6 @@ re.on_draw_ui(function()
         wasOpen = true
         imgui.set_next_window_size(Vector2f.new(520, 450), 4)
 
-
         isWindowOpen = imgui.begin_window(language.get(languagePrefix.."title"), isWindowOpen, 1024)
         if imgui.begin_menu_bar() then
             if imgui.begin_menu(language.get(languagePrefix.."settings")) then
@@ -102,7 +101,6 @@ re.on_draw_ui(function()
 
         imgui.spacing()
         for _, module in pairs(modules) do if module.draw ~= nil then module.draw() end end
-
         imgui.spacing()
 
         imgui.spacing()
