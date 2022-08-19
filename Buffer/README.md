@@ -12,18 +12,39 @@
                   Miscellaneous
                   <ul>
                      <li>Unlimited Consumables</li>
+                     <ul>
+                        <li>Items &amp; Endemic Life</li>
+                     </ul>
                      <li>Sharpness</li>
                      <li>Wirebugs</li>
+                     <ul>
+                        <li>Unlimited (out of combat/anywhere)</li>
+                        <li>Give 3</li>
+                        <li>Unlimited Red/Yellow Powerup</li>
+                     </ul>
                      <li>Canteen</li>
+                     <ul>
+                        <li>100% Dango Skill (With/Without ticket)</li>
+                        <li>Level 4 skills</li>
+                     </ul>
                   </ul>
                </li>
                <li>
                   Character
                   <ul>
-                     <li>Stamina</li>
+                     <li>Unlimited Stamina</li>
                      <li>Health</li>
-                     <li>Conditions, Blights, Ailments</li>
+                     <ul>
+                        <li>Constant Healing/Instant Healing</li>
+                        <li>Max Dragonheart health depending on skill level</li>
+                        <li>Max Heroics health</li>
+                        <li>Max Adrenaline Health</li>
+                     </ul>
+                     <li>Prevent Conditions, Blights, Ailments</li>
                      <li>Stat Modifiers</li>
+                     <ul>
+                        <li>Attack &amp; Defence Modifiers</li>
+                     </ul>
                   </ul>
                </li>
                <li>
@@ -66,16 +87,6 @@
                      <li>Anchor Rage</li>
                   </ul>
                </li> 
-			   <li>
-                  Gunlance
-                  <ul>
-                     <li>Unlimited Dragon Cannon</li>
-                     <li>Unlimited Aerials</li>
-                     <li>Auto Reload</li>
-                     <li>Ground Splitter</li>
-                     <li>Erupting Cannon</li>
-                  </ul>
-               </li>
                <li>
                   Hunting Horn
                   <ul>
@@ -87,6 +98,16 @@
          </td>
          <td>
             <ul>
+            <li>
+                  Gunlance
+                  <ul>
+                     <li>Unlimited Dragon Cannon</li>
+                     <li>Unlimited Aerials</li>
+                     <li>Auto Reload</li>
+                     <li>Ground Splitter</li>
+                     <li>Erupting Cannon</li>
+                  </ul>
+               </li>
                <li>
                   Switch Axe
                   <ul>
@@ -102,6 +123,7 @@
                      <li>Full Bottles</li>
                      <li>Sword Charged</li>
                      <li>Shield Charged</li>
+                     <li>Chainsaw mode</li>
                   </ul>
                </li>
                <li>
