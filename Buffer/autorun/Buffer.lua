@@ -49,7 +49,7 @@ re.on_draw_ui(function()
     local languagePrefix = "window."
 
     -- Draw button to toggle window state
-    if imgui.button(language.get(languagePrefix.."toggle_button")) then
+    if imgui.button(language.get(languagePrefix .. "toggle_button")) then
         isWindowOpen = not isWindowOpen
         config.set("window.is_window_open", isWindowOpen)
     end
@@ -58,27 +58,25 @@ re.on_draw_ui(function()
         wasOpen = true
         imgui.set_next_window_size(Vector2f.new(520, 450), 4)
 
-        isWindowOpen = imgui.begin_window(language.get(languagePrefix.."title"), isWindowOpen, 1024)
+        isWindowOpen = imgui.begin_window(language.get(languagePrefix .. "title"), isWindowOpen, 1024)
         if imgui.begin_menu_bar() then
-            if imgui.begin_menu(language.get(languagePrefix.."settings")) then
+            if imgui.begin_menu(language.get(languagePrefix .. "settings")) then
                 imgui.spacing()
-                if imgui.begin_menu(language.get(languagePrefix.."language")) then
+                if imgui.begin_menu(language.get(languagePrefix .. "language")) then
                     imgui.spacing()
                     for lang, value in pairs(language.languages) do
-                        if imgui.menu_item("   " .. lang .. "   ", "", lang == language.current, lang ~= language.current) then
-                           language.change(lang)
-                        end
+                        if imgui.menu_item("   " .. lang .. "   ", "", lang == language.current, lang ~= language.current) then language.change(lang) end
                     end
                     imgui.spacing()
                     imgui.end_menu()
                 end
-                if imgui.begin_menu(language.get(languagePrefix.."font_size")) then
+                if imgui.begin_menu(language.get(languagePrefix .. "font_size")) then
                     imgui.spacing()
                     language.font.temp_size = language.font.temp_size or language.font.size
                     local changed = false
-                    changed, language.font.temp_size = imgui.slider_int(language.get(languagePrefix.."font_size").." ", language.font.temp_size, 8, 24)
+                    changed, language.font.temp_size = imgui.slider_int(language.get(languagePrefix .. "font_size") .. " ", language.font.temp_size, 8, 24)
                     imgui.same_line()
-                    if imgui.button(language.get(languagePrefix.."font_size_apply")) then
+                    if imgui.button(language.get(languagePrefix .. "font_size_apply")) then
                         language.change(language.current, language.font.temp_size)
                         language.font.temp_size = nil
                     end
@@ -89,10 +87,14 @@ re.on_draw_ui(function()
                 imgui.end_menu()
             end
 
-            if imgui.begin_menu(language.get(languagePrefix.."about")) then
+            if imgui.begin_menu(language.get(languagePrefix .. "about")) then
                 imgui.spacing()
-                imgui.text("   "..language.get(languagePrefix.."author")..": Bimmr   ")
-                imgui.text("   "..language.get(languagePrefix.."version")..": "..version.."   ")
+                imgui.text("   " .. language.get(languagePrefix .. "author") .. ": Bimmr   ")
+                if language.languages[language.current].window.translator then
+                    imgui.text("   " .. language.get(languagePrefix .. "translator") .. ": " .. language.languages[language.current]["_TRANSLATOR"] .. "   ")
+                end
+                imgui.text("   " .. language.get(languagePrefix .. "version") .. ": " .. version .. "   ")
+
                 imgui.spacing()
                 imgui.end_menu()
             end
