@@ -8,7 +8,8 @@ local language = {
         data = nil,
         size = 16
     },
-    languages = {}
+    languages = {},
+    sorted = {},
 }
 
 function language.init()
@@ -40,6 +41,15 @@ function language.load_languages()
         local languageName = utils.split(fileName, ".")[1]
         language.languages[languageName] = json.load_file(file)
     end
+    language.sorted = language.sort_languages()
+end
+function language.sort_languages()
+    local languages = {}
+    for k, v in pairs(language.languages) do
+        table.insert(languages, k)
+    end
+    table.sort(languages, function(a, b) return a < b end)
+    return languages
 end
 
 -- Get a single value from the language from the provided key
