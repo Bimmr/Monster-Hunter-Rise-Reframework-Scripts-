@@ -1,0 +1,208 @@
+{
+    "_IMPORTANT_NOTE": "如同名项中的值也是相同的,必须添加空格来区分",
+    "_USE_FONT": "NotoSansSC-Bold.otf",
+    "_TRANSLATOR": "Chikaze",
+    "window":{
+        "toggle_button": "Buffer 切换界面显示",
+        "title": "Buffer 调节器",
+        "settings": "设置",
+        "language": "语言",
+        "font_size": "字体大小",
+        "font_size_apply": "应用",
+        "about": "关于",
+        "author": "制作者",
+        "translator": "翻译者",
+        "version": "版本号"
+    },
+    "bow": {
+        "title": "弓",
+        "charge_level": "蓄力等级 ",
+        "charge_level_prefix": "等级 ",
+        "charge_level_disabled": "禁用 ",
+        "unlimited_arrows": "无限瓶",
+        "herculean_draw": "刚力挽弓",
+        "herculean_draw_tooltip": "武器上不会出现视觉特效",
+        "bolt_boost": "箭强化"
+    },
+    "character": {
+        "title": "猎人状态",
+        "conditions_and_blights": {
+            "title": "预防异常状态",
+            "blights": {
+                "title": "累加类异常",
+                "blast": "爆破",
+                "bubble": "泡沫",
+                "dragon": "龙属性",
+                "fire": "火属性",
+                "ice": "冰属性",
+                "thunder": "雷属性",
+                "water": "水属性"
+            },
+            "conditions": {
+                "title": "特殊类异常",
+                "bleeding": "裂伤",
+                "defence_and_resistance": "全耐性 防御力下降",
+                "frenzy": "狂龙症",
+                "hellfire_and_stentch": "鬼火与异臭",
+                "poison": "毒",
+                "qurio": "劫血",
+                "sleep": "睡意",
+                "still_working_on": "仍在研究: 眩晕 麻痹 丝线束缚"
+            }
+        },
+        "health": {
+            "title": "体力",
+            "healing": "持续回复",
+            "healing_tooltip": "任何损失的体力都会被恢复",
+            "insta_healing": "立即回复",
+            "insta_healing_tooltip": "当你受到伤害时立即恢复体力",
+            "max_adrenaline": "最大化 团子火场怪力 体力",
+            "max_dragonheart": "最大化 龙气活化 体力",
+            "max_dragonheart_tooltip": "将根据装备的 龙气活性 技能等级自动计算",
+            "max_heroics": "最大化 火场怪力 体力"
+        },
+        "stats": {
+            "title": "状态",
+            "attack": "攻击力",
+            "attack_disabled": "禁用",
+            "attack_tooltip": "如果失效 请拖动滑块到最左边后重新调节",
+            "defence": "防御力",
+            "defence_disabled": "禁用",
+            "defence_tooltip": "如果失效 请拖动滑块到最左边后重新调节"
+        },
+        "unlimited_stamina": "无限耐力"
+    },
+    "great_sword": {
+        "title": "大剑",
+        "charge_level": "蓄力等级  ",
+        "charge_level_prefix": "等级  ",
+        "charge_level_disabled": "禁用  ",
+        "power_sheathe": "强化纳刀",
+        "power_sheathe_tooltip": "武器上不会出现视觉特效"
+    },
+    "hammer": {
+        "title": "大锤",
+        "charge_level": "蓄力等级   ",
+        "charge_level_prefix": "等级   ",
+        "charge_level_disabled": "禁用   ",
+        "impact_burst": "天地大冲撞"
+    },
+    "heavy_bowgun": {
+        "title": "重弩炮",
+        "charge_level": "蓄力等级    ",
+        "charge_level_prefix": "等级    ",
+        "charge_level_disabled": "禁用    ",
+        "unlimited_ammo": "无限弹药 ",
+        "auto_reload": "自动装填 ",
+        "overheat": "防止过热",
+        "wyvern_machine_gun": "无限机关龙弹",
+        "wyvern_sniper": "无限狙击龙弹",
+        "no_deviation": "无偏移 "
+    },
+    "insect_glaive": {
+        "title": "操虫棍",
+        "aerials": "无限空中攻击 ",
+        "kinsect_stamina": "无限猎虫耐力",
+        "orange_extract": "橙 精华",
+        "red_extract": "红 精华",
+        "white_extract": "白 精华"
+    },
+    "lance": {
+        "title": "长枪",
+        "anchor_rage": "锚泊蓄能",
+        "anchor_rage_prefix": "等级",
+        "anchor_rage_disabled": "禁用"
+    },
+    "light_bowgun": {
+        "title": "轻弩炮",
+        "unlimited_ammo": "无限弹药  ",
+        "auto_reload": "自动装填  ",
+        "fanning_maneuver": "扇旋移动",
+        "wyvern_blast": "无限起爆龙弹",
+        "no_deviation": "无偏移  "
+    },
+    "long_sword": {
+        "title": "太刀",
+        "guage_level": "练气槽等级",
+        "guage_level_prefix": "等级",
+        "guage_level_disabled": "禁用",
+        "guage_max": "填满练气槽"
+    },
+    "miscellaneous": {
+        "title": "杂项",
+        "ammo_and_coatings": {
+            "title": "弹药与瓶",
+            "auto_reload": "自动装填   ",
+            "no_deviation": "无偏移   ",
+            "unlimited_ammo": "无限弹药   ",
+            "unlimited_coatings": "无限瓶"
+        },
+        "canteen": {
+            "title": "茶点店",
+            "dango_100_no_ticket": "无票必发动团子技能",
+            "dango_100_ticket": "有票必发动团子技能",
+            "level_4": "全团子技能等级4",
+            "level_4_tooltip": "界面不会对应等级"
+        },
+        "consumables": {
+            "title": "消耗品",
+            "endemic_life": "无限猎具生物",
+            "items": "无限消耗品"
+        },
+        "sharpness_level": "锋利度等级",
+        "sharpness_level_tooltip": "锋利度仍会变化,但锋利度等级不会变化",
+        "sharpness_levels": {
+            "disabled":"禁用", 
+            "red": "红", 
+            "orange": "橙", 
+            "yellow": "黄", 
+            "green": "绿", 
+            "blue": "蓝", 
+            "white": "白", 
+            "purple": "紫"
+        },
+        "wirebugs": {
+            "title": "翔虫",
+            "give_3": "获得野生翔虫",
+            "unlimited": "无限翔虫",
+            "unlimited_ooc": "战斗外无限翔虫",
+            "unlimited_powerup": "无限变幻翔虫",
+            "unlimited_powerup_tooltip": "需要你持有红或金变幻翔虫"
+        }
+    },
+    "charge_blade": {
+        "title": "盾斧",
+        "full_bottles": "填满充能瓶",
+        "shield_charged": "盾属性强化",
+        "sword_charged": "剑属性强化"
+    },
+    "dual_blades": {
+        "title": "双剑",
+        "archdemon_mode": "鬼人化",
+        "ironshine_silk": "铁虫砥丝"
+    },
+    "gun_lance": {
+        "title": "铳枪",
+        "aerials": "无限空中攻击  ",
+        "auto_reload": "自动装填    ",
+        "dragon_cannon": "龙杭炮",
+        "errupting_cannon": "爆杭炮",
+        "ground_splitter": "地裂斩"
+    },
+    "hunting_horn": {
+        "title": "狩猎笛",
+        "infernal_mode": "气炎旋律",
+        "skillbind_shockwave": "铁虫丝响打"
+    },
+    "switch_axe": {
+        "title": "斩击斧",
+        "max_charge": "填满斩击槽",
+        "max_sword_ammo": "剑高输出状态",
+        "power_axe": "斧高输出状态",
+        "switch_charger": "斩击充能"
+    },
+    "sword_and_shield": {
+        "title": "单手剑",
+        "destroyer_oil": "重击剑药"
+    }
+}
