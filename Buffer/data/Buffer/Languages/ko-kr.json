@@ -88,6 +88,8 @@
     "heavy_bowgun": {
         "title": "헤비보우건",
         "charge_level": "모으기 단계  ",
+        "charge_level_prefix": "단계",
+        "charge_level_disabled": "끄기",
         "unlimited_ammo": "탄약 무한 ",
         "auto_reload": "자동 장전  ",
         "overheat": "오버히트 방지",

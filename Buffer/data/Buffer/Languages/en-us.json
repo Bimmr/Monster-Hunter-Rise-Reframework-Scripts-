@@ -87,6 +87,8 @@
     "heavy_bowgun": {
         "title": "Heavy Bowgun",
         "charge_level": "Charge Level  ",
+        "charge_level_prefix": "Level",
+        "charge_level_disabled": "Off",
         "unlimited_ammo": "Unlimited Ammo ",
         "auto_reload": "Auto Reload  ",
         "overheat": "Prevent Overheat",

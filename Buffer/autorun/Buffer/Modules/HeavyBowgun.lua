@@ -55,7 +55,8 @@ function data.draw()
     if imgui.collapsing_header(language.get(languagePrefix .. "title")) then
         imgui.indent(10)
 
-        changed, data.charge_level = imgui.slider_int(language.get(languagePrefix .. "charge_level"), data.charge_level, -1, 3, data.charge_level > -1 and "Level %d" or "Off")
+        changed, data.charge_level = imgui.slider_int(language.get(languagePrefix .. "charge_level"), data.charge_level, -1, 3, data.charge_level > -1 and
+                                                          language.get(languagePrefix .. "charge_level_prefix") .. " %d" or language.get(languagePrefix .. "charge_level_disabled"))
         any_changed = changed or any_changed
         changed, misc.ammo_and_coatings.unlimited_ammo = imgui.checkbox(language.get(languagePrefix .. "unlimited_ammo"), misc.ammo_and_coatings.unlimited_ammo)
         misc_changed = changed or misc_changed
