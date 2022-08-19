@@ -17,8 +17,8 @@
     "bow": {
         "title": "弓",
         "charge_level": "蓄力等級 ",
-        "charge_level_prefix": "等級 ",
-        "charge_level_disabled": "禁用 ",
+        "charge_level_prefix": "等級",
+        "charge_level_disabled": "禁用",
         "unlimited_arrows": "無限瓶",
         "herculean_draw": "剛力挽弓",
         "herculean_draw_tooltip": "武器上不會出現視覺特效",
@@ -75,23 +75,23 @@
     "great_sword": {
         "title": "大劍",
         "charge_level": "蓄力等級  ",
-        "charge_level_prefix": "等級  ",
-        "charge_level_disabled": "禁用  ",
+        "charge_level_prefix": "等級",
+        "charge_level_disabled": "禁用",
         "power_sheathe": "強化納刀",
         "power_sheathe_tooltip": "武器上不會出現視覺特效"
     },
     "hammer": {
         "title": "大錘",
         "charge_level": "蓄力等級   ",
-        "charge_level_prefix": "等級   ",
-        "charge_level_disabled": "禁用   ",
+        "charge_level_prefix": "等級",
+        "charge_level_disabled": "禁用",
         "impact_burst": "天地大衝撞"
     },
     "heavy_bowgun": {
         "title": "重弩炮",
         "charge_level": "蓄力等級    ",
-        "charge_level_prefix": "等級    ",
-        "charge_level_disabled": "禁用    ",
+        "charge_level_prefix": "等級",
+        "charge_level_disabled": "禁用",
         "unlimited_ammo": "無限彈藥 ",
         "auto_reload": "自動裝填 ",
         "overheat": "防止過熱",
@@ -174,7 +174,8 @@
         "title": "盾斧",
         "full_bottles": "填滿充能瓶",
         "shield_charged": "盾屬性強化",
-        "sword_charged": "劍屬性強化"
+        "sword_charged": "劍屬性強化",
+        "chainsaw_buff": "Chainsaw Buff"
     },
     "dual_blades": {
         "title": "雙劍",
