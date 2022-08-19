@@ -20,7 +20,7 @@
         "charge_level_prefix": "等級",
         "charge_level_disabled": "禁用",
         "unlimited_arrows": "無限瓶",
-        "herculean_draw": "剛力挽弓",
+        "herculean_draw": "猛力拉弓",
         "herculean_draw_tooltip": "武器上不會出現視覺特效",
         "bolt_boost": "箭強化"
     },
@@ -29,7 +29,7 @@
         "conditions_and_blights": {
             "title": "預防異常狀態",
             "blights": {
-                "title": "累加類異常",
+                "title": "累計類異常",
                 "blast": "爆破",
                 "bubble": "泡沫",
                 "dragon": "龍屬性",
@@ -85,10 +85,10 @@
         "charge_level": "蓄力等級   ",
         "charge_level_prefix": "等級",
         "charge_level_disabled": "禁用",
-        "impact_burst": "天地大衝撞"
+        "impact_burst": "流星穿地擊"
     },
     "heavy_bowgun": {
-        "title": "重弩炮",
+        "title": "重弩槍",
         "charge_level": "蓄力等級    ",
         "charge_level_prefix": "等級",
         "charge_level_disabled": "禁用",
@@ -114,10 +114,10 @@
         "anchor_rage_disabled": "禁用"
     },
     "light_bowgun": {
-        "title": "輕弩炮",
+        "title": "輕弩槍",
         "unlimited_ammo": "無限彈藥  ",
         "auto_reload": "自動裝填  ",
-        "fanning_maneuver": "扇旋移動",
+        "fanning_maneuver": "迴旋移動",
         "wyvern_blast": "無限起爆龍彈",
         "no_deviation": "無偏移  "
     },
@@ -138,7 +138,7 @@
             "unlimited_coatings": "無限瓶"
         },
         "canteen": {
-            "title": "茶點店",
+            "title": "茶館",
             "dango_100_no_ticket": "無票必發動糰子技能",
             "dango_100_ticket": "有票必發動糰子技能",
             "level_4": "全糰子技能等級4",
@@ -171,16 +171,16 @@
         }
     },
     "charge_blade": {
-        "title": "盾斧",
+        "title": "充能斧",
         "full_bottles": "填滿充能瓶",
         "shield_charged": "盾屬性強化",
         "sword_charged": "劍屬性強化",
-        "chainsaw_buff": "Chainsaw Buff"
+        "chainsaw_buff": "斧屬性強化"
     },
     "dual_blades": {
         "title": "雙劍",
         "archdemon_mode": "鬼人化",
-        "ironshine_silk": "鐵蟲砥絲"
+        "ironshine_silk": "鐵蟲研絲"
     },
     "gun_lance": {
         "title": "銃槍",
@@ -192,7 +192,7 @@
     },
     "hunting_horn": {
         "title": "狩獵笛",
-        "infernal_mode": "氣炎旋律",
+        "infernal_mode": "氣炎的旋律",
         "skillbind_shockwave": "鐵蟲絲響打"
     },
     "switch_axe": {
@@ -200,10 +200,10 @@
         "max_charge": "填滿斬擊槽",
         "max_sword_ammo": "劍高輸出狀態",
         "power_axe": "斧高輸出狀態",
-        "switch_charger": "斬擊充能"
+        "switch_charger": "斬擊蓄力"
     },
     "sword_and_shield": {
         "title": "單手劍",
-        "destroyer_oil": "重擊劍藥"
+        "destroyer_oil": "重擊刃藥"
     }
 }
