@@ -44,7 +44,12 @@
                 "poison": "Poison",
                 "qurio": "Qurio",
                 "sleep": "Sleep",
-                "still_working_on": "Still working on Stun, Paralyze and Web"
+                "stun": "Stun",
+                "stun_tooltip": "The visual effect will still play",
+                "paralyze": "Paralyze",
+                "paralyze_tooltip": "The visual effect will still play",
+                "thread": "Thread",
+                "thread_tooltip": "The visual effect will still play"
             }
         },
         "health": {

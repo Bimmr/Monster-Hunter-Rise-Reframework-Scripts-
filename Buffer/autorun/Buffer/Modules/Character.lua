@@ -21,13 +21,15 @@ local data = {
         },
         conditions = {
             bleeding = false,
-            -- stun = false,
+            stun = false,
             poison = false,
             sleep = false,
             frenzy = false,
             qurio = false,
             defence_and_resistance = false,
-            hellfire_and_stentch = false
+            hellfire_and_stentch = false,
+            paralyze = false,
+            thread = false
         }
     },
     stats = {
@@ -110,83 +112,84 @@ function data.init_hooks()
             playerData:call("set__vital", math.min(max, newHealth) + .0)
         end
 
-        if data.conditions_and_blights.blights.fire then
+        local is_in_lobby = playerBase:get_field("<IsLobbyPlayer>k__BackingField")
+
+        if data.conditions_and_blights.blights.fire and not is_in_lobby then
             playerBase:set_field("_FireLDurationTimer", 0) -- The fire timer
             playerBase:set_field("_FireDamageTimer", 0) -- The fire damage timer
         end
 
-        if data.conditions_and_blights.blights.water then
+        if data.conditions_and_blights.blights.water and not is_in_lobby then
             playerBase:set_field("_WaterLDurationTimer", 0) -- The water blight timer
         end
 
-        if data.conditions_and_blights.blights.ice then
+        if data.conditions_and_blights.blights.ice and not is_in_lobby then
             playerBase:set_field("_IceLDurationTimer", 0) -- The ice blight timer
         end
 
-        if data.conditions_and_blights.blights.thunder then
+        if data.conditions_and_blights.blights.thunder and not is_in_lobby then
             playerBase:set_field("_ThunderLDurationTimer", 0) -- The thunder blight timer
         end
 
-        if data.conditions_and_blights.blights.dragon then
+        if data.conditions_and_blights.blights.dragon and not is_in_lobby then
             playerBase:set_field("_DragonLDurationTimer", 0) -- The dragon blight timer
         end
 
-        if data.conditions_and_blights.blights.bubble then
+        if data.conditions_and_blights.blights.bubble and not is_in_lobby then
             playerBase:set_field("_BubbleDamageTimer", 0) -- The bubble timer
             -- playerData:set_field("_BubbleType", 0) -- | 0=None | 1=BubbleS | 2=BubbleL |
         end
 
-        if data.conditions_and_blights.blights.blast then
+        if data.conditions_and_blights.blights.blast and not is_in_lobby then
             playerBase:set_field("_BombDurationTimer", 0) -- The blast timer
         end
 
-        if data.conditions_and_blights.conditions.bleeding then
+        if data.conditions_and_blights.conditions.bleeding and not is_in_lobby then
             playerBase:set_field("_BleedingDebuffTimer", 0) -- The bleeding timer
         end
 
-        -- if data.conditions_and_blights.conditions.stun then
-        --     playerBase:set_field("_StunDurationTimer", 0) -- The stun timer
-        -- end
-
-        if data.conditions_and_blights.conditions.poison then
+        if data.conditions_and_blights.conditions.poison and not is_in_lobby then
             playerBase:set_field("_PoisonDurationTimer", 0) -- The poison timer
             playerBase:set_field("_PoisonDamageTimer", 0) -- How long till next poison tick
             -- playerData:set_field("_PoisonLv", 0) -- | 0=None | 1=Poison | 2=NoxiousPoison | 3=DeadlyPoison | 
         end
 
-        if data.conditions_and_blights.conditions.sleep then
+        if data.conditions_and_blights.conditions.stun and not is_in_lobby then
+            playerBase:set_field("_StunDurationTimer", 0) -- The stun timer -- DOESN'T REMOVE ANIMATION TIME
+        end
+
+        if data.conditions_and_blights.conditions.sleep and not is_in_lobby then
             playerBase:set_field("_SleepDurationTimer", 0) -- The sleep timer
             playerBase:set_field("<SleepMovableTimer>k__BackingField", 0) -- The sleep walking timer
         end
 
-        if data.conditions_and_blights.conditions.frenzy then
+        if data.conditions_and_blights.conditions.paralyze and not is_in_lobby then
+            playerBase:set_field("_ParalyzeDurationTimer", 0) -- The paralysis recovery timer -- DOESN'T REMOVE ANIMATION TIME
+        end
+
+        if data.conditions_and_blights.conditions.frenzy and not is_in_lobby then
             playerBase:set_field("_IsVirusLatency", false) -- The frenzy virus
             playerBase:set_field("_VirusTimer", 0) -- How long till the next frenzy virus tick
             playerBase:set_field("_VirusAccumulator", 0) -- Total ticks of Frenzy
         end
 
-        if data.conditions_and_blights.conditions.qurio then
+        if data.conditions_and_blights.conditions.qurio and not is_in_lobby then
             playerBase:set_field("_MysteryDebuffTimer", 0) -- The qurio timer
             playerBase:set_field("_MysteryDebuffDamageTimer", 0) -- The qurio damage timer")
         end
 
-        if data.conditions_and_blights.conditions.defence_and_resistance then
+        if data.conditions_and_blights.conditions.defence_and_resistance and not is_in_lobby then
             playerBase:set_field("_ResistanceDownDurationTimer", 0) -- The resistance down timer
             playerBase:set_field("_DefenceDownDurationTimer", 0) -- The defence down timer
         end
 
-        if data.conditions_and_blights.conditions.hellfire_and_stentch then
+        if data.conditions_and_blights.conditions.hellfire_and_stentch and not is_in_lobby then
             playerBase:set_field("_OniBombDurationTimer", 0) -- The hellfire timer
             playerBase:set_field("_StinkDurationTimer", 0) -- The putrid gas damage timer
         end
-        -- if true then
-        --       playerBase:set_field("_ParalyzeDurationTimer", 0) -- The paralysis recovery timer -- DOESN'T REMOVE ANIMATION TIME
-        --         -- playerBase:set_field("_BetoDurationTimer", 0) -- The covered in spider web recovery timer -- DOESN'T REMOVE ANIMATION TIME
-        --         -- playerBase:call("endParalyse(snow.player.PlayerQuestBase.EndPerformType)", 1)
-        --         playerBase:call("reduceParalyzeDurationTimer(System.Single)", 60)
-
-        --     playerBase:call("clearParalyzeRequest")
-        -- end
+        if data.conditions_and_blights.conditions.thread and not is_in_lobby then
+            playerBase:set_field("_BetoDurationTimer", 0) -- The covered in spider web recovery timer -- DOESN'T REMOVE ANIMATION TIME
+        end
 
         if data.stats.attack > -1 then
             -- Set the original attack value
@@ -230,16 +233,15 @@ end
 function data.draw()
 
     local changed, any_changed = false, false
-    local languagePrefix = data.title.."."
+    local languagePrefix = data.title .. "."
     if imgui.collapsing_header(language.get(languagePrefix .. "title")) then
         imgui.indent(10)
 
-
         changed, data.unlimited_stamina = imgui.checkbox(language.get(languagePrefix .. "unlimited_stamina"), data.unlimited_stamina)
         any_changed = any_changed or changed
-        
-        languagePrefix = data.title..".health."
-        if imgui.tree_node(language.get(languagePrefix.."title")) then
+
+        languagePrefix = data.title .. ".health."
+        if imgui.tree_node(language.get(languagePrefix .. "title")) then
             changed, data.health.healing = imgui.checkbox(language.get(languagePrefix .. "healing"), data.health.healing)
             any_changed = any_changed or changed
             utils.tooltip(language.get(languagePrefix .. "healing_tooltip"))
@@ -255,10 +257,10 @@ function data.draw()
             any_changed = any_changed or changed
             imgui.tree_pop()
         end
-        languagePrefix = data.title..".conditions_and_blights."
+        languagePrefix = data.title .. ".conditions_and_blights."
         if imgui.tree_node(language.get(languagePrefix .. "title")) then
 
-            languagePrefix = data.title..".conditions_and_blights.blights."
+            languagePrefix = data.title .. ".conditions_and_blights.blights."
             if imgui.tree_node(language.get(languagePrefix .. "title")) then
                 changed, data.conditions_and_blights.blights.fire = imgui.checkbox(language.get(languagePrefix .. "fire"), data.conditions_and_blights.blights.fire)
                 any_changed = any_changed or changed
@@ -276,13 +278,14 @@ function data.draw()
                 any_changed = any_changed or changed
                 imgui.tree_pop()
             end
-            languagePrefix = data.title..".conditions_and_blights.conditions."
+            languagePrefix = data.title .. ".conditions_and_blights.conditions."
             if imgui.tree_node(language.get(languagePrefix .. "title")) then
                 changed, data.conditions_and_blights.conditions.bleeding = imgui.checkbox(language.get(languagePrefix .. "bleeding"),
                                                                                           data.conditions_and_blights.conditions.bleeding)
                 any_changed = any_changed or changed
-                -- changed, data.conditions_and_blights.conditions.stun = imgui.checkbox("Stun", data.conditions_and_blights.conditions.stun)
-                -- any_changed = any_changed or changed
+                changed, data.conditions_and_blights.conditions.stun = imgui.checkbox(language.get(languagePrefix .. "stun"), data.conditions_and_blights.conditions.stun)
+                utils.tooltip(language.get(languagePrefix .. "stun_tooltip"))
+                any_changed = any_changed or changed
                 changed, data.conditions_and_blights.conditions.poison = imgui.checkbox(language.get(languagePrefix .. "poison"), data.conditions_and_blights.conditions.poison)
                 any_changed = any_changed or changed
                 changed, data.conditions_and_blights.conditions.sleep = imgui.checkbox(language.get(languagePrefix .. "sleep"), data.conditions_and_blights.conditions.sleep)
@@ -297,12 +300,17 @@ function data.draw()
                 changed, data.conditions_and_blights.conditions.hellfire_and_stentch = imgui.checkbox(language.get(languagePrefix .. "hellfire_and_stentch"),
                                                                                                       data.conditions_and_blights.conditions.hellfire_and_stentch)
                 any_changed = any_changed or changed
-                imgui.text(language.get(languagePrefix .. "still_working_on"))
+                changed, data.conditions_and_blights.conditions.paralyze = imgui.checkbox(language.get(languagePrefix .. "paralyze"),
+                                                                                          data.conditions_and_blights.conditions.paralyze)
+                utils.tooltip(language.get(languagePrefix .. "paralyze_tooltip"))
+                any_changed = any_changed or changed
+                changed, data.conditions_and_blights.conditions.thread = imgui.checkbox(language.get(languagePrefix .. "thread"), data.conditions_and_blights.conditions.thread)
+                utils.tooltip(language.get(languagePrefix .. "thread_tooltip"))
                 imgui.tree_pop()
             end
             imgui.tree_pop()
         end
-        languagePrefix = data.title..".stats."
+        languagePrefix = data.title .. ".stats."
         if imgui.tree_node(language.get(languagePrefix .. "title")) then
             local step = 10
             local attack_max, defence_max = 2600, 3100
@@ -323,7 +331,7 @@ function data.draw()
             data.stats.defence = defence_slider > -1 and defence_slider * step or -1
             imgui.tree_pop()
         end
-        
+
         if any_changed then config.save_section(data.create_config_section()) end
         imgui.unindent(10)
         imgui.separator()
@@ -357,7 +365,6 @@ function data.create_config_section()
                 max_dragonheart = data.health.max_dragonheart,
                 max_heroics = data.health.max_heroics,
                 max_adrenaline = data.health.max_adrenaline
-
             },
             conditions_and_blights = {
                 blights = {
@@ -371,13 +378,15 @@ function data.create_config_section()
                 },
                 conditions = {
                     bleeding = data.conditions_and_blights.conditions.bleeding,
-                    stun = data.conditions_and_blights.conditions.stun,
                     poison = data.conditions_and_blights.conditions.poison,
                     sleep = data.conditions_and_blights.conditions.sleep,
+                    paralyze = data.conditions_and_blights.conditions.paralyze,
                     frenzy = data.conditions_and_blights.conditions.frenzy,
                     qurio = data.conditions_and_blights.conditions.qurio,
                     defence_and_resistance = data.conditions_and_blights.conditions.defence_and_resistance,
-                    hellfire_and_stentch = data.conditions_and_blights.conditions.hellfire_and_stentch
+                    hellfire_and_stentch = data.conditions_and_blights.conditions.hellfire_and_stentch,
+                    stun = data.conditions_and_blights.conditions.stun,
+                    thread = data.conditions_and_blights.conditions.thread
                 }
             },
             stats = {
