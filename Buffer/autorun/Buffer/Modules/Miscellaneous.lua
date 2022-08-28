@@ -111,6 +111,20 @@ function data.init_hooks()
         return retval
     end)
 
+    local managed_recoil = nil
+    sdk.hook(sdk.find_type_definition("snow.data.BulletWeaponData"):get_method("get_Recoil"), function(args)
+        local managed = sdk.to_managed_object(args[2])
+        if not managed then return end
+        if not managed:get_type_definition():is_a("snow.data.BulletWeaponData") then return end
+        managed_recoil = true
+    end, function(retval)
+        if managed_recoil ~= nil then
+            managed_recoil = nil
+            if data.ammo_and_coatings.no_recoil then return 0 end
+        end
+        return retval
+    end)
+
     sdk.hook(sdk.find_type_definition("snow.player.fsm.PlayerFsm2ActionHunterWire"):get_method("start"), utils.nothing(), function(retval)
         if (data.wirebugs.unlimited_ooc and not utils.checkIfInBattle()) or data.wirebugs.unlimited then
             local playerBase = utils.getPlayerBase()
@@ -210,6 +224,8 @@ function data.draw()
             changed, data.ammo_and_coatings.auto_reload = imgui.checkbox(language.get(languagePrefix .. "auto_reload"), data.ammo_and_coatings.auto_reload)
             any_changed = any_changed or changed
             changed, data.ammo_and_coatings.no_deviation = imgui.checkbox(language.get(languagePrefix .. "no_deviation"), data.ammo_and_coatings.no_deviation)
+            any_changed = any_changed or changed
+            changed, data.ammo_and_coatings.no_recoil = imgui.checkbox(language.get(languagePrefix .. "no_recoil"), data.ammo_and_coatings.no_recoil)
             any_changed = any_changed or changed
             imgui.tree_pop()
         end

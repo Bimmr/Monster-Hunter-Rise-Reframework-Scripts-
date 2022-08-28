@@ -70,6 +70,8 @@ function data.draw()
         any_changed = changed or any_changed
         changed, misc.ammo_and_coatings.no_deviation = imgui.checkbox(language.get(languagePrefix .. "no_deviation"), misc.ammo_and_coatings.no_deviation)
         misc_changed = changed or misc_changed
+        changed, misc.ammo_and_coatings.no_recoil = imgui.checkbox(language.get(languagePrefix .. "no_recoil"), misc.ammo_and_coatings.no_recoil)
+        misc_changed = changed or misc_changed
 
         if any_changed then config.save_section(data.create_config_section()) end
         if misc_changed then config.save_section(misc.create_config_section()) end

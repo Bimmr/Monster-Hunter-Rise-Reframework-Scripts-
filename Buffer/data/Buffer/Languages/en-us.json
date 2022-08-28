@@ -99,7 +99,8 @@
         "overheat": "Prevent Overheat",
         "wyvern_machine_gun": "Unlimited Wyvern Machine Gun",
         "wyvern_sniper": "Unlimited Wyvern Sniper",
-        "no_deviation": "No Deviation  "
+        "no_deviation": "No Deviation  ",
+        "no_recoil": "No Recoil  "
     },
     "insect_glaive": {
         "title": "Insect Glaive",
@@ -121,7 +122,8 @@
         "auto_reload": "Auto Reload ",
         "fanning_maneuver": "Fanning Maneuver",
         "wyvern_blast": "Unlimited Wyvern Blast",
-        "no_deviation": "No Deviation "
+        "no_deviation": "No Deviation ",
+        "no_recoil": "No Recoil "
     },
     "long_sword": {
         "title": "Long Sword",
@@ -136,6 +138,7 @@
             "title": "Ammo and Coatings",
             "auto_reload": "Auto Reload",
             "no_deviation": "No Deviation",
+            "no_recoil": "No Recoil",
             "unlimited_ammo": "Unlimited Ammo (Bowguns)",
             "unlimited_coatings": "Unlimited Coatings (Bow)"
         },
