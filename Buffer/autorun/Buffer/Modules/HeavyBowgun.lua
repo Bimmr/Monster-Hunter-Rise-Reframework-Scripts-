@@ -39,7 +39,7 @@ function data.init_hooks()
             playerData:set_field("_HeavyBowgunWyvernSnipeBullet", 1)
             playerData:set_field("_HeavyBowgunWyvernSnipeTimer", 0)
         end
-        if data.wyvern_machinegun then
+        if data.wyvern_machine_gun then
             playerData:set_field("_HeavyBowgunWyvernMachineGunBullet", 50)
             playerData:set_field("_HeavyBowgunWyvernMachineGunTimer", 0)
         end
