@@ -73,7 +73,10 @@
             "attack_tooltip": "如果失效 請拖動滑塊到最左邊後重新調節",
             "defence": "防禦力",
             "defence_disabled": "禁用",
-            "defence_tooltip": "如果失效 請拖動滑塊到最左邊後重新調節"
+            "defence_tooltip": "如果失效 請拖動滑塊到最左邊後重新調節",
+            "affinity": "會心率",
+            "affinity_disabled": "禁用",
+            "affinity_tooltip": "如果失效 請拖動滑塊到最左邊後重新調節"
         },
         "unlimited_stamina": "無限耐力"
     },
