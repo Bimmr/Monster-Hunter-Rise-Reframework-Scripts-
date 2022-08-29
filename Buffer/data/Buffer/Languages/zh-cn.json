@@ -47,7 +47,12 @@
                 "poison": "毒",
                 "qurio": "劫血",
                 "sleep": "睡意",
-                "still_working_on": "仍在研究: 眩晕 麻痹 丝线束缚"
+                "stun": "眩晕",
+                "stun_tooltip": "仍然有视觉效果",
+                "paralyze": "麻痹",
+                "paralyze_tooltip": "仍然有视觉效果",
+                "thread": "丝线束缚",
+                "thread_tooltip": "仍然有视觉效果"
             }
         },
         "health": {
@@ -97,7 +102,8 @@
         "overheat": "防止过热",
         "wyvern_machine_gun": "无限机关龙弹",
         "wyvern_sniper": "无限狙击龙弹",
-        "no_deviation": "无偏移 "
+        "no_deviation": "无偏移 ",
+        "no_recoil": "无后座力 "
     },
     "insect_glaive": {
         "title": "操虫棍",
@@ -119,7 +125,8 @@
         "auto_reload": "自动装填  ",
         "fanning_maneuver": "扇旋移动",
         "wyvern_blast": "无限起爆龙弹",
-        "no_deviation": "无偏移  "
+        "no_deviation": "无偏移  ",
+        "no_recoil": "无后坐力  "
     },
     "long_sword": {
         "title": "太刀",
@@ -134,6 +141,7 @@
             "title": "弹药与瓶",
             "auto_reload": "自动装填   ",
             "no_deviation": "无偏移   ",
+            "no_recoil": "无后座力   ",
             "unlimited_ammo": "无限弹药   ",
             "unlimited_coatings": "无限瓶"
         },
