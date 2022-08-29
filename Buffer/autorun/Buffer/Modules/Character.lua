@@ -34,12 +34,10 @@ local data = {
     },
     stats = {
         attack = -1,
-        defence = -1
+        defence = -1,
+        affinity = -1
     },
-    data = {
-        attack_original = nil,
-        defence_original = nil
-    }
+    original = { }
 }
 
 function data.init()
@@ -190,44 +188,75 @@ function data.init_hooks()
         if data.conditions_and_blights.conditions.thread and not is_in_lobby then
             playerBase:set_field("_BetoDurationTimer", 0) -- The covered in spider web recovery timer -- DOESN'T REMOVE ANIMATION TIME
         end
-
-        if data.stats.attack > -1 then
-            -- Set the original attack value
-            if data.data.attack_original == nil then data.data.attack_original = playerData:get_field("_Attack") end
-
-            -- Setup variables to determine how much extra attack needs to be added to get to the set value
-            local attack = data.data.attack_original
-            local attackTarget = data.stats.attack
-            local attackMod = attackTarget - attack
-
-            -- Add the extra attack
-            playerData:set_field("_AtkUpAlive", attackMod)
-
-            -- Restore the original attack value if disabled    
-        elseif data.data.attack_original ~= nil then
-            playerData:set_field("_AtkUpAlive", 0)
-            data.data.attack_original = nil
-        end
-
-        if data.stats.defence > -1 then
-            -- Set the original defence value
-            if data.data.defence_original == nil then data.data.defence_original = playerData:get_field("_Defence") end
-
-            -- Setup variables to determine how much extra defence needs to be added to get to the set value
-            local defence = data.data.defence_original
-            local defenceTarget = data.stats.defence
-            local defenceMod = defenceTarget - defence
-
-            -- Add the extra defence
-            playerData:set_field("_DefUpAlive", defenceMod)
-
-            -- Restore the original defence value if disabled    
-        elseif data.data.defence_original ~= nil then
-            playerData:set_field("_DefUpAlive", 0)
-            data.data.defence_original = nil
-        end
     end)
     utils.nothing()
+
+    local managed_atk = nil
+    sdk.hook(sdk.find_type_definition("snow.equip.MainWeaponBaseData"):get_method("get_Atk"), function(args)
+        local managed = sdk.to_managed_object(args[2])
+        if not managed then return end
+        if not managed:get_type_definition():is_a("snow.equip.MainWeaponBaseData") then return end
+        managed_atk = managed
+    end, function(retval)
+        if managed_atk ~= nil then
+            if data.stats.attack > -1 then
+                if data.original.attack == nil then data.original.attack = utils.getPlayerData():get_field("_Attack") end
+                local player = data.original.attack
+                local target = data.stats.attack
+                local to_set = target - player
+                managed_atk = nil
+                return sdk.to_ptr(data.stats.attack)
+            else if data.original.attack ~= nil then data.original.attack = nil end
+        end
+        managed_atk = nil
+    end
+    return retval
+    end)
+
+    local managed_def = nil
+    sdk.hook(sdk.find_type_definition("snow.equip.MainWeaponBaseData"):get_method("get_DefBonus"), function(args)
+        local managed = sdk.to_managed_object(args[2])
+        if not managed then return end
+        if not managed:get_type_definition():is_a("snow.equip.MainWeaponBaseData") then return end
+        managed_def = managed
+    end, function(retval)
+        if managed_def ~= nil then
+            if data.stats.defence > -1 then
+                if data.original.defence == nil then data.original.defence = utils.getPlayerData():get_field("_Defence") end
+                local player = data.original.defence
+                local target = data.stats.defence
+                local to_set = target - player
+                managed_def = nil
+                return sdk.to_ptr(to_set)
+            else if data.original.defence ~= nil then data.original.defence = nil end
+            end
+            managed_def = nil
+        end
+        return retval
+    end)
+
+    local managed_crit = nil
+    -- snow.player.HeavyBowgun > RefWeaponData > > > LocalBaseData > > > _WeaponBaseData
+    sdk.hook(sdk.find_type_definition("snow.equip.MainWeaponBaseData"):get_method("get_CriticalRate"), function(args)
+        local managed = sdk.to_managed_object(args[2])
+        if not managed then return end
+        if not managed:get_type_definition():is_a("snow.equip.MainWeaponBaseData") then return end
+        managed_crit = managed
+    end, function(retval)
+        if managed_crit ~= nil then
+            if data.stats.affinity > -1 then
+                if data.original.affinity == nil then data.original.affinity = utils.getPlayerData():get_field("_CriticalRate") end
+                local player = data.original.affinity
+                local target = data.stats.affinity
+                local to_set = target - player
+                managed_crit = nil
+                return sdk.to_ptr(to_set)
+            else if data.original.affinity ~= nil then data.original.affinity = nil end
+        end
+        managed_crit = nil
+    end
+    return retval
+    end)
 end
 
 function data.draw()
@@ -329,6 +358,11 @@ function data.draw()
             utils.tooltip(language.get(languagePrefix .. "defence_tooltip"))
             data.stats.attack = attack_slider > -1 and attack_slider * step or -1
             data.stats.defence = defence_slider > -1 and defence_slider * step or -1
+
+            changed, data.stats.affinity = imgui.slider_int(language.get(languagePrefix .. "affinity"), data.stats.affinity, -1, 100,
+                                                            data.stats.affinity > -1 and " %d" .. '%%' or language.get(languagePrefix .. "affinity_disabled"))
+            utils.tooltip(language.get(languagePrefix .. "affinity_tooltip"))
+            any_changed = any_changed or changed
             imgui.tree_pop()
         end
 
@@ -391,7 +425,8 @@ function data.create_config_section()
             },
             stats = {
                 attack = data.stats.attack,
-                defence = data.stats.defence
+                defence = data.stats.defence,
+                affinity = data.stats.affinity
             }
         }
     }
@@ -399,10 +434,17 @@ end
 
 function data.load_from_config(config_section)
     if not config_section then return end
+
     data.unlimited_stamina = config_section.unlimited_stamina or data.unlimited_stamina
     data.health = config_section.health or data.health
     data.conditions_and_blights = config_section.conditions_and_blights or data.conditions_and_blights
-    data.stats = config_section.stats or data.stats
+    if data.stats then
+        data.stats.attack = config_section.stats.attack or data.stats.attack
+        data.stats.defence = config_section.stats.defence or data.stats.defence
+        data.stats.affinity = config_section.stats.affinity or data.stats.affinity
+    else
+        data.stats = config_section.stats
+    end
 end
 
 return data

@@ -70,7 +70,10 @@
             "attack_tooltip": "Drag slider to the left to reset if the stat breaks",
             "defence": "Defence",
             "defence_disabled": "Off",
-            "defence_tooltip": "Drag slider to the left to reset if the stat breaks"
+            "defence_tooltip": "Drag slider to the left to reset if the stat breaks",
+            "affinity": "Affinity",
+            "affinity_disabled": "Off",
+            "affinity_tooltip": "Drag slider to the left to reset if the stat breaks"
         },
         "unlimited_stamina": "Unlimited Stamina"
     },
