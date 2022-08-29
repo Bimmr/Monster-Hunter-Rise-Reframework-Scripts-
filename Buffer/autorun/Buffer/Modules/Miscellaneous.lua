@@ -171,7 +171,7 @@ function data.init_hooks()
         if data.canteen.level_4 and not data.data.level_4_wasEnabled then
             data.data.level_4_wasEnabled = true
             local dangoLevels = utils.getMealFunc():get_field("SpecialSkewerDangoLv")
-            local level4 = sdk.create_instance("System.UInt32")
+            local level4 = sdk.create_uint32(4)
             level4:set_field("mValue", 4)
             for i = 0, 2 do dangoLevels[i] = level4 end
 
@@ -180,9 +180,7 @@ function data.init_hooks()
             local dangoLevels = utils.getMealFunc():get_field("SpecialSkewerDangoLv")
 
             for i = 0, 2 do
-                local level = sdk.create_instance("System.UInt32")
-                level:set_field("mValue", i == 0 and 4 or i == 1 and 3 or 1) -- lua version of i == 0 ? 4 : i == 1 ? 3 : 1
-                dangoLevels[i] = level
+                dangoLevels[i] = sdk.create_uint32(i == 0 and 4 or i == 1 and 3 or 1)-- lua version of i == 0 ? 4 : i == 1 ? 3 : 1
             end
         end
     end, utils.nothing())
