@@ -422,11 +422,6 @@ function data.create_config_section()
                     stun = data.conditions_and_blights.conditions.stun,
                     thread = data.conditions_and_blights.conditions.thread
                 }
-            },
-            stats = {
-                attack = data.stats.attack,
-                defence = data.stats.defence,
-                affinity = data.stats.affinity
             }
         }
     }
@@ -438,13 +433,6 @@ function data.load_from_config(config_section)
     data.unlimited_stamina = config_section.unlimited_stamina or data.unlimited_stamina
     data.health = config_section.health or data.health
     data.conditions_and_blights = config_section.conditions_and_blights or data.conditions_and_blights
-    if data.stats then
-        data.stats.attack = config_section.stats.attack or data.stats.attack
-        data.stats.defence = config_section.stats.defence or data.stats.defence
-        data.stats.affinity = config_section.stats.affinity or data.stats.affinity
-    else
-        data.stats = config_section.stats
-    end
 end
 
 return data
