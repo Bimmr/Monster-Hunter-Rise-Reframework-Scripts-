@@ -64,7 +64,7 @@
             "max_heroics": "Max Heroics Health"
         },
         "stats": {
-            "title": "Stats",
+            "title": "Weapon Stats",
             "attack": "Attack",
             "attack_disabled": "Off",
             "attack_tooltip": "Drag slider to the left to reset if the stat breaks",
