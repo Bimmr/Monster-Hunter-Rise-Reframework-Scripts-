@@ -188,53 +188,96 @@ function data.init_hooks()
         if data.conditions_and_blights.conditions.thread and not is_in_lobby then
             playerBase:set_field("_BetoDurationTimer", 0) -- The covered in spider web recovery timer -- DOESN'T REMOVE ANIMATION TIME
         end
+
+        if data.stats.attack > -1 then
+            -- Set the original attack value
+            if data.original.attack == nil then data.original.attack = playerData:get_field("_Attack") end
+
+            -- Setup variables to determine how much extra attack needs to be added to get to the set value
+            local attack = data.original.attack
+            local attackTarget = data.stats.attack
+            local attackMod = attackTarget - attack
+
+            -- Add the extra attack
+            playerData:set_field("_AtkUpAlive", attackMod)
+
+            -- Restore the original attack value if disabled    
+        elseif data.original.attack ~= nil then
+            playerData:set_field("_AtkUpAlive", 0)
+            data.original.attack = nil
+        end
+
+        if data.stats.defence > -1 then
+            -- Set the original defence value
+            if data.original.defence == nil then data.original.defence = playerData:get_field("_Defence") end
+
+            -- Setup variables to determine how much extra defence needs to be added to get to the set value
+            local defence = data.original.defence
+            local defenceTarget = data.stats.defence
+            local defenceMod = defenceTarget - defence
+
+            -- Add the extra defence
+            playerData:set_field("_DefUpAlive", defenceMod)
+               -- Restore the original defence value if disabled    
+        elseif data.original.defence ~= nil then
+            playerData:set_field("_DefUpAlive", 0)
+            data.original.defence = nil
+        end
     end)
     utils.nothing()
 
-    local managed_atk = nil
-    sdk.hook(sdk.find_type_definition("snow.equip.MainWeaponBaseData"):get_method("get_Atk"), function(args)
-        local managed = sdk.to_managed_object(args[2])
-        if not managed then return end
-        if not managed:get_type_definition():is_a("snow.equip.MainWeaponBaseData") then return end
-        managed_atk = managed
-    end, function(retval)
-        if managed_atk ~= nil then
-            if data.stats.attack > -1 then
-                if data.original.attack == nil then data.original.attack = utils.getPlayerData():get_field("_Attack") end
-                local player = data.original.attack
-                local target = data.stats.attack
-                local to_set = target - player
-                managed_atk = nil
-                return sdk.to_ptr(data.stats.attack)
-            else if data.original.attack ~= nil then data.original.attack = nil end
-        end
-        managed_atk = nil
-    end
-    return retval
-    end)
+    -- local managed_atk = nil
+    -- sdk.hook(sdk.find_type_definition("snow.equip.MainWeaponBaseData"):get_method("get_Atk"), function(args)
+    --     local managed = sdk.to_managed_object(args[2])
+    --     if not managed then return end
+    --     if not managed:get_type_definition():is_a("snow.equip.MainWeaponBaseData") then return end
+    --     managed_atk = managed
+    -- end, function(retval)
+    --     if managed_atk ~= nil then
+    --         if data.stats.attack > -1 then
+    --             if data.original.attack == nil then data.original.attack = utils.getPlayerData():get_field("_Attack") end
+    --             local player = data.original.attack
+    --             local weapon = managed_atk:get_field("_Atk")
+    --             local target = data.stats.attack
+    --             local to_set = target - player + weapon
 
-    local managed_def = nil
-    sdk.hook(sdk.find_type_definition("snow.equip.MainWeaponBaseData"):get_method("get_DefBonus"), function(args)
-        local managed = sdk.to_managed_object(args[2])
-        if not managed then return end
-        if not managed:get_type_definition():is_a("snow.equip.MainWeaponBaseData") then return end
-        managed_def = managed
-    end, function(retval)
-        if managed_def ~= nil then
-            if data.stats.defence > -1 then
-                if data.original.defence == nil then data.original.defence = utils.getPlayerData():get_field("_Defence") end
-                local player = data.original.defence
-                local weapon = managed_def:get_field("_DefBonus")
-                local target = data.stats.defence
-                local to_set = target - player + weapon
-                managed_def = nil
-                return sdk.to_ptr(to_set)
-            else if data.original.defence ~= nil then data.original.defence = nil end
-            end
-            managed_def = nil
-        end
-        return retval
-    end)
+                
+    --             log.debug("Target: "..data.stats.attack)
+    --             log.debug("Player Original: ".. data.original.attack)
+    --             log.debug("Weapon: ".. weapon)
+    --             log.debug("Value to set: "..to_set )
+    --             log.debug("--------------------------------------")
+    --             managed_atk = nil
+    --             return sdk.to_ptr(data.stats.attack)
+    --         else if data.original.attack ~= nil then data.original.attack = nil end
+    --     end
+    --     managed_atk = nil
+    -- end
+    -- return retval
+    -- end)
+
+    -- local managed_def = nil
+    -- sdk.hook(sdk.find_type_definition("snow.equip.MainWeaponBaseData"):get_method("get_DefBonus"), function(args)
+    --     local managed = sdk.to_managed_object(args[2])
+    --     if not managed then return end
+    --     if not managed:get_type_definition():is_a("snow.equip.MainWeaponBaseData") then return end
+    --     managed_def = managed
+    -- end, function(retval)
+    --     if managed_def ~= nil then
+    --         if data.stats.defence > -1 then
+    --             if data.original.defence == nil then data.original.defence = utils.getPlayerData():get_field("_Defence") end
+    --             local player = data.original.defence
+    --             local weapon = managed_def:get_field("_DefBonus")
+    --             local target = data.stats.defence
+    --             local to_set = target - player + weapon
+    --             managed_def = nil
+    --             return sdk.to_ptr(to_set)
+    --         else if data.original.defence ~= nil then data.original.defence = nil end
+    --         end
+    --         managed_def = nil
+    --     end
+    --     return retval
+    -- end)
 
     local managed_crit = nil
     -- snow.player.HeavyBowgun > RefWeaponData > > > LocalBaseData > > > _WeaponBaseData
