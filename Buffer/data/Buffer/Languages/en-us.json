@@ -1,5 +1,6 @@
 {
     "_IMPORTANT_NOTE": "If multiple items have the same value but control different things, you need to make them different by using spaces",
+    "_TRANSLATOR": "Bimmr",
     "window":{
         "toggle_button": "Toggle Buffer GUI",
         "title": "Modifiers & Settings",
@@ -9,6 +10,7 @@
         "font_size_apply": "Apply",
         "about": "About",
         "author": "Author",
+        "translator": "Translator",
         "version": "Version"
     },
     "bow": {
