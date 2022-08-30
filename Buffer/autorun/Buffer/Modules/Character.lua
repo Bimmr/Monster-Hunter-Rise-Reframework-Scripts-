@@ -224,8 +224,9 @@ function data.init_hooks()
             if data.stats.defence > -1 then
                 if data.original.defence == nil then data.original.defence = utils.getPlayerData():get_field("_Defence") end
                 local player = data.original.defence
+                local weapon = managed_def:get_field("_DefBonus")
                 local target = data.stats.defence
-                local to_set = target - player
+                local to_set = target - player + weapon
                 managed_def = nil
                 return sdk.to_ptr(to_set)
             else if data.original.defence ~= nil then data.original.defence = nil end
@@ -247,8 +248,9 @@ function data.init_hooks()
             if data.stats.affinity > -1 then
                 if data.original.affinity == nil then data.original.affinity = utils.getPlayerData():get_field("_CriticalRate") end
                 local player = data.original.affinity
+                local weapon = managed_crit:get_field("_CriticalRate")
                 local target = data.stats.affinity
-                local to_set = target - player
+                local to_set = target - player + weapon 
                 managed_crit = nil
                 return sdk.to_ptr(to_set)
             else if data.original.affinity ~= nil then data.original.affinity = nil end
