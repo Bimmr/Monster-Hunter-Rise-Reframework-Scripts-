@@ -90,7 +90,7 @@ re.on_draw_ui(function()
             if imgui.begin_menu(language.get(languagePrefix .. "about")) then
                 imgui.spacing()
                 imgui.text("   " .. language.get(languagePrefix .. "author") .. ": Bimmr   ")
-                if language.languages[language.current].window.translator then
+                if language.languages[language.current]["_TRANSLATOR"] then
                     imgui.text("   " .. language.get(languagePrefix .. "translator") .. ": " .. language.languages[language.current]["_TRANSLATOR"] .. "   ")
                 end
                 imgui.text("   " .. language.get(languagePrefix .. "version") .. ": " .. version .. "   ")
