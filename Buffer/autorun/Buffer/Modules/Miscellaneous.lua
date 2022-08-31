@@ -121,7 +121,9 @@ function data.init_hooks()
     end, function(retval)
         if managed_recoil ~= nil then
             managed_recoil = nil
-            if data.ammo_and_coatings.no_recoil then return 5 end
+            if data.ammo_and_coatings.no_recoil then 
+                return sdk.to_ptr(6)
+            end
             return 0
         end
         return retval
@@ -174,7 +176,6 @@ function data.init_hooks()
         elseif not data.canteen.level_4 and data.data.level_4_wasEnabled then
             data.data.level_4_wasEnabled = false
             local dangoLevels = utils.getMealFunc():get_field("SpecialSkewerDangoLv")
-
             for i = 0, 2 do
                 dangoLevels[i] = sdk.create_uint32(i == 0 and 4 or i == 1 and 3 or 1)-- lua version of i == 0 ? 4 : i == 1 ? 3 : 1
             end
@@ -190,6 +191,7 @@ function data.init_hooks()
             local level4 = sdk.create_uint32(4)
             level4:set_field("mValue", 4)
             for i = 0, 2 do dangoLevels[i] = level4 end
+
         elseif not data.canteen.level_4 and data.data.level_4GUI_wasEnabled then
             data.data.level_4GUI_wasEnabled = false
             local managed = sdk.to_managed_object(args[2])
