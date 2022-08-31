@@ -152,8 +152,7 @@
             "title": "茶館",
             "dango_100_no_ticket": "無票必發動糰子技能",
             "dango_100_ticket": "有票必發動糰子技能",
-            "level_4": "全糰子技能等級4",
-            "level_4_tooltip": "介面不會對應等級"
+            "level_4": "全糰子技能等級4"
         },
         "consumables": {
             "title": "消耗品",

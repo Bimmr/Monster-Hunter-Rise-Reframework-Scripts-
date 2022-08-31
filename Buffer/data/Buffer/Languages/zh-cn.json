@@ -152,8 +152,7 @@
             "title": "茶点店",
             "dango_100_no_ticket": "无票必发动团子技能",
             "dango_100_ticket": "有票必发动团子技能",
-            "level_4": "全团子技能等级4",
-            "level_4_tooltip": "界面不会对应等级"
+            "level_4": "全团子技能等级4"
         },
         "consumables": {
             "title": "消耗品",

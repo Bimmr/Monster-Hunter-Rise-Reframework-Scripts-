@@ -141,8 +141,7 @@
             "title": "식당",
             "dango_100_no_ticket": "경단 기술 100% (달인의 경단권 미사용)",
             "dango_100_ticket": "경단 기술 100% (달인의 경단권 사용)",
-            "level_4": "Lv 4 경단",
-            "level_4_tooltip": "UI에서 Lv 4로 보이지는 않으나, Lv 4 효과를 제공함"
+            "level_4": "Lv 4 경단"
         },
         "consumables": {
             "title": "소비 아이템",

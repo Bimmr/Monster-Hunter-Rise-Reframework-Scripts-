@@ -12,7 +12,8 @@ local data = {
         unlimited_ammo = false,
         unlimited_coatings = false,
         auto_reload = false, -- Drawn here, but no hook
-        no_deviation = false
+        no_deviation = false,
+        no_recoil = false
     },
     wirebugs = {
         unlimited_ooc = false,
@@ -112,7 +113,7 @@ function data.init_hooks()
     end)
 
     local managed_recoil = nil
-    sdk.hook(sdk.find_type_definition("snow.data.BulletWeaponData"):get_method("get_Recoil"), function(args)
+    sdk.hook(sdk.find_type_definition("snow.data.BulletWeaponData"):get_method("getRecoil"), function(args)
         local managed = sdk.to_managed_object(args[2])
         if not managed then return end
         if not managed:get_type_definition():is_a("snow.data.BulletWeaponData") then return end
@@ -120,7 +121,8 @@ function data.init_hooks()
     end, function(retval)
         if managed_recoil ~= nil then
             managed_recoil = nil
-            if data.ammo_and_coatings.no_recoil then return 0 end
+            if data.ammo_and_coatings.no_recoil then return 5 end
+            return 0
         end
         return retval
     end)
@@ -141,7 +143,7 @@ function data.init_hooks()
         end
     end)
 
-    local managed_dango, managed_dango_chance = nil, nil
+    local managed_dango = nil
     sdk.hook(sdk.find_type_definition("snow.data.DangoData"):get_method("get_SkillActiveRate"), function(args)
         if data.canteen.dango_100_no_ticket or data.canteen.dango_100_ticket then
             local managed = sdk.to_managed_object(args[2])
@@ -152,17 +154,11 @@ function data.init_hooks()
 
             if isUsingTicket or data.canteen.dango_100_no_ticket then
                 managed_dango = managed
-                managed_dango_chance = managed:get_field("_Param"):get_field("_SkillActiveRate")
-                managed:get_field("_Param"):set_field("_SkillActiveRate", 200)
-                return sdk.PreHookResult.SKIP_ORIGINAL
             end
         end
     end, function(retval)
-        -- Restore the original value
-        if (data.canteen.dango_100_no_ticket or data.canteen.dango_100_ticket) and managed_dango then
-            managed_dango:get_field("_Param"):set_field("_SkillActiveRate", managed_dango_chance)
-            managed_dango = nil
-            managed_dango_chance = nil
+        if managed_dango then
+            return sdk.to_ptr(200)
         end
         return retval
     end)
@@ -179,6 +175,26 @@ function data.init_hooks()
             data.data.level_4_wasEnabled = false
             local dangoLevels = utils.getMealFunc():get_field("SpecialSkewerDangoLv")
 
+            for i = 0, 2 do
+                dangoLevels[i] = sdk.create_uint32(i == 0 and 4 or i == 1 and 3 or 1)-- lua version of i == 0 ? 4 : i == 1 ? 3 : 1
+            end
+        end
+    end, utils.nothing())
+    
+    sdk.hook(sdk.find_type_definition("snow.gui.fsm.kitchen.GuiKitchen"):get_method("setDangoTabList"), function(args)
+        if data.canteen.level_4 and not data.data.level_4GUI_wasEnabled then
+            data.data.level_4GUI_wasEnabled = true
+            local managed = sdk.to_managed_object(args[2])
+            if not managed then return end
+            local dangoLevels = managed:get_field("SpecialSkewerDangoLv")
+            local level4 = sdk.create_uint32(4)
+            level4:set_field("mValue", 4)
+            for i = 0, 2 do dangoLevels[i] = level4 end
+        elseif not data.canteen.level_4 and data.data.level_4GUI_wasEnabled then
+            data.data.level_4GUI_wasEnabled = false
+            local managed = sdk.to_managed_object(args[2])
+            if not managed then return end
+            local dangoLevels = managed:get_field("SpecialSkewerDangoLv")
             for i = 0, 2 do
                 dangoLevels[i] = sdk.create_uint32(i == 0 and 4 or i == 1 and 3 or 1)-- lua version of i == 0 ? 4 : i == 1 ? 3 : 1
             end
@@ -247,7 +263,6 @@ function data.draw()
             changed, data.canteen.dango_100_ticket = imgui.checkbox(language.get(languagePrefix .. "dango_100_ticket"), data.canteen.dango_100_ticket)
             any_changed = any_changed or changed
             changed, data.canteen.level_4 = imgui.checkbox(language.get(languagePrefix .. "level_4"), data.canteen.level_4)
-            utils.tooltip(language.get(languagePrefix .. "level_4_tooltip"))
             any_changed = any_changed or changed
             imgui.tree_pop()
         end
@@ -279,12 +294,6 @@ function data.load_from_config(config_section)
     data.ammo_and_coatings = config_section.ammo_and_coatings or data.ammo_and_coatings
     data.wirebugs = config_section.wirebugs or data.wirebugs
     data.canteen = config_section.canteen or data.canteen
-
-    -- Old config format helper
-    if config_section.unlimited_consumables then
-        data.consumables.items = config_section.unlimited_consumables
-        data.consumables.endemic_life = config_section.unlimited_consumables
-    end
 
 end
 

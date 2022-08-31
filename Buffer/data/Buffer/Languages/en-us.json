@@ -151,8 +151,7 @@
             "title": "Canteen",
             "dango_100_no_ticket": "Dango Skill 100% (No Ticket)",
             "dango_100_ticket": "Dango Skill 100% (Ticket)",
-            "level_4": "Level 4 Dango",
-            "level_4_tooltip": "GUI won't show level 4, but it will give you the level 4 skill"
+            "level_4": "Level 4 Dango"
         },
         "consumables": {
             "title": "Consumables",
