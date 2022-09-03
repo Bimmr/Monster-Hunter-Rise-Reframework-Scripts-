@@ -1,5 +1,6 @@
 {
     "_IMPORTANT_NOTE": "If multiple items have the same value but control different things, you need to make them different by using spaces",
+    "_TRANSLATOR": "Gentechnik"
     "window":{
         "toggle_button": "Toggle Buffer GUI",
         "title": "Modifikatoren & Einstellungen",
@@ -9,7 +10,7 @@
         "font_size_apply": "anwenden",
         "about": "About",
         "author": "Author",
-        "translator": "Gentechnik",
+        "translator": "(Placeholder)",
         "version": "Version"
     },
     "bow": {
