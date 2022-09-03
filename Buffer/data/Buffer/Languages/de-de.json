@@ -1,0 +1,218 @@
+{
+    "_IMPORTANT_NOTE": "If multiple items have the same value but control different things, you need to make them different by using spaces",
+    "_TRANSLATOR": "Gentechnik"
+    "window":{
+        "toggle_button": "Toggle Buffer GUI",
+        "title": "Modifikatoren & Einstellungen",
+        "settings": "Einstellungen",
+        "language": "Sprache",
+        "font_size": "Schriftgröße",
+        "font_size_apply": "anwenden",
+        "about": "About",
+        "author": "Author",
+        "translator": "Übersetzer",
+        "version": "Version"
+    },
+    "bow": {
+        "title": "Bogen",
+        "charge_level": "Auflade Level   ",
+        "charge_level_prefix": "Level",
+        "charge_level_disabled": "Aus",
+        "unlimited_arrows": "Unendlich Pfeile",
+        "herculean_draw": "Herkulisches Ziehen",
+        "herculean_draw_tooltip": "Kein Effekt wird auf der Waffe sichtbar sein",
+        "bolt_boost": "Bolzen-Booster"
+    },
+    "character": {
+        "title": "Charakter",
+        "conditions_and_blights": {
+            "title": "Status-Anomalien und Zustände",
+            "blights": {
+                "title": "Verhindert Pest",
+                "blast": "Explosionspest",
+                "bubble": "Blasenpest",
+                "dragon": "Drachenpest",
+                "fire": "Feuerpest",
+                "ice": "Eispest",
+                "thunder": "Donnerpest",
+                "water": "Wasserpest"
+            },
+            "conditions": {
+                "title": "Verhindert Zustände",
+                "bleeding": "Blutungen",
+                "defence_and_resistance": "Verteidigung und Widerstand",
+                "frenzy": "Raserei",
+                "hellfire_and_stentch": "Höllenfeuer und Gestank",
+                "poison": "Gift",
+                "qurio": "Blutpest",
+                "sleep": "Schlaf",
+                "stun": "Betäuben",
+                "stun_tooltip": "Der Visuelle Effekt spielt trotzem",
+                "paralyze": "Lähmung",
+                "paralyze_tooltip": "Der Visuelle Effekt spielt trotzem",
+                "thread": "Eingenetzt",
+                "thread_tooltip": "Der Visuelle Effekt spielt trotzem"
+            }
+        },
+        "health": {
+            "title": "Leben",
+            "healing": "konstante Heilung",
+            "healing_tooltip": "Alles fehlende Leben kann sich erholen.",
+            "insta_healing": "Sofortige Heilung",
+            "insta_healing_tooltip": "Wenn du Schaden nimmst, wirst du sofort voll geheilt.",
+            "max_adrenaline": "Max Adrenalin Leben (Dango)",
+            "max_dragonheart": "Max Drachenherz Leben",
+            "max_dragonheart_tooltip": "Passt max Leben dem ausgerüsteten Level von Drachenherz an.",
+            "max_heroics": "Max Heldentat Leben"
+        },
+        "stats": {
+            "title": "Waffen Werte",
+            "attack": "Angriff",
+            "attack_disabled": "Aus",
+            "attack_tooltip": "Ziehe den Regler nach links zum zurücksetzten, falls der Wert defekt wird ",
+            "defence": "Verteidigung",
+            "defence_disabled": "Aus",
+            "defence_tooltip": "Ziehe den Regler nach links zum zurücksetzten, falls der Wert defekt wird",
+            "affinity": "Affinität",
+            "affinity_disabled": "Aus",
+            "affinity_tooltip": "Ziehe den Regler nach links zum zurücksetzten, falls der Wert defekt wird"
+        },
+        "unlimited_stamina": "Unendlich Ausdauer"
+    },
+    "great_sword": {
+        "title": "Großschwert",
+        "charge_level": "Auflade Level  ",
+        "charge_level_prefix": "Level",
+        "charge_level_disabled": "Aus",
+        "power_sheathe": "Kraft-Wegstecken",
+        "power_sheathe_tooltip": "Kein Effect wird auf der Waffe sichtbar sein"
+    },
+    "hammer": {
+        "title": "Hammer",
+        "charge_level": "Auflade Level  ",
+        "charge_level_prefix": "Level",
+        "charge_level_disabled": "Aus",
+        "impact_burst": "Einschlagskrater"
+    },
+    "heavy_bowgun": {
+        "title": "Schweres Bogengewehr",
+        "charge_level": "Auflade Level  ",
+        "charge_level_prefix": "Level",
+        "charge_level_disabled": "Aus",
+        "unlimited_ammo": "Unendlich Munition ",
+        "auto_reload": "Automatisches Nachladen  ",
+        "overheat": "Verhindert Überhitzen",
+        "wyvern_machine_gun": "Unendlich Wyvernherz",
+        "wyvern_sniper": "Unendlich Wyvernauge",
+        "no_deviation": "Keine Abweichung  ",
+        "no_recoil": "Kein Rückstoß  "
+    },
+    "insect_glaive": {
+        "title": "Insektenglefe",
+        "aerials": "Unendlich Luftangriffe ",
+        "kinsect_stamina": "Unendlich Kinsekt Ausdauer",
+        "orange_extract": "Oranges Extrakt",
+        "red_extract": "Rotes Extrakt",
+        "white_extract": "Weißes Extrakt"
+    },
+    "lance": {
+        "title": "Lanze",
+        "anchor_rage": "Ankerwut",
+        "anchor_rage_prefix": "Level",
+        "anchor_rage_disabled": "Aus"
+    },
+    "light_bowgun": {
+        "title": "Leichtes Bogengewehr",
+        "unlimited_ammo": "Unendlich Munition",
+        "auto_reload": "Automatisches Nachladen ",
+        "fanning_maneuver": "Fächermanöver",
+        "wyvern_blast": "Unendlich Wyvernexplosion",
+        "no_deviation": "Keine Abweichung ",
+        "no_recoil": "Kein Rückstoß "
+    },
+    "long_sword": {
+        "title": "Langschwert",
+        "guage_level": "Elan Level",
+        "guage_level_prefix": "Level",
+        "guage_level_disabled": "Aus",
+        "guage_max": "Elan Balken voll"
+    },
+    "miscellaneous": {
+        "title": "Sonstiges",
+        "ammo_and_coatings": {
+            "title": "Munition und Beschichtungen",
+            "auto_reload": "Automatisches Nachladen",
+            "no_deviation": "Keine Abweichung",
+            "no_recoil": "Kein Rückstoß",
+            "unlimited_ammo": "Unendlich Munition (Bogengewehre)",
+            "unlimited_coatings": "Unendlich Beschichtungen (Bogen)"
+        },
+        "canteen": {
+            "title": "Kantine",
+            "dango_100_no_ticket": "Dango Fähigkeit 100% (Kein Gutschein)",
+            "dango_100_ticket": "Dango Fähigkeit 100% (Gutschein)",
+            "level_4": "Level 4 Dango"
+        },
+        "consumables": {
+            "title": "Verbrauchsgüter",
+            "endemic_life": "Undendlich Einheimische Wesen",
+            "items": "Unendlich Items"
+        },
+        "sharpness_level": "Schärfe Level",
+        "sharpness_level_tooltip": "Die Schärfe Anzeige wird sich immernoch bewegen, aber das Level bleibt gleich.",
+        "sharpness_levels": {
+            "disabled":"Aus", 
+            "red": "Rot", 
+            "orange": "Orange", 
+            "yellow": "Gelb", 
+            "green": "Grün", 
+            "blue": "Blau", 
+            "white": "Weiß", 
+            "purple": "Lila"
+        },
+        "wirebugs": {
+            "title": "Seilkäfer",
+            "give_3": "Gib 3 Seilkäfer",
+            "unlimited": "Unendlich Seilkäfer",
+            "unlimited_ooc": "Unendlich Seilkäfer (Außerhalb vom Kampf)",
+            "unlimited_powerup": "Unendliche Verstärkungen",
+            "unlimited_powerup_tooltip": "Erfordert das aufnehmen eines Gold oder Rubinseilkäfers vorher."
+        }
+    },
+    "charge_blade": {
+        "title": "Energieklinge",
+        "full_bottles": "Volle Phiolen",
+        "shield_charged": "Schild Aufgeladen",
+        "sword_charged": "Schwert Aufgeladen",
+        "chainsaw_buff": "Kettensägen Buff"
+    },
+    "dual_blades": {
+        "title": "Doppelklingen",
+        "archdemon_mode": "Erzdämonen Modus",
+        "ironshine_silk": "Eisenschimmer-Seide"
+    },
+    "gun_lance": {
+        "title": "Gewehrlanze",
+        "aerials": "Unendlich Luftangriffe",
+        "auto_reload": "Automatisches Nachladen",
+        "dragon_cannon": "Unendlich Wyvernfeuer",
+        "errupting_cannon": "Eruptionskanone",
+        "ground_splitter": "Bodenteiler"
+    },
+    "hunting_horn": {
+        "title": "Jagdhorn",
+        "infernal_mode": "Höllenmelodie Modus",
+        "skillbind_shockwave": "Seidenbinder-Schockwelle"
+    },
+    "switch_axe": {
+        "title": "Morph-Axt",
+        "max_charge": "Max Aufladung",
+        "max_sword_ammo": "Max Schwert Munition",
+        "power_axe": "Power Axt",
+        "switch_charger": "Morph-Lader"
+    },
+    "sword_and_shield": {
+        "title": "Schwert & Schild",
+        "destroyer_oil": "Zerstöreröl"
+    }
+}
