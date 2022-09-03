@@ -124,7 +124,6 @@ function data.init_hooks()
             if data.ammo_and_coatings.no_recoil then 
                 return sdk.to_ptr(6)
             end
-            return 0
         end
         return retval
     end)
