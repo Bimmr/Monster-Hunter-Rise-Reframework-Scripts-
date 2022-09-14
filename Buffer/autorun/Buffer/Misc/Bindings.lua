@@ -11,33 +11,48 @@ function bindings.init(module_list)
     modules = module_list
 
     input_manager = sdk.get_managed_singleton("snow.StmInputManager")
-    active_device = input_manager:get_field("_ActiveDevice")
-    input_device = input_manager:get_field("_InGameInputDevice")
 
     -- Testing
     bindings.add(1, 8192, "miscellaneous.ammo_and_coatings.unlimited_ammo", true) -- R3
-    bindings.add(3, 80, "miscellaneous.ammo_and_coatings.unlimited_ammo", true) -- P
-end
-
-function bindings.add(device, keyNum, path, on)
-    if device == 1 then
-        bindings.btns[keyNum] = {
-            path = path,
-            modifiers = nil,
-            on = on
-        }
-    elseif device == 3 then
-        bindings.keys[keyNum] = {
-            path = path,
-            modifiers = nil,
-            on = on
-        }
-    end
+    bindings.add(1, {16}, "miscellaneous.ammo_and_coatings.unlimited_ammo", true) -- Triangle
+    bindings.add(3, {8, 80}, "miscellaneous.ammo_and_coatings.unlimited_ammo", true) -- P
 end
 
 -- 1 = Gamepad | 2 = Mouse | 2 = Keyboard
 function bindings.get_device()
+    if not active_device then
+        active_device = input_manager:get_field("_ActiveDevice")
+        input_device = input_manager:get_field("_InGameInputDevice")
+    end
     return active_device:get_field("_ActiveDevice")
+end
+
+-- Add a new binding
+-- If device is gamepad(1), input is an int
+-- If device is mouse(2), do nothing currently
+-- If device is a keyboard(3), input is an array of ints
+function bindings.add(device, input, path, on)
+
+    -- Gamepad will combine inputs to create a new number depending on the inputs, so we can just use that as a key
+    if device == 1 then
+        if type(input) == "table" then input = input[1] end
+        bindings.btns[input] = {
+            path = path,
+            modifiers = nil,
+            on = on
+        }
+
+        -- Keyboard uses an array of possible inputs, so we need to have an array of inputs and we can't use that as a key
+    elseif device == 3 then
+        table.insert(bindings.keys, {
+            keys = input,
+            data = {
+                path = path,
+                modifiers = nil,
+                on = on
+            }
+        })
+    end
 end
 
 -- ======= Gamepad ==========
@@ -65,24 +80,36 @@ end
 function bindings.get_current_keys()
     local current = input_device:get_field("_kbd_on")
     local keys = {}
-    for i = 1, #current do
-        if current[i] and current[i]["mValue"] and current[i].mValue == true then table.insert(keys, i) end
-    end
+    for i = 1, #current do if current[i] and current[i]["mValue"] and current[i].mValue == true then table.insert(keys, i) end end
     return keys
 end
 
 -- Is the key down
-function bindings.is_key_down(key)
-    local current = input_device:get_field("_kbd_on")[key]
-    if current[key] and current[key]["mValue"] and current[key].mValue == true then return true end
-    return false
+function bindings.is_keys_down(arr_keys)
+    local current = input_device:get_field("_kbd_on")
+    local result = true
+    for _, v in pairs(arr_keys) do if current[v] and current[v]["mValue"] and not current[v].mValue == true then result = false end end
+    return result
 end
 
 -- Is the key pressed
-function bindings.is_key_pressed(key)
+function bindings.is_keys_pressed(arr_keys)
+    local current = input_device:get_field("_kbd_on")
     local triggered = input_device:get_field("_kbd_trg")
-    if triggered[key] and triggered[key]["mValue"] and triggered[key].mValue == true then return true end
-    return false
+
+    -- Keep track of correct inputs
+    local total = #arr_keys
+
+    -- Check currently on
+    local on = 0
+    for _, v in pairs(arr_keys) do if current[v] and current[v]["mValue"] and  current[v].mValue == true then on = on + 1 end end
+
+    -- Check currently triggered
+    local trig = 0
+    for _, v in pairs(arr_keys) do if triggered[v] and triggered[v]["mValue"] and  triggered[v].mValue == true then trig = trig + 1 end end
+
+    if trig == 0 then return false end
+    return on == #arr_keys
 end
 
 -- =========================================
@@ -95,7 +122,7 @@ function bindings.update()
         for btn, data in pairs(bindings.btns) do if bindings.is_button_pressed(btn) then bindings.perform(data) end end
     elseif device == 3 then
         -- log.debug(json.dump_string(bindings.get_current_keys()))
-        for key, data in pairs(bindings.keys) do if bindings.is_key_pressed(key) then bindings.perform(data) end end
+        for key, input_data in pairs(bindings.keys) do if bindings.is_keys_pressed(input_data.keys) then bindings.perform(input_data.data) end end
     end
 end
 
@@ -113,7 +140,7 @@ function bindings.perform(data)
     if #path == 2 then
         if type(on_value) == "boolean" then
             modules[module_index][path[2]] = not modules[module_index][path[2]]
-        elseif type(on_value) == "int" then
+        elseif type(on_value) == "number" then
             if modules[module_index][path[2]] > -1 then
                 modules[module_index][path[2]] = on_value
             else
@@ -123,8 +150,7 @@ function bindings.perform(data)
     elseif #path == 3 then
         if type(on_value) == "boolean" then
             modules[module_index][path[2]][path[3]] = not modules[module_index][path[2]][path[3]]
-            log.debug("Value Changed")
-        elseif type(on_value) == "int" then
+        elseif type(on_value) == "number" then
             if modules[module_index][path[2]][path[3]] > -1 then
                 modules[module_index][path[2]][path[3]] = on_value
             else
@@ -134,8 +160,7 @@ function bindings.perform(data)
     elseif #path == 4 then
         if type(on_value) == "boolean" then
             modules[module_index][path[2]][path[3]][path[4]] = not modules[module_index][path[2]][path[3]][path[4]]
-            log.debug("Value Changed")
-        elseif type(on_value) == "int" then
+        elseif type(on_value) == "number" then
             if modules[module_index][path[2]][path[3]][path[4]] > -1 then
                 modules[module_index][path[2]][path[3]][path[4]] = on_value
             else
