@@ -6,6 +6,7 @@ local isWindowOpen, wasOpen = false, false
 local utils = require("Buffer.Misc.Utils")
 local config = require("Buffer.Misc.Config")
 local language = require("Buffer.Misc.Language")
+local bindings = require("Buffer.Misc.Bindings")
 
 -- -- Misc Modules
 local miscellaneous = require("Buffer.Modules.Miscellaneous")
@@ -32,6 +33,9 @@ local modules = {miscellaneous, character, greatSword, longSword, shortSword, du
 
 -- Load the languages
 language.init()
+
+-- Init the key and button binds
+bindings.init(modules)
 
 -- Init the modules, and load their config sections
 for i, module in pairs(modules) do
@@ -120,7 +124,18 @@ re.on_draw_ui(function()
     if language.font.data ~= nil then imgui.pop_font() end
 end)
 
+
+-- Keybinds
+re.on_frame(function()
+    bindings.update()
+end)
+
 -- On script reset, reset anything that needs to be reset
 re.on_script_reset(function()
     for _, module in pairs(modules) do if module.reset ~= nil then module.reset() end end
+end)
+
+-- On script save
+re.on_config_save(function()
+    for _, module in pairs(modules) do config.save_section(module.create_config_section()) end
 end)
