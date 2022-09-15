@@ -64,9 +64,101 @@ re.on_draw_ui(function()
 
         isWindowOpen = imgui.begin_window(language.get(languagePrefix .. "title"), isWindowOpen, 1024)
         if imgui.begin_menu_bar() then
+
+            languagePrefix = "window.bindings."
+            if imgui.begin_menu(language.get(languagePrefix .. "title")) then
+                imgui.spacing()
+                if imgui.begin_menu("   " .. "Keyboard") then
+                    imgui.spacing()
+                    imgui.begin_table("bindingskeyboard", 3, nil, nil, nil)
+
+                    for k, v in pairs(bindings.keys) do
+                        imgui.table_next_row()
+                        imgui.table_next_column()
+                        local keys = v.input
+                        local data = v.data
+                        local path = utils.split(data.path, ".")
+                        local currentPath = path[1]
+                        local title = language.get(currentPath .. ".title")
+                        for i = 2, #path, 1 do
+                            currentPath = currentPath .. "." .. path[i]
+                            if i == #path then
+                                title = title .. "/" .. language.get(currentPath)
+                            else
+                                title = title .. "/" .. language.get(currentPath .. ".title")
+                            end
+                        end
+                        imgui.text("   " .. title)
+                        imgui.table_next_column()
+                        local key_string = ""
+                        for k, key in pairs(keys) do
+                            key_string = key_string .. bindings.get_key_name(key)
+                            if k < #keys then key_string = key_string .. " + " end
+                        end
+                        imgui.text("   [ " .. key_string .. " ]     ")
+                        imgui.table_next_column()
+                        if imgui.button("X") then log.debug("Removing") end
+                        imgui.same_line()
+                        imgui.text("  ")
+                    end
+
+                    imgui.end_table()
+                    imgui.separator()
+
+                    if imgui.menu_item("   " .. "[Add a New Binding]", "", false) then log.debug("Adding") end
+                    imgui.spacing()
+                    imgui.end_menu()
+                end
+                if imgui.begin_menu("   " .. "Gamepad") then
+                    imgui.spacing()
+                    imgui.begin_table("bindingsgamepad", 3, nil, nil, nil)
+
+                    for k, v in pairs(bindings.btns) do
+                        imgui.table_next_row()
+                        imgui.table_next_column()
+                        local btns = v.input
+                        local data = v.data
+                        log.debug(json.dump_string(data))
+                        local path = utils.split(data.path, ".")
+                        local currentPath = path[1]
+                        local title = language.get(currentPath .. ".title")
+                        for i = 2, #path, 1 do
+                            currentPath = currentPath .. "." .. path[i]
+                            if i == #path then
+                                title = title .. "/" .. language.get(currentPath)
+                            else
+                                title = title .. "/" .. language.get(currentPath .. ".title")
+                            end
+                        end
+                        imgui.text("   " .. title)
+                        imgui.table_next_column()
+                        local key_string = ""
+                        for k, key in pairs(btns) do
+                            key_string = key_string .. bindings.get_btn_name(key)
+                            if k < #btns then key_string = key_string .. " + " end
+                        end
+                        imgui.text("   [ " .. key_string .. " ]     ")
+                        imgui.table_next_column()
+                        if imgui.button("X") then log.debug("Removing") end
+                        imgui.same_line()
+                        imgui.text("  ")
+                    end
+
+                    imgui.end_table()
+                    imgui.separator()
+
+                    if imgui.menu_item("   " .. "[Add a New Binding]", "", false) then log.debug("Adding") end
+                    imgui.spacing()
+                    imgui.end_menu()
+                end
+
+                imgui.spacing()
+                imgui.end_menu()
+            end
+            languagePrefix = "window."
             if imgui.begin_menu(language.get(languagePrefix .. "settings")) then
                 imgui.spacing()
-                if imgui.begin_menu(language.get(languagePrefix .. "language")) then
+                if imgui.begin_menu("   " .. language.get(languagePrefix .. "language")) then
                     imgui.spacing()
                     for _, lang in pairs(language.sorted) do
                         if imgui.menu_item("   " .. lang .. "   ", "", lang == language.current, lang ~= language.current) then language.change(lang) end
@@ -74,7 +166,7 @@ re.on_draw_ui(function()
                     imgui.spacing()
                     imgui.end_menu()
                 end
-                if imgui.begin_menu(language.get(languagePrefix .. "font_size")) then
+                if imgui.begin_menu("   " .. language.get(languagePrefix .. "font_size")) then
                     imgui.spacing()
                     language.font.temp_size = language.font.temp_size or language.font.size
                     local changed = false
@@ -123,7 +215,6 @@ re.on_draw_ui(function()
 
     if language.font.data ~= nil then imgui.pop_font() end
 end)
-
 
 -- Keybinds
 re.on_frame(function()
