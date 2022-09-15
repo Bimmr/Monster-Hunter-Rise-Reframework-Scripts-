@@ -83,11 +83,10 @@ end
 function utils.tooltip(text)
     imgui.same_line()
     imgui.text("(?)")
-    if imgui.is_item_hovered() then
-        imgui.set_tooltip(text)
-    end
+    if imgui.is_item_hovered() then imgui.set_tooltip(text) end
 end
 
+-- Split a string into an array
 function utils.split(text, delim)
     -- returns an array of fields based on text and delimiter (one character only)
     local result = {}
@@ -96,13 +95,11 @@ function utils.split(text, delim)
     if delim == nil then
         delim = "%s"
     elseif string.find(delim, magic, 1, true) then
-        delim = "%"..delim
+        delim = "%" .. delim
     end
 
-    local pattern = "[^"..delim.."]+"
-    for w in string.gmatch(text, pattern) do
-        table.insert(result, w)
-    end
+    local pattern = "[^" .. delim .. "]+"
+    for w in string.gmatch(text, pattern) do table.insert(result, w) end
     return result
 end
 
