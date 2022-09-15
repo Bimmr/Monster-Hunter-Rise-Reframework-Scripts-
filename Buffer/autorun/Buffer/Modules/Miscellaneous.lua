@@ -7,7 +7,6 @@ local data = {
         endemic_life = false
     },
     sharpness_level = -1,
-    old_sharpness_level = -1,
     ammo_and_coatings = {
         unlimited_ammo = false,
         unlimited_coatings = false,
@@ -27,7 +26,7 @@ local data = {
         managed_dango_100 = nil,
         level_4 = false
     },
-    data = {
+    hidden = {
         sharpness_level_old = -1,
         level_4_was_enabled = false
     }
@@ -67,14 +66,14 @@ function data.init_hooks()
         if not playerBase then return end
 
         if data.sharpness_level > -1 then
-            if data.data.sharpness_level_old == -1 then data.data.sharpness_level_old = playerBase:get_field("<SharpnessLv>k__BackingField") end
+            if data.hidden.sharpness_level_old == -1 then data.hidden.sharpness_level_old = playerBase:get_field("<SharpnessLv>k__BackingField") end
             -- | 0=Red | 1=Orange | 2=Yellow | 3=Green | 4=Blue | 5=White | 6=Purple |
             playerBase:set_field("<SharpnessLv>k__BackingField", data.sharpness_level) -- Sharpness Level of Purple
             -- playerBase:set_field("<SharpnessGauge>k__BackingField", 400) -- Sharpness Value
             -- playerBase:set_field("<SharpnessGaugeMax>k__BackingField", 400) -- Max Sharpness
-        elseif data.sharpness_level == -1 and data.data.sharpness_level_old > -1 then
-            playerBase:set_field("<SharpnessLv>k__BackingField", data.data.sharpness_level_old)
-            data.data.sharpness_level_old = -1
+        elseif data.sharpness_level == -1 and data.hidden.sharpness_level_old > -1 then
+            playerBase:set_field("<SharpnessLv>k__BackingField", data.hidden.sharpness_level_old)
+            data.hidden.sharpness_level_old = -1
         end
 
         if data.wirebugs.give_3 then
@@ -165,15 +164,15 @@ function data.init_hooks()
     end)
 
     sdk.hook(sdk.find_type_definition("snow.facility.kitchen.MealFunc"):get_method("updateList"), function(args)
-        if data.canteen.level_4 and not data.data.level_4_wasEnabled then
-            data.data.level_4_wasEnabled = true
+        if data.canteen.level_4 and not data.hidden.level_4_wasEnabled then
+            data.hidden.level_4_wasEnabled = true
             local dangoLevels = utils.getMealFunc():get_field("SpecialSkewerDangoLv")
             local level4 = sdk.create_uint32(4)
             level4:set_field("mValue", 4)
             for i = 0, 2 do dangoLevels[i] = level4 end
 
-        elseif not data.canteen.level_4 and data.data.level_4_wasEnabled then
-            data.data.level_4_wasEnabled = false
+        elseif not data.canteen.level_4 and data.hidden.level_4_wasEnabled then
+            data.hidden.level_4_wasEnabled = false
             local dangoLevels = utils.getMealFunc():get_field("SpecialSkewerDangoLv")
             for i = 0, 2 do
                 dangoLevels[i] = sdk.create_uint32(i == 0 and 4 or i == 1 and 3 or 1)-- lua version of i == 0 ? 4 : i == 1 ? 3 : 1
@@ -182,8 +181,8 @@ function data.init_hooks()
     end, utils.nothing())
     
     sdk.hook(sdk.find_type_definition("snow.gui.fsm.kitchen.GuiKitchen"):get_method("setDangoTabList"), function(args)
-        if data.canteen.level_4 and not data.data.level_4GUI_wasEnabled then
-            data.data.level_4GUI_wasEnabled = true
+        if data.canteen.level_4 and not data.hidden.level_4GUI_wasEnabled then
+            data.hidden.level_4GUI_wasEnabled = true
             local managed = sdk.to_managed_object(args[2])
             if not managed then return end
             local dangoLevels = managed:get_field("SpecialSkewerDangoLv")
@@ -191,8 +190,8 @@ function data.init_hooks()
             level4:set_field("mValue", 4)
             for i = 0, 2 do dangoLevels[i] = level4 end
 
-        elseif not data.canteen.level_4 and data.data.level_4GUI_wasEnabled then
-            data.data.level_4GUI_wasEnabled = false
+        elseif not data.canteen.level_4 and data.hidden.level_4GUI_wasEnabled then
+            data.hidden.level_4GUI_wasEnabled = false
             local managed = sdk.to_managed_object(args[2])
             if not managed then return end
             local dangoLevels = managed:get_field("SpecialSkewerDangoLv")
