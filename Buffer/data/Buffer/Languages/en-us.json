@@ -10,7 +10,18 @@
         "about": "About",
         "author": "Author",
         "translator": "Translator",
-        "version": "Version"
+        "version": "Version",
+        "bindings": {
+            "title": "Bindings",
+            "keyboard": "Keyboard",
+            "gamepad": "Controller",
+            "remove": "Remove",
+            "add": "Add a New Binding",
+            "choose_modification": "Choose a modification",
+            "to_set": "Record a key/button bind",
+            "save": "Save",
+            "cancel": "Cancel"
+        }
     },
     "bow": {
         "title": "Bow",
