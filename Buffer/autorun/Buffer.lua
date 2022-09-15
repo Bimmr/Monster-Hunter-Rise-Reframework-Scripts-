@@ -60,17 +60,22 @@ re.on_draw_ui(function()
 
     if isWindowOpen then
         wasOpen = true
+
+        imgui.push_style_var(11, 5.0) -- Rounded elements
+        imgui.push_style_var(2, 10.0) -- Window Padding
+        
         imgui.set_next_window_size(Vector2f.new(520, 450), 4)
 
         isWindowOpen = imgui.begin_window(language.get(languagePrefix .. "title"), isWindowOpen, 1024)
+        bindings.popup_update()
         if imgui.begin_menu_bar() then
 
             languagePrefix = "window.bindings."
             if imgui.begin_menu(language.get(languagePrefix .. "title")) then
                 imgui.spacing()
-                if imgui.begin_menu("   " .. "Keyboard") then
+                if imgui.begin_menu("   "..language.get(languagePrefix .. "keyboard")) then
                     imgui.spacing()
-                    imgui.begin_table("bindingskeyboard", 3, nil, nil, nil)
+                    imgui.begin_table("bindings_keyboard", 3, nil, nil, nil)
 
                     for k, v in pairs(bindings.keys) do
                         imgui.table_next_row()
@@ -91,13 +96,13 @@ re.on_draw_ui(function()
                         imgui.text("   " .. title)
                         imgui.table_next_column()
                         local key_string = ""
-                        for k, key in pairs(keys) do
+                        for index, key in pairs(keys) do
                             key_string = key_string .. bindings.get_key_name(key)
-                            if k < #keys then key_string = key_string .. " + " end
+                            if index < #keys then key_string = key_string .. " + " end
                         end
                         imgui.text("   [ " .. key_string .. " ]     ")
                         imgui.table_next_column()
-                        if imgui.button("X") then log.debug("Removing") end
+                        if imgui.button(language.get(languagePrefix .. "remove")) then bindings.remove(k) end
                         imgui.same_line()
                         imgui.text("  ")
                     end
@@ -105,20 +110,19 @@ re.on_draw_ui(function()
                     imgui.end_table()
                     imgui.separator()
 
-                    if imgui.menu_item("   " .. "[Add a New Binding]", "", false) then log.debug("Adding") end
+                    if imgui.button("   " .. language.get(languagePrefix .. "add"), "", false) then bindings.popup_open() end
                     imgui.spacing()
                     imgui.end_menu()
                 end
-                if imgui.begin_menu("   " .. "Gamepad") then
+                if imgui.begin_menu("   " ..language.get(languagePrefix .. "gamepad")) then
                     imgui.spacing()
-                    imgui.begin_table("bindingsgamepad", 3, nil, nil, nil)
+                    imgui.begin_table("bindings_gamepad", 3, nil, nil, nil)
 
                     for k, v in pairs(bindings.btns) do
                         imgui.table_next_row()
                         imgui.table_next_column()
                         local btns = v.input
                         local data = v.data
-                        log.debug(json.dump_string(data))
                         local path = utils.split(data.path, ".")
                         local currentPath = path[1]
                         local title = language.get(currentPath .. ".title")
@@ -133,13 +137,13 @@ re.on_draw_ui(function()
                         imgui.text("   " .. title)
                         imgui.table_next_column()
                         local key_string = ""
-                        for k, key in pairs(btns) do
+                        for index, key in pairs(btns) do
                             key_string = key_string .. bindings.get_btn_name(key)
-                            if k < #btns then key_string = key_string .. " + " end
+                            if index < #btns then key_string = key_string .. " + " end
                         end
                         imgui.text("   [ " .. key_string .. " ]     ")
                         imgui.table_next_column()
-                        if imgui.button("X") then log.debug("Removing") end
+                        if imgui.button(language.get(languagePrefix .. "remove")) then bindings.remove(k) end
                         imgui.same_line()
                         imgui.text("  ")
                     end
@@ -147,7 +151,7 @@ re.on_draw_ui(function()
                     imgui.end_table()
                     imgui.separator()
 
-                    if imgui.menu_item("   " .. "[Add a New Binding]", "", false) then log.debug("Adding") end
+                    if imgui.button("   " ..language.get(languagePrefix .. "add")) then bindings.popup_open() end
                     imgui.spacing()
                     imgui.end_menu()
                 end
@@ -205,6 +209,7 @@ re.on_draw_ui(function()
 
         imgui.spacing()
         imgui.end_window()
+        imgui.pop_style_var(2)
 
         -- If the window is closed, but was just open. 
         -- This is needed because of the close icon on the window not triggering a save to the config

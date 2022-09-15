@@ -1,18 +1,27 @@
 local utils = require("Buffer.Misc.Utils")
+local language
 local input_manager, active_device, input_device
 local key_bindings, btn_bindings
+local modules = {}
 
 local bindings = {
     btns = {},
     keys = {}
 }
-local modules = {}
+local popup = {
+    open = false,
+    listening = false,
+    path = nil,
+    binding = nil
+}
 
 function bindings.init(module_list)
     modules = module_list
 
-    key_bindings = bindings.generate_enum("via.hid.KeyboardKey")
-    btn_bindings = bindings.generate_enum("via.hid.GamePadButton")
+    language = require("Buffer.Misc.Language")
+
+    key_bindings = utils.generate_enum("via.hid.KeyboardKey")
+    btn_bindings = utils.generate_enum("via.hid.GamePadButton")
 
     -- Testing
     bindings.add(1, {8192, 1024}, "miscellaneous.ammo_and_coatings.unlimited_ammo", true) -- R3 + R1
@@ -52,6 +61,15 @@ function bindings.add(device, input, path, on)
             }
         })
     end
+end
+function bindings.remove(device, index)
+    local binding_table = nil
+    if device == 1 then
+        binding_table = bindings.btns
+    elseif device == 3 then
+        binding_table = bindings.keys
+    end
+    table.remove(binding_table, index)
 end
 
 -- ======= Gamepad ==========
@@ -225,20 +243,89 @@ function bindings.perform(data)
         end
     end
 end
+-- ================= Popup =====================
 
-function bindings.generate_enum(typename)
-    local t = sdk.find_type_definition(typename)
-    if not t then return {} end
-    local fields = t:get_fields()
-    local enum = {}
-    for i, field in ipairs(fields) do
-        if field:is_static() then
-            local name = field:get_name()
-            local raw_value = field:get_data(nil)
-            enum[name] = raw_value
+function bindings.popup_update()
+    if popup.open then bindings.popup_draw() end
+end
+
+function bindings.popup_open()
+    popup.open = true
+end
+function bindings.popup_close()
+    imgui.close_current_popup()
+    bindings.popup_reset()
+end
+function bindings.popup_reset()
+    popup = {
+        open = false,
+        listening = false,
+        path = nil,
+        binding = nil
+    }
+end
+
+function bindings.popup_draw()
+    imgui.open_popup("bindings_popup")
+    imgui.set_next_window_size(Vector2f.new(350, 135), 1)
+    imgui.begin_popup("bindings_popup")
+    imgui.indent(10)
+    imgui.spacing()
+    imgui.spacing()
+    imgui.text(language.get("window.bindings.add"))
+    imgui.separator()
+    imgui.spacing()
+    imgui.spacing()
+    if (imgui.begin_menu(language.get("window.bindings.choose_modification"))) then
+        for _, module in pairs(modules) do
+            if imgui.begin_menu(language.get(module.title .. ".title")) then
+                bindings.popup_draw_menu(module, module.title)
+                imgui.end_menu()
+            end
+        end
+        imgui.end_menu()
+    end
+    imgui.same_line()
+    imgui.text("          ")
+    imgui.spacing()
+    if imgui.button(language.get("window.bindings.to_set")) then
+        popup.listening = true
+        log.debug("Listen for buttons here") -- Watch input on, record what's on. Then when everything has been released and if nothing else is on set the recorded on value as as the binding
+    end
+    imgui.separator()
+    imgui.spacing()
+    imgui.spacing()
+    if imgui.button(language.get("window.bindings.save")) then
+        log.debug("Save")
+        bindings.popup_close()
+    end
+    imgui.same_line()
+    if imgui.button(language.get("window.bindings.cancel")) then
+        log.debug("Cancel")
+        bindings.popup_close()
+    end
+    imgui.unindent(10)
+    imgui.end_popup()
+end
+
+function bindings.popup_draw_menu(menu, language_path)
+    menu = menu or modules
+    language_path = language_path or ""
+
+    for key, value in pairs(menu) do
+        if type(value) == "table" then
+            log.debug(key) -- Key shows as hidden, but when I try to make it avoid keys named hidden it avoids all of the keys
+                if imgui.begin_menu(key) then
+                    log.debug(key)
+                    log.debug(json.dump_string(value))
+                    log.debug("-------------------------")
+                    bindings.popup_draw_menu(value)
+                    imgui.end_menu()
+            end
+        elseif type(value) == "boolean" or type(value) == "number" then
+            imgui.menu_item(key, nil, false, true)
         end
     end
-    return enum
 end
 
 return bindings
