@@ -37,7 +37,7 @@ local data = {
         defence = -1,
         affinity = -1
     },
-    original = { }
+    hidden = { }
 }
 
 function data.init()
@@ -191,10 +191,10 @@ function data.init_hooks()
 
         if data.stats.attack > -1 then
             -- Set the original attack value
-            if data.original.attack == nil then data.original.attack = playerData:get_field("_Attack") end
+            if data.hidden.attack == nil then data.hidden.attack = playerData:get_field("_Attack") end
 
             -- Setup variables to determine how much extra attack needs to be added to get to the set value
-            local attack = data.original.attack
+            local attack = data.hidden.attack
             local attackTarget = data.stats.attack
             local attackMod = attackTarget - attack
 
@@ -202,26 +202,26 @@ function data.init_hooks()
             playerData:set_field("_AtkUpAlive", attackMod)
 
             -- Restore the original attack value if disabled    
-        elseif data.original.attack ~= nil then
+        elseif data.hidden.attack ~= nil then
             playerData:set_field("_AtkUpAlive", 0)
-            data.original.attack = nil
+            data.hidden.attack = nil
         end
 
         if data.stats.defence > -1 then
             -- Set the original defence value
-            if data.original.defence == nil then data.original.defence = playerData:get_field("_Defence") end
+            if data.hidden.defence == nil then data.hidden.defence = playerData:get_field("_Defence") end
 
             -- Setup variables to determine how much extra defence needs to be added to get to the set value
-            local defence = data.original.defence
+            local defence = data.hidden.defence
             local defenceTarget = data.stats.defence
             local defenceMod = defenceTarget - defence
 
             -- Add the extra defence
             playerData:set_field("_DefUpAlive", defenceMod)
                -- Restore the original defence value if disabled    
-        elseif data.original.defence ~= nil then
+        elseif data.hidden.defence ~= nil then
             playerData:set_field("_DefUpAlive", 0)
-            data.original.defence = nil
+            data.hidden.defence = nil
         end
     end)
     utils.nothing()
@@ -235,21 +235,21 @@ function data.init_hooks()
     -- end, function(retval)
     --     if managed_atk ~= nil then
     --         if data.stats.attack > -1 then
-    --             if data.original.attack == nil then data.original.attack = utils.getPlayerData():get_field("_Attack") end
-    --             local player = data.original.attack
+    --             if data.hidden.attack == nil then data.hidden.attack = utils.getPlayerData():get_field("_Attack") end
+    --             local player = data.hidden.attack
     --             local weapon = managed_atk:get_field("_Atk")
     --             local target = data.stats.attack
     --             local to_set = target - player + weapon
 
                 
     --             log.debug("Target: "..data.stats.attack)
-    --             log.debug("Player Original: ".. data.original.attack)
+    --             log.debug("Player Original: ".. data.hidden.attack)
     --             log.debug("Weapon: ".. weapon)
     --             log.debug("Value to set: "..to_set )
     --             log.debug("--------------------------------------")
     --             managed_atk = nil
     --             return sdk.to_ptr(data.stats.attack)
-    --         else if data.original.attack ~= nil then data.original.attack = nil end
+    --         else if data.hidden.attack ~= nil then data.hidden.attack = nil end
     --     end
     --     managed_atk = nil
     -- end
@@ -265,14 +265,14 @@ function data.init_hooks()
     -- end, function(retval)
     --     if managed_def ~= nil then
     --         if data.stats.defence > -1 then
-    --             if data.original.defence == nil then data.original.defence = utils.getPlayerData():get_field("_Defence") end
-    --             local player = data.original.defence
+    --             if data.hidden.defence == nil then data.hidden.defence = utils.getPlayerData():get_field("_Defence") end
+    --             local player = data.hidden.defence
     --             local weapon = managed_def:get_field("_DefBonus")
     --             local target = data.stats.defence
     --             local to_set = target - player + weapon
     --             managed_def = nil
     --             return sdk.to_ptr(to_set)
-    --         else if data.original.defence ~= nil then data.original.defence = nil end
+    --         else if data.hidden.defence ~= nil then data.hidden.defence = nil end
     --         end
     --         managed_def = nil
     --     end
@@ -289,14 +289,14 @@ function data.init_hooks()
     end, function(retval)
         if managed_crit ~= nil then
             if data.stats.affinity > -1 then
-                if data.original.affinity == nil then data.original.affinity = utils.getPlayerData():get_field("_CriticalRate") end
-                local player = data.original.affinity
+                if data.hidden.affinity == nil then data.hidden.affinity = utils.getPlayerData():get_field("_CriticalRate") end
+                local player = data.hidden.affinity
                 local weapon = managed_crit:get_field("_CriticalRate")
                 local target = data.stats.affinity
                 local to_set = target - player + weapon 
                 managed_crit = nil
                 return sdk.to_ptr(to_set)
-            else if data.original.affinity ~= nil then data.original.affinity = nil end
+            else if data.hidden.affinity ~= nil then data.hidden.affinity = nil end
         end
         managed_crit = nil
     end
