@@ -83,7 +83,7 @@ end
 function utils.tooltip(text)
     imgui.same_line()
     imgui.text("(?)")
-    if imgui.is_item_hovered() then imgui.set_tooltip(text) end
+    if imgui.is_item_hovered() then imgui.set_tooltip("  "..text.."  ") end
 end
 
 -- Split a string into an array
@@ -103,4 +103,19 @@ function utils.split(text, delim)
     return result
 end
 
+
+function utils.generate_enum(typename)
+    local t = sdk.find_type_definition(typename)
+    if not t then return {} end
+    local fields = t:get_fields()
+    local enum = {}
+    for i, field in ipairs(fields) do
+        if field:is_static() then
+            local name = field:get_name()
+            local raw_value = field:get_data(nil)
+            enum[name] = raw_value
+        end
+    end
+    return enum
+end
 return utils
