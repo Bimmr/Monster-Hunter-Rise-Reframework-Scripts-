@@ -12,7 +12,18 @@
         "about": "關於",
         "author": "製作者",
         "translator": "翻譯者",
-        "version": "版本號"
+        "version": "版本號",
+        "bindings": {
+            "title": "繫結鍵",
+            "keyboard": "鍵盤",
+            "gamepad": "手柄",
+            "remove": "移除",
+            "add": "添加新快捷鍵",
+            "choose_modification": "選中一個修改",
+            "to_set": "記錄繫結鍵",
+            "save": "儲存",
+            "cancel": "取消"
+        }
     },
     "bow": {
         "title": "弓",
