@@ -112,7 +112,7 @@ re.on_draw_ui(function()
                         imgui.separator()
                     end
 
-                    if imgui.button("   " .. language.get(languagePrefix .. "add"), "", false) then bindings.popup_open(3) end
+                    if imgui.button("   " .. language.get(languagePrefix .. "add_keyboard"), "", false) then bindings.popup_open(3) end
                     imgui.spacing()
                     imgui.end_menu()
                 end
@@ -154,7 +154,7 @@ re.on_draw_ui(function()
                         imgui.end_table()
                         imgui.separator()
                     end
-                    if imgui.button("   " .. language.get(languagePrefix .. "add")) then bindings.popup_open(1) end
+                    if imgui.button("   " .. language.get(languagePrefix .. "add_gamepad")) then bindings.popup_open(1) end
                     imgui.spacing()
                     imgui.end_menu()
                 end

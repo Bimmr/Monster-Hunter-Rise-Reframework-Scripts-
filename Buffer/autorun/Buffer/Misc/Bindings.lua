@@ -335,9 +335,9 @@ function bindings.popup_draw()
 
         -- Change title depending on device
         if popup.device == 1 then
-            imgui.text(language.get("window.bindings.header_gamepad"))
+            imgui.text(language.get("window.bindings.add_gamepad"))
         else
-            imgui.text(language.get("window.bindings.header_keyboard"))
+            imgui.text(language.get("window.bindings.add_keyboard"))
         end
         imgui.separator()
         imgui.spacing()
