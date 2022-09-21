@@ -158,6 +158,7 @@ function data.init_hooks()
         end
     end, function(retval)
         if managed_dango then
+            managed_dango = nil
             return sdk.to_ptr(200)
         end
         return retval
