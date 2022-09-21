@@ -63,95 +63,98 @@ re.on_draw_ui(function()
 
         imgui.push_style_var(11, 5.0) -- Rounded elements
         imgui.push_style_var(2, 10.0) -- Window Padding
-        
+
         imgui.set_next_window_size(Vector2f.new(520, 450), 4)
 
         isWindowOpen = imgui.begin_window(language.get(languagePrefix .. "title"), isWindowOpen, 1024)
-        bindings.popup_update()
+        bindings.draw()
         if imgui.begin_menu_bar() then
 
             languagePrefix = "window.bindings."
             if imgui.begin_menu(language.get(languagePrefix .. "title")) then
                 imgui.spacing()
-                if imgui.begin_menu("   "..language.get(languagePrefix .. "keyboard")) then
-                    imgui.spacing()
-                    imgui.begin_table("bindings_keyboard", 3, nil, nil, nil)
+                if imgui.begin_menu("   " .. language.get(languagePrefix .. "keyboard")) then
+                    if #bindings.keys > 0 then
+                        imgui.spacing()
+                        imgui.begin_table("bindings_keyboard", 3, nil, nil, nil)
 
-                    for k, v in pairs(bindings.keys) do
-                        imgui.table_next_row()
-                        imgui.table_next_column()
-                        local keys = v.input
-                        local data = v.data
-                        local path = utils.split(data.path, ".")
-                        local currentPath = path[1]
-                        local title = language.get(currentPath .. ".title")
-                        for i = 2, #path, 1 do
-                            currentPath = currentPath .. "." .. path[i]
-                            if i == #path then
-                                title = title .. "/" .. language.get(currentPath)
-                            else
-                                title = title .. "/" .. language.get(currentPath .. ".title")
+                        for k, v in pairs(bindings.keys) do
+                            imgui.table_next_row()
+                            imgui.table_next_column()
+                            local keys = v.input
+                            local data = v.data
+                            local path = utils.split(data.path, ".")
+                            local currentPath = path[1]
+                            local title = language.get(currentPath .. ".title")
+                            for i = 2, #path, 1 do
+                                currentPath = currentPath .. "." .. path[i]
+                                if i == #path then
+                                    title = title .. "/" .. language.get(currentPath)
+                                else
+                                    title = title .. "/" .. language.get(currentPath .. ".title")
+                                end
                             end
+                            imgui.text("   " .. title)
+                            imgui.table_next_column()
+                            local key_string = ""
+                            for index, key in pairs(keys) do
+                                key_string = key_string .. bindings.get_key_name(key)
+                                if index < #keys then key_string = key_string .. " + " end
+                            end
+                            imgui.text("   [ " .. key_string .. " ]     ")
+                            imgui.table_next_column()
+                            if imgui.button(language.get(languagePrefix .. "remove")) then bindings.remove(3, k) end
+                            imgui.same_line()
+                            imgui.text("  ")
                         end
-                        imgui.text("   " .. title)
-                        imgui.table_next_column()
-                        local key_string = ""
-                        for index, key in pairs(keys) do
-                            key_string = key_string .. bindings.get_key_name(key)
-                            if index < #keys then key_string = key_string .. " + " end
-                        end
-                        imgui.text("   [ " .. key_string .. " ]     ")
-                        imgui.table_next_column()
-                        if imgui.button(language.get(languagePrefix .. "remove")) then bindings.remove(k) end
-                        imgui.same_line()
-                        imgui.text("  ")
+
+                        imgui.end_table()
+                        imgui.separator()
                     end
 
-                    imgui.end_table()
-                    imgui.separator()
-
-                    if imgui.button("   " .. language.get(languagePrefix .. "add"), "", false) then bindings.popup_open() end
+                    if imgui.button("   " .. language.get(languagePrefix .. "add"), "", false) then bindings.popup_open(3) end
                     imgui.spacing()
                     imgui.end_menu()
                 end
-                if imgui.begin_menu("   " ..language.get(languagePrefix .. "gamepad")) then
-                    imgui.spacing()
-                    imgui.begin_table("bindings_gamepad", 3, nil, nil, nil)
+                if imgui.begin_menu("   " .. language.get(languagePrefix .. "gamepad")) then
+                    if #bindings.btns then
+                        imgui.spacing()
+                        imgui.begin_table("bindings_gamepad", 3, nil, nil, nil)
 
-                    for k, v in pairs(bindings.btns) do
-                        imgui.table_next_row()
-                        imgui.table_next_column()
-                        local btns = v.input
-                        local data = v.data
-                        local path = utils.split(data.path, ".")
-                        local currentPath = path[1]
-                        local title = language.get(currentPath .. ".title")
-                        for i = 2, #path, 1 do
-                            currentPath = currentPath .. "." .. path[i]
-                            if i == #path then
-                                title = title .. "/" .. language.get(currentPath)
-                            else
-                                title = title .. "/" .. language.get(currentPath .. ".title")
+                        for k, v in pairs(bindings.btns) do
+                            imgui.table_next_row()
+                            imgui.table_next_column()
+                            local btns = v.input
+                            local data = v.data
+                            local path = utils.split(data.path, ".")
+                            local currentPath = path[1]
+                            local title = language.get(currentPath .. ".title")
+                            for i = 2, #path, 1 do
+                                currentPath = currentPath .. "." .. path[i]
+                                if i == #path then
+                                    title = title .. "/" .. language.get(currentPath)
+                                else
+                                    title = title .. "/" .. language.get(currentPath .. ".title")
+                                end
                             end
+                            imgui.text("   " .. title)
+                            imgui.table_next_column()
+                            local key_string = ""
+                            for index, key in pairs(btns) do
+                                key_string = key_string .. bindings.get_btn_name(key)
+                                if index < #btns then key_string = key_string .. " + " end
+                            end
+                            imgui.text("   [ " .. key_string .. " ]     ")
+                            imgui.table_next_column()
+                            if imgui.button(language.get(languagePrefix .. "remove")) then bindings.remove(1, k) end
+                            imgui.same_line()
+                            imgui.text("  ")
                         end
-                        imgui.text("   " .. title)
-                        imgui.table_next_column()
-                        local key_string = ""
-                        for index, key in pairs(btns) do
-                            key_string = key_string .. bindings.get_btn_name(key)
-                            if index < #btns then key_string = key_string .. " + " end
-                        end
-                        imgui.text("   [ " .. key_string .. " ]     ")
-                        imgui.table_next_column()
-                        if imgui.button(language.get(languagePrefix .. "remove")) then bindings.remove(k) end
-                        imgui.same_line()
-                        imgui.text("  ")
+
+                        imgui.end_table()
+                        imgui.separator()
                     end
-
-                    imgui.end_table()
-                    imgui.separator()
-
-                    if imgui.button("   " ..language.get(languagePrefix .. "add")) then bindings.popup_open() end
+                    if imgui.button("   " .. language.get(languagePrefix .. "add")) then bindings.popup_open(1) end
                     imgui.spacing()
                     imgui.end_menu()
                 end

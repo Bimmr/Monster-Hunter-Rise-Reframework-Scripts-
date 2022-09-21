@@ -8,12 +8,8 @@ local bindings = {
     btns = {},
     keys = {}
 }
-local popup = {
-    open = false,
-    listening = false,
-    path = nil,
-    binding = nil
-}
+
+local popup = {}
 
 function bindings.init(module_list)
     modules = module_list
@@ -24,10 +20,10 @@ function bindings.init(module_list)
     btn_bindings = utils.generate_enum("via.hid.GamePadButton")
 
     -- Testing
-    bindings.add(1, {8192, 1024}, "miscellaneous.ammo_and_coatings.unlimited_ammo", true) -- R3 + R1
-    bindings.add(1, {4096}, "great_sword.charge_level", 3) -- R3
+    -- bindings.add(1, {8192, 1024}, "miscellaneous.ammo_and_coatings.unlimited_ammo", true) -- R3 + R1
+    -- bindings.add(1, {4096}, "great_sword.charge_level", 3) -- R3
 
-    bindings.add(3, {8, 80}, "miscellaneous.ammo_and_coatings.unlimited_ammo", true) -- BACKSPACE + P
+    -- bindings.add(3, {8, 80}, "miscellaneous.ammo_and_coatings.unlimited_ammo", true) -- BACKSPACE + P
 end
 
 -- 1 = Gamepad | 2 = Mouse | 3 = Keyboard
@@ -69,7 +65,7 @@ function bindings.remove(device, index)
     elseif device == 3 then
         binding_table = bindings.keys
     end
-    table.remove(binding_table, index)
+    log.debug(json.dump_string(table.remove(binding_table, index)))
 end
 
 -- ======= Gamepad ==========
@@ -108,13 +104,13 @@ function bindings.get_btns_from_code(code, withName)
     return {}
 end
 
--- Get current button push
+-- Get current buttons pressed
 function bindings.get_current_buttons()
     local current = input_device:get_field("_pad_on")
     return bindings.get_btns_from_code(current)
 end
 
--- Was the button pressed
+-- Are the buttons pressed
 function bindings.is_buttons_pressed(arr_btns)
 
     local current = input_device:get_field("_pad_on")
@@ -139,6 +135,20 @@ function bindings.is_buttons_pressed(arr_btns)
     return matches + 1 == #arr_btns
 end
 
+-- Are the buttons down
+function bindings.is_buttons_down(arr_btns)
+    local current = input_device:get_field("_pad_on")
+    current = bindings.get_btns_from_code(current)
+
+    local matches = 0
+    for _, required_code in pairs(arr_btns) do
+        local found = false
+        for _, current_code in pairs(current) do if current_code == required_code then found = true end end
+        if not found then return false end
+    end
+    return true
+end
+
 -- Get the enum name of the button
 function bindings.get_btn_name(code)
     -- If the code is a single btn
@@ -152,7 +162,7 @@ end
 
 -- ======= Keyboard ==========
 
--- Get current key push
+-- Get current keys down
 function bindings.get_current_keys()
     local current = input_device:get_field("_kbd_on")
     local keys = {}
@@ -160,7 +170,7 @@ function bindings.get_current_keys()
     return keys
 end
 
--- Is the key pressed
+-- Are the keys pressed
 function bindings.is_keys_pressed(arr_keys)
     local current = input_device:get_field("_kbd_on")
     local triggered = input_device:get_field("_kbd_trg")
@@ -177,6 +187,14 @@ function bindings.is_keys_pressed(arr_keys)
     for _, v in pairs(arr_keys) do if triggered[v] and triggered[v]["mValue"] and triggered[v].mValue == true then trig = trig + 1 end end
 
     if trig == 0 then return false end
+    return on == #arr_keys
+end
+
+-- Are the keys currently down
+function bindings.is_keys_down(arr_keys)
+    local current = input_device:get_field("_kbd_on")
+    local on = 0
+    for _, v in pairs(arr_keys) do if current[v] and current[v]["mValue"] and current[v].mValue == true then on = on + 1 end end
     return on == #arr_keys
 end
 
@@ -198,6 +216,11 @@ function bindings.update()
         -- log.debug(json.dump_string(bindings.get_current_keys()))
         for key, input_data in pairs(bindings.keys) do if bindings.is_keys_pressed(input_data.input) then bindings.perform(input_data.data) end end
     end
+    if popup.open then bindings.popup_update() end
+end
+
+function bindings.draw()
+    if popup.open then bindings.popup_draw() end
 end
 
 -- Perform the changes
@@ -246,37 +269,60 @@ end
 -- ================= Popup =====================
 
 function bindings.popup_update()
-    if popup.open then bindings.popup_draw() end
+    if popup.listening then
+        local current = popup.device == 1 and bindings.get_current_buttons() or bindings.get_current_keys()
+        if #current > 0 then
+            if not popup.binding then popup.binding = {} end
+            for _, pressed_btn in pairs(current) do
+                local in_list = false
+                for _, binding_btn in pairs(popup.binding) do if binding_btn == pressed_btn then in_list = true end end
+                if not in_list then table.insert(popup.binding, pressed_btn) end
+            end
+        end
+    end
 end
 
-function bindings.popup_open()
+function bindings.popup_open(device)
+    bindings.popup_reset()
     popup.open = true
+    popup.device = device
 end
+
 function bindings.popup_close()
     imgui.close_current_popup()
     bindings.popup_reset()
 end
+
 function bindings.popup_reset()
     popup = {
         open = false,
+        device = 0,
         listening = false,
         path = nil,
-        binding = nil
+        on = true,
+        binding = {}
     }
 end
 
 function bindings.popup_draw()
-    imgui.open_popup("bindings_popup")
-    imgui.set_next_window_size(Vector2f.new(350, 135), 1)
-    imgui.begin_popup("bindings_popup")
+    local popup_size = Vector2f.new(350, 135)
+    if popup.path ~= nil then popup_size.y = 175 end
+    imgui.set_next_window_size(popup_size, 1 + 256)
+    imgui.begin_window("buffer_bindings", nil, 1)
     imgui.indent(10)
     imgui.spacing()
     imgui.spacing()
-    imgui.text(language.get("window.bindings.add"))
+    if popup.device == 1 then
+        imgui.text(language.get("window.bindings.header_gamepad"))
+    else
+        imgui.text(language.get("window.bindings.header_keyboard"))
+    end
     imgui.separator()
     imgui.spacing()
     imgui.spacing()
-    if (imgui.begin_menu(language.get("window.bindings.choose_modification"))) then
+    local bindings_text = language.get("window.bindings.choose_modification")
+    if popup.path ~= nil then bindings_text = popup.path end
+    if imgui.begin_menu(bindings_text) then
         for _, module in pairs(modules) do
             if imgui.begin_menu(language.get(module.title .. ".title")) then
                 bindings.popup_draw_menu(module, module.title)
@@ -288,24 +334,62 @@ function bindings.popup_draw()
     imgui.same_line()
     imgui.text("          ")
     imgui.spacing()
-    if imgui.button(language.get("window.bindings.to_set")) then
-        popup.listening = true
-        log.debug("Listen for buttons here") -- Watch input on, record what's on. Then when everything has been released and if nothing else is on set the recorded on value as as the binding
+    if popup.path ~= nil then
+        imgui.spacing()
+        if type(popup.on) == "number" then
+            imgui.text(language.get("window.bindings.on_value")..": ")
+            imgui.same_line()
+            local changed, on_value = imgui.input_text("     ", popup.on)
+            if changed and on_value ~= "" and tonumber(on_value) then
+                popup.on = tonumber(on_value)
+            end
+        elseif type(popup.on) == "boolean" then
+            imgui.text(language.get("window.bindings.on_value")..": ")
+            imgui.same_line()
+            imgui.input_text("   ", "true", 16384)
+        end
+        imgui.spacing()
+        imgui.separator()
     end
+    imgui.spacing()
+
+    local listening_button_text = language.get("window.bindings.to_set")
+    if popup.listening then
+        if popup.binding and #popup.binding > 0 then
+            listening_button_text = ""
+            if popup.device == 1 then
+                listening_button_text = bindings.get_btn_name(popup.binding[1])
+                for i = 2, #popup.binding do listening_button_text = listening_button_text .. " + " .. bindings.get_btn_name(popup.binding[i]) end
+            else
+                listening_button_text = bindings.get_key_name(popup.binding[1])
+                for i = 2, #popup.binding do listening_button_text = listening_button_text .. " + " .. bindings.get_key_name(popup.binding[i]) end
+            end
+        elseif popup.device == 1 then
+            listening_button_text = language.get("window.bindings.to_listen")
+        else
+            listening_button_text = language.get("window.bindings.listening")
+        end
+    end
+
+    if imgui.button(listening_button_text) then
+        popup.listening = true
+        popup.binding = nil
+    end
+    -- imgui.set_tooltip("Click to reset")
     imgui.separator()
     imgui.spacing()
     imgui.spacing()
-    if imgui.button(language.get("window.bindings.save")) then
-        log.debug("Save")
-        bindings.popup_close()
-    end
-    imgui.same_line()
-    if imgui.button(language.get("window.bindings.cancel")) then
-        log.debug("Cancel")
-        bindings.popup_close()
+
+    if imgui.button(language.get("window.bindings.cancel")) then bindings.popup_close() end
+    if popup.path and popup.binding then
+        imgui.same_line()
+        if imgui.button(language.get("window.bindings.save")) then
+            bindings.add(popup.device, popup.binding, popup.path, popup.on)
+            bindings.popup_close()
+        end
     end
     imgui.unindent(10)
-    imgui.end_popup()
+    imgui.end_window()
 end
 
 function bindings.popup_draw_menu(menu, language_path)
@@ -314,16 +398,19 @@ function bindings.popup_draw_menu(menu, language_path)
 
     for key, value in pairs(menu) do
         if type(value) == "table" then
-            log.debug(key) -- Key shows as hidden, but when I try to make it avoid keys named hidden it avoids all of the keys
-                if imgui.begin_menu(key) then
-                    log.debug(key)
-                    log.debug(json.dump_string(value))
-                    log.debug("-------------------------")
-                    bindings.popup_draw_menu(value)
+            if key ~= "hidden" then
+                if imgui.begin_menu(language.get(language_path .. "." .. key .. ".title")) then
+                    bindings.popup_draw_menu(value, language_path .. "." .. key)
                     imgui.end_menu()
+                end
             end
         elseif type(value) == "boolean" or type(value) == "number" then
-            imgui.menu_item(key, nil, false, true)
+            if imgui.menu_item(language.get(language_path .. "." .. key), nil, false, true) then
+                popup.path = language_path .. "." .. key
+                if type(value) == "number" then
+                    popup.on = tonumber(1)
+                end
+            end
         end
     end
 end

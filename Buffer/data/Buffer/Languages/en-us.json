@@ -16,9 +16,12 @@
             "keyboard": "Keyboard",
             "gamepad": "Controller",
             "remove": "Remove",
-            "add": "Add a New Binding",
+            "header_keyboard": "Add a New Keyboard Binding",
+            "header_gamepad": "Add a New Controller Binding",
             "choose_modification": "Choose a modification",
-            "to_set": "Record a key/button bind",
+            "on_value": "On Value",
+            "to_listen": "Start Listening for inputs",
+            "listening": "Listening for inputs",
             "save": "Save",
             "cancel": "Cancel"
         }
