@@ -20,6 +20,8 @@ function bindings.init(module_list)
 
     language = require("Buffer.Misc.Language")
 
+    bindings.load_from_file()
+
     key_bindings = utils.generate_enum("via.hid.KeyboardKey")
     btn_bindings = utils.generate_enum("via.hid.GamePadButton")
 
@@ -60,6 +62,7 @@ function bindings.add(device, input, path, on)
                 on = on
             }
         })
+        bindings.save_to_file()
     end
 end
 -- Remove a binding from the device's table (Sometimes doesn't work... will need to debug)
@@ -70,12 +73,28 @@ function bindings.remove(device, index)
     elseif device == 3 then
         binding_table = bindings.keys
     end
-    -- log.debug(json.dump_string(table.remove(binding_table, index)))
+    if binding_table then
+        table.remove(binding_table, index)
+        bindings.save_to_file()
+    end
 end
 
 -- ======== File Stuff ===========
--- Coming Soon
+function bindings.load_from_file()
+    local file = json.load_file(file_path)
+    if file then
+        bindings.btns = file.btns or {}
+        bindings.keys = file.keys or {}
+    end
+end
 
+-- Save the bindings to a file
+function bindings.save_to_file()
+    json.dump_file(file_path, {
+        ['keys'] = bindings.keys,
+        ['btns'] = bindings.btns
+    })
+end
 
 -- ======= Gamepad ==========
 
