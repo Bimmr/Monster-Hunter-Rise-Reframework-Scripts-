@@ -74,8 +74,8 @@ re.on_draw_ui(function()
             if imgui.begin_menu(language.get(languagePrefix .. "title")) then
                 imgui.spacing()
                 if imgui.begin_menu("   " .. language.get(languagePrefix .. "keyboard")) then
+                    imgui.spacing()
                     if #bindings.keys > 0 then
-                        imgui.spacing()
                         imgui.begin_table("bindings_keyboard", 3, nil, nil, nil)
 
                         for k, v in pairs(bindings.keys) do
@@ -117,8 +117,8 @@ re.on_draw_ui(function()
                     imgui.end_menu()
                 end
                 if imgui.begin_menu("   " .. language.get(languagePrefix .. "gamepad")) then
-                    if #bindings.btns then
-                        imgui.spacing()
+                    imgui.spacing()
+                    if #bindings.btns > 0 then
                         imgui.begin_table("bindings_gamepad", 3, nil, nil, nil)
 
                         for k, v in pairs(bindings.btns) do
