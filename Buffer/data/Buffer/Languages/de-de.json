@@ -11,7 +11,21 @@
         "about": "About",
         "author": "Author",
         "translator": "Übersetzer",
-        "version": "Version"
+        "version": "Version",
+        "bindings": {
+            "title": "Bindings",
+            "keyboard": "Keyboard",
+            "gamepad": "Controller",
+            "remove": "Remove",
+            "add_keyboard": "Add a New Keyboard Binding",
+            "add_gamepad": "Add a New Controller Binding",
+            "choose_modification": "Choose a modification",
+            "on_value": "On Value",
+            "to_listen": "Start Listening for inputs",
+            "listening": "Listening for inputs",
+            "save": "Save",
+            "cancel": "Cancel"
+        }
     },
     "bow": {
         "title": "Bogen",
