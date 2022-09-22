@@ -12,7 +12,21 @@
         "about": "关于",
         "author": "制作者",
         "translator": "翻译者",
-        "version": "版本号"
+        "version": "版本号",
+        "bindings": {
+            "title": "快捷键",
+            "keyboard": "键盘",
+            "gamepad": "手柄",
+            "remove": "移除",
+            "add_keyboard": "添加键盘快捷键",
+            "add_gamepad": "添加手柄快捷键",
+            "choose_modification": "选择一个修改",
+            "on_value": "On Value",
+            "to_listen": "开始记录输入",
+            "listening": "正在记录中...",
+            "save": "保存",
+            "cancel": "取消"
+        }
     },
     "bow": {
         "title": "弓",
