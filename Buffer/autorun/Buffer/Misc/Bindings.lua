@@ -264,7 +264,8 @@ function bindings.perform(data)
 
     -- I have to do it this way because otherwise it changes it by value and not by reference which means the module remains unchanged...
     --     unless Lua has another option I don't know about - I'm open to suggestions
-    if #path == 2 then
+
+    if #path == 2 then -- Example: character.sharpness
         if type(on_value) == "boolean" then
             modules[module_index][path[2]] = not modules[module_index][path[2]]
         elseif type(on_value) == "number" then
@@ -274,7 +275,7 @@ function bindings.perform(data)
                 modules[module_index][path[2]] = -1
             end
         end
-    elseif #path == 3 then
+    elseif #path == 3 then -- Example: miscellaneous.ammo_and_coatings.unlimited_ammo
         if type(on_value) == "boolean" then
             modules[module_index][path[2]][path[3]] = not modules[module_index][path[2]][path[3]]
         elseif type(on_value) == "number" then
@@ -284,7 +285,7 @@ function bindings.perform(data)
                 modules[module_index][path[2]][path[3]] = -1
             end
         end
-    elseif #path == 4 then
+    elseif #path == 4 then-- Example: character.conditions_and_blights.blights.fire
         if type(on_value) == "boolean" then
             modules[module_index][path[2]][path[3]][path[4]] = not modules[module_index][path[2]][path[3]][path[4]]
         elseif type(on_value) == "number" then
@@ -310,6 +311,8 @@ function bindings.popup_update()
                     for _, binding_btn in pairs(popup.binding) do if binding_btn == pressed_btn then in_list = true end end
                     if not in_list then table.insert(popup.binding, pressed_btn) end
                 end
+            elseif #current == 0 and popup.binding and #popup.binding > 0 then
+                popup.listening = false
             end
         end
     end
@@ -402,30 +405,28 @@ function bindings.popup_draw()
 
         -- If not listening for inputs display default to listen from language file
         local listening_button_text = language.get("window.bindings.to_listen")
-        if popup.listening then
 
-            -- If some inputs have been pressed, display them in a readable format
-            if popup.binding and #popup.binding > 0 then
-                listening_button_text = ""
-                if popup.device == 1 then
-                    listening_button_text = bindings.get_btn_name(popup.binding[1])
-                    for i = 2, #popup.binding do listening_button_text = listening_button_text .. " + " .. bindings.get_btn_name(popup.binding[i]) end
-                else
-                    listening_button_text = bindings.get_key_name(popup.binding[1])
-                    for i = 2, #popup.binding do listening_button_text = listening_button_text .. " + " .. bindings.get_key_name(popup.binding[i]) end
-                end
-
-                -- If no inputs pressed use default listening from language file
+        -- If some inputs have been pressed, display them in a readable format
+        if popup.binding and #popup.binding > 0 then
+            listening_button_text = ""
+            if popup.device == 1 then
+                listening_button_text = bindings.get_btn_name(popup.binding[1])
+                for i = 2, #popup.binding do listening_button_text = listening_button_text .. " + " .. bindings.get_btn_name(popup.binding[i]) end
             else
-                listening_button_text = language.get("window.bindings.listening")
+                listening_button_text = bindings.get_key_name(popup.binding[1])
+                for i = 2, #popup.binding do listening_button_text = listening_button_text .. " + " .. bindings.get_key_name(popup.binding[i]) end
             end
+            if popup.listening then listening_button_text = listening_button_text .. " + ..." end
+
+        -- If no inputs pressed use default listening from language file
+        elseif popup.listening then
+            listening_button_text = language.get("window.bindings.listening")
         end
 
         if imgui.button(listening_button_text) then
             popup.listening = true
             popup.binding = nil
         end
-        -- imgui.set_tooltip("Click to reset")
         imgui.separator()
         imgui.spacing()
         imgui.spacing()
@@ -462,6 +463,7 @@ function bindings.popup_draw_menu(menu, language_path)
             if imgui.menu_item(language.get(language_path .. "." .. key), nil, false, true) then
                 popup.path = language_path .. "." .. key
                 if type(value) == "number" then popup.on = tonumber(1) end
+                if type(value) == "boolean" then popup.on = true end
             end
         end
     end
