@@ -61,7 +61,12 @@
                 "poison": "독",
                 "qurio": "겁혈 피해",
                 "sleep": "수면",
-                "still_working_on": "(개발중)스턴/마비/실 속박 상태"
+                "stun": "Stun",
+                "stun_tooltip": "The visual effect will still play",
+                "paralyze": "Paralyze",
+                "paralyze_tooltip": "The visual effect will still play",
+                "thread": "Thread",
+                "thread_tooltip": "The visual effect will still play"
             }
         },
         "health": {
@@ -82,7 +87,10 @@
             "attack_tooltip": "만약 스탯이 깨지면 슬라이더를 왼쪽으로 드래그하여 재설정",
             "defence": "방어력",
             "defence_disabled": "끄기",
-            "defence_tooltip": "만약 스탯이 깨지면 슬라이더를 왼쪽으로 드래그하여 재설정"
+            "defence_tooltip": "만약 스탯이 깨지면 슬라이더를 왼쪽으로 드래그하여 재설정",
+            "affinity": "Affinity",
+            "affinity_disabled": "Off",
+            "affinity_tooltip": "Drag slider to the left to reset if the stat breaks"
         },
         "unlimited_stamina": "스태미나 무한"
     },
@@ -111,7 +119,8 @@
         "overheat": "오버히트 방지",
         "wyvern_machine_gun": "기관 용탄 무한",
         "wyvern_sniper": "저격 용탄 무한",
-        "no_deviation": "흔들림 없음  "
+        "no_deviation": "흔들림 없음  ",
+        "no_recoil": "No Recoil  "
     },
     "insect_glaive": {
         "title": "조충곤",
@@ -133,7 +142,8 @@
         "auto_reload": "자동 장전 ",
         "fanning_maneuver": "선회 이동 버프",
         "wyvern_blast": "기폭 용탄 무한",
-        "no_deviation": "흔들림 없음 "
+        "no_deviation": "흔들림 없음 ",
+        "no_recoil": "No Recoil "
     },
     "long_sword": {
         "title": "태도",
@@ -148,6 +158,7 @@
             "title": "탄약/병",
             "auto_reload": "자동 장전",
             "no_deviation": "흔들림 없음",
+            "no_recoil": "No Recoil",
             "unlimited_ammo": "탄약 무한 (보우건)",
             "unlimited_coatings": "병 무한 (활)"
         },
