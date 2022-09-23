@@ -21,7 +21,7 @@
             "add_keyboard": "添加键盘快捷键",
             "add_gamepad": "添加手柄快捷键",
             "choose_modification": "选择一个修改",
-            "on_value": "On Value",
+            "on_value": "目标值",
             "to_listen": "开始记录输入",
             "listening": "正在记录中...",
             "save": "保存",
