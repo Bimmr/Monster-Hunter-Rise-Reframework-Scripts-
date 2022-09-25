@@ -14,18 +14,18 @@
         "translator": "Übersetzer",
         "version": "Version",
         "bindings": {
-            "title": "Bindings",
-            "keyboard": "Keyboard",
+            "title": "Tastenbelegungen",
+            "keyboard": "Tastatur",
             "gamepad": "Controller",
-            "remove": "Remove",
-            "add_keyboard": "Add a New Keyboard Binding",
-            "add_gamepad": "Add a New Controller Binding",
-            "choose_modification": "Choose a modification",
-            "on_value": "On Value",
-            "to_listen": "Start Listening for inputs",
-            "listening": "Listening for inputs",
-            "save": "Save",
-            "cancel": "Cancel"
+            "remove": "Entfernen",
+            "add_keyboard": "Neue Tastenbelegung hinzufügen (Tastatur)",
+            "add_gamepad": "Neue Tastenbelegung hinzufügen (Controller)",
+            "choose_modification": "Wähle die zuverändernde Taste",
+            "on_value": "Auf Wert bezogen",
+            "to_listen": "Start um Tasteneingaben aufzunehmen",
+            "listening": "Aufnahme von Tasteneingaben",
+            "save": "Speichern",
+            "cancel": "Abbruch"
         }
     },
     "bow": {
@@ -170,7 +170,7 @@
         },
         "consumables": {
             "title": "Verbrauchsgüter",
-            "endemic_life": "Undendlich Einheimische Wesen",
+            "endemic_life": "Unendlich Einheimische Wesen",
             "items": "Unendlich Items"
         },
         "sharpness_level": "Schärfe Level",
