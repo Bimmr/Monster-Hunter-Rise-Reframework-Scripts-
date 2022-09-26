@@ -62,18 +62,21 @@ function utils.checkIfInBattle()
     if not musicManager then musicManager = sdk.get_managed_singleton("snow.wwise.WwiseMusicManager") end
     if not questManager then questManager = sdk.get_managed_singleton("snow.QuestManager") end
 
-    local currentMusicType = musicManager:get_field("_FightBGMType")
     local currentBattleState = musicManager:get_field("_CurrentEnemyAction")
+    local currentMixUsed = musicManager:get_field("_Current")
 
     local currentQuestType = questManager:get_field("_QuestType")
     local currentQuestStatus = questManager:get_field("_QuestStatus")
 
     local inBattle = currentBattleState == 3 -- Fighting a monster
-    or currentMusicType == 25 -- Fighting a wave of monsters
-    or currentQuestType == 8 -- Fighting in the arena (Village/Hub quests)
+    or currentMixUsed == 37 -- Fighting a wave of monsters
+    or currentMixUsed == 10 -- Stronger battle music mix is being used
+    or currentMixUsed == 31 -- Used in some arena battles
     or currentQuestType == 64 -- Fighting in the arena (Utsushi)
 
+
     local isQuestComplete = currentQuestStatus == 3 -- Completed the quest
+    or currentQuestStatus == 0 -- Not in a quest
 
     return inBattle and not isQuestComplete
 end
