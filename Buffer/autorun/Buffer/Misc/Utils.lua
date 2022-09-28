@@ -121,4 +121,11 @@ function utils.generate_enum(typename)
     end
     return enum
 end
+
+
+function utils.send_message(text)
+    local chatManager = sdk.get_managed_singleton("snow.gui.ChatManager");
+    chatManager:call("reqAddChatInfomation", text, 0);
+end
+
 return utils
