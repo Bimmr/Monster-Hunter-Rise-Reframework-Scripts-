@@ -26,8 +26,8 @@
             "listening": "Aufnahme von Tasteneingaben",
             "save": "Speichern",
             "cancel": "Abbruch",
-            "enabled": "has been enabled.",
-            "disabled": "has been disabled."
+            "enabled": "wurde aktiviert.",
+            "disabled": "wurde deaktiviert."
         }
     },
     "bow": {
