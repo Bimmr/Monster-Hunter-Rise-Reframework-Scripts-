@@ -95,7 +95,21 @@ function bindings.save_to_file()
         ['btns'] = bindings.btns
     })
 end
-
+-- ======= Misc ===========
+function bindings.get_formatted_title(path)
+    path = utils.split(path, ".")
+    local currentPath = path[1]
+    local title = language.get(currentPath .. ".title")
+    for i = 2, #path, 1 do
+        currentPath = currentPath .. "." .. path[i]
+        if i == #path then
+            title = title .. "/" .. language.get(currentPath)
+        else
+            title = title .. "/" .. language.get(currentPath .. ".title")
+        end
+    end
+    return title
+end
 -- ======= Gamepad ==========
 
 -- Because the game combines button inputs into a single number we need to split it back up
@@ -258,6 +272,8 @@ function bindings.perform(data)
     local path = utils.split(data.path, ".")
     local on_value = data.on
 
+    local enabled_text, disabled_text = "<COL YEL>".. language.get("window.bindings.enabled").."</COL>", "<COL RED>"..language.get("window.bindings.disabled").."</COL>"
+
     -- Find module
     local module_index
     for key, value in pairs(modules) do if modules[key].title == path[1] then module_index = key end end
@@ -268,31 +284,40 @@ function bindings.perform(data)
     if #path == 2 then -- Example: character.sharpness
         if type(on_value) == "boolean" then
             modules[module_index][path[2]] = not modules[module_index][path[2]]
+            utils.send_message(bindings.get_formatted_title(data.path) .. " "..(modules[module_index][path[2]] and enabled_text or disabled_text))
         elseif type(on_value) == "number" then
             if modules[module_index][path[2]] == -1 then
                 modules[module_index][path[2]] = on_value
+                utils.send_message(bindings.get_formatted_title(data.path) .. " ".. enabled_text)
             else
                 modules[module_index][path[2]] = -1
+                utils.send_message(bindings.get_formatted_title(data.path) .. " ".. disabled_text)
             end
         end
     elseif #path == 3 then -- Example: miscellaneous.ammo_and_coatings.unlimited_ammo
         if type(on_value) == "boolean" then
             modules[module_index][path[2]][path[3]] = not modules[module_index][path[2]][path[3]]
+            utils.send_message(bindings.get_formatted_title(data.path) .. " "..(modules[module_index][path[2]][path[3]] and enabled_text or disabled_text))
         elseif type(on_value) == "number" then
             if modules[module_index][path[2]][path[3]] == -1 then
                 modules[module_index][path[2]][path[3]] = on_value
+                utils.send_message(bindings.get_formatted_title(data.path) .. " ".. enabled_text)
             else
                 modules[module_index][path[2]][path[3]] = -1
+                utils.send_message(bindings.get_formatted_title(data.path) .. " ".. disabled_text)
             end
         end
-    elseif #path == 4 then-- Example: character.conditions_and_blights.blights.fire
+    elseif #path == 4 then -- Example: character.conditions_and_blights.blights.fire
         if type(on_value) == "boolean" then
             modules[module_index][path[2]][path[3]][path[4]] = not modules[module_index][path[2]][path[3]][path[4]]
+            utils.send_message(bindings.get_formatted_title(data.path) .. " "..(modules[module_index][path[2]][path[3]][path[4]] and enabled_text or disabled_text))
         elseif type(on_value) == "number" then
             if modules[module_index][path[2]][path[3]][path[4]] == -1 then
                 modules[module_index][path[2]][path[3]][path[4]] = on_value
+                utils.send_message(bindings.get_formatted_title(data.path) .. " ".. enabled_text)
             else
                 modules[module_index][path[2]][path[3]][path[4]] = -1
+                utils.send_message(bindings.get_formatted_title(data.path) .. " ".. disabled_text)
             end
         end
     end
@@ -367,7 +392,7 @@ function bindings.popup_draw()
 
         -- If no path has been chosen use the default text from the language file, otherwise display the path selected
         local bindings_text = language.get("window.bindings.choose_modification")
-        if popup.path ~= nil then bindings_text = popup.path end
+        if popup.path ~= nil then bindings_text = bindings.get_formatted_title(popup.path) end
         if imgui.begin_menu(bindings_text) then
             for _, module in pairs(modules) do
                 if imgui.begin_menu(language.get(module.title .. ".title")) then
@@ -418,7 +443,7 @@ function bindings.popup_draw()
             end
             if popup.listening then listening_button_text = listening_button_text .. " + ..." end
 
-        -- If no inputs pressed use default listening from language file
+            -- If no inputs pressed use default listening from language file
         elseif popup.listening then
             listening_button_text = language.get("window.bindings.listening")
         end

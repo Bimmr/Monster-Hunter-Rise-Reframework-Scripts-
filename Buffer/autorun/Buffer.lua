@@ -83,17 +83,7 @@ re.on_draw_ui(function()
                             imgui.table_next_column()
                             local keys = v.input
                             local data = v.data
-                            local path = utils.split(data.path, ".")
-                            local currentPath = path[1]
-                            local title = language.get(currentPath .. ".title")
-                            for i = 2, #path, 1 do
-                                currentPath = currentPath .. "." .. path[i]
-                                if i == #path then
-                                    title = title .. "/" .. language.get(currentPath)
-                                else
-                                    title = title .. "/" .. language.get(currentPath .. ".title")
-                                end
-                            end
+                            local title = bindings.get_formatted_title(data.path)
                             imgui.text("   " .. title)
                             imgui.table_next_column()
                             local key_string = ""
@@ -126,17 +116,8 @@ re.on_draw_ui(function()
                             imgui.table_next_column()
                             local btns = v.input
                             local data = v.data
-                            local path = utils.split(data.path, ".")
-                            local currentPath = path[1]
-                            local title = language.get(currentPath .. ".title")
-                            for i = 2, #path, 1 do
-                                currentPath = currentPath .. "." .. path[i]
-                                if i == #path then
-                                    title = title .. "/" .. language.get(currentPath)
-                                else
-                                    title = title .. "/" .. language.get(currentPath .. ".title")
-                                end
-                            end
+                            
+                            local title = bindings.get_formatted_title(data.path)
                             imgui.text("   " .. title)
                             imgui.table_next_column()
                             local key_string = ""
