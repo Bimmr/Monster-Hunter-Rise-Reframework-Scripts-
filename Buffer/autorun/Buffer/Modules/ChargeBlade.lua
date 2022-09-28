@@ -19,6 +19,7 @@ end
 function data.init_hooks()
     sdk.hook(sdk.find_type_definition("snow.player.ChargeAxe"):get_method("update"), function(args)
         local managed = sdk.to_managed_object(args[2])
+        if not managed:get_type_definition():is_a("snow.player.ChargeAxe") then return end
         
         if data.full_bottles then
             managed:set_field("<ChargedBottleNum>k__BackingField", 5)

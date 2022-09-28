@@ -15,6 +15,7 @@ end
 function data.init_hooks()
     sdk.hook(sdk.find_type_definition("snow.player.ShortSword"):get_method("update"), function(args)
         local managed = sdk.to_managed_object(args[2])
+        if not managed:get_type_definition():is_a("snow.player.ShortSword") then return end
 
         if data.destroyer_oil then
             managed:set_field("<IsOilBuffSetting>k__BackingField", true)

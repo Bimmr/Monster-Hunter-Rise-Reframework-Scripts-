@@ -17,6 +17,7 @@ end
 
 function data.init_hooks()
     sdk.hook(sdk.find_type_definition("snow.player.InsectGlaive"):get_method("update"), function(args)
+        if not managed:get_type_definition():is_a("snow.player.InsectGlaive") then return end
         local managed = sdk.to_managed_object(args[2])
 
         if data.red_extract then managed:set_field("_RedExtractiveTime", 8000) end
@@ -27,6 +28,7 @@ function data.init_hooks()
 
     sdk.hook(sdk.find_type_definition("snow.player.IG_Insect"):get_method("update"), function(args)
         local managed = sdk.to_managed_object(args[2])
+        if not managed:get_type_definition():is_a("snow.player.IG_Insect") then return end
 
         if data.kinsect_stamina then managed:set_field("<_Stamina>k__BackingField", 100) end -- not working?
 

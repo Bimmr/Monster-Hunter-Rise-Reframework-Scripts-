@@ -16,6 +16,7 @@ end
 function data.init_hooks()
     sdk.hook(sdk.find_type_definition("snow.player.Horn"):get_method("update"), function(args)
         local managed = sdk.to_managed_object(args[2])
+        if not managed:get_type_definition():is_a("snow.player.Horn") then return end
 
         if data.infernal_mode then managed:set_field("<RevoltGuage>k__BackingField", 100) end
         if data.skillbind_shockwave then managed:set_field("_ImpactPullsTimer", 1800) end

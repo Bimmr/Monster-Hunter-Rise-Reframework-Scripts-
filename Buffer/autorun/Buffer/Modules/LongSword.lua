@@ -16,6 +16,7 @@ end
 function data.init_hooks()
     sdk.hook(sdk.find_type_definition("snow.player.LongSword"):get_method("update"), function(args)
         local managed = sdk.to_managed_object(args[2])
+        if not managed:get_type_definition():is_a("snow.player.LongSword") then return end
 
         if data.guage_max then managed:set_field("_LongSwordGauge", 100) end
         if data.guage_level > -1 then managed:set_field("_LongSwordGaugeLv", data.guage_level) end

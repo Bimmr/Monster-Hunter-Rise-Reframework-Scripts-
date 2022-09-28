@@ -50,6 +50,8 @@ end
 
 function data.init_hooks()
     sdk.hook(sdk.find_type_definition("snow.player.PlayerManager"):get_method("update"), function(args)
+        local managed = sdk.to_managed_object(args[2])
+        if not managed:get_type_definition():is_a("snow.player.PlayerManager") then return end
 
         local playerBase = utils.getPlayerBase()
         if not playerBase then return end

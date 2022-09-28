@@ -23,6 +23,7 @@ end
 function data.init_hooks()
     sdk.hook(sdk.find_type_definition("snow.player.HeavyBowgun"):get_method("update"), function(args)
         local managed = sdk.to_managed_object(args[2])
+        if not managed:get_type_definition():is_a("snow.player.HeavyBowgun") then return end
 
         if data.charge_level > -1 then
             managed:set_field("_ShotChargeLv", data.charge_level)
@@ -32,6 +33,8 @@ function data.init_hooks()
     end, utils.nothing())
 
     sdk.hook(sdk.find_type_definition("snow.player.PlayerManager"):get_method("update"), function(args)
+        local managed = sdk.to_managed_object(args[2])
+        if not managed:get_type_definition():is_a("snow.player.PlayerManager") then return end
         local playerData = utils.getPlayerData()
         if not playerData then return end
 

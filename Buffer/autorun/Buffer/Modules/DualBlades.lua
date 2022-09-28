@@ -16,6 +16,7 @@ end
 function data.init_hooks()
     sdk.hook(sdk.find_type_definition("snow.player.DualBlades"):get_method("update"), function(args)
         local managed = sdk.to_managed_object(args[2])
+        if not managed:get_type_definition():is_a("snow.player.DualBlades") then return end
 
         if data.archdemon_mode then managed:set_field("<KijinKyoukaGuage>k__BackingField", 100) end
         if data.ironshine_silk then managed:set_field("SharpnessRecoveryBuffValidTimer", 3000) end

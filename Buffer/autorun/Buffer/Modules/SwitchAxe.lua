@@ -18,6 +18,7 @@ end
 function data.init_hooks()
     sdk.hook(sdk.find_type_definition("snow.player.SlashAxe"):get_method("update"), function(args)
         local managed = sdk.to_managed_object(args[2])
+        if not managed:get_type_definition():is_a("snow.player.SlashAxe") then return end
 
         if data.max_charge then managed:set_field("_BottleGauge", 100) end
         if data.max_sword_ammo then managed:set_field("_BottleAwakeGauge", 150) end

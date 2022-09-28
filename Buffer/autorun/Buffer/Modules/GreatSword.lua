@@ -16,6 +16,7 @@ end
 function data.init_hooks()
     sdk.hook(sdk.find_type_definition("snow.player.GreatSword"):get_method("update"), function(args)
         local managed = sdk.to_managed_object(args[2])
+        if not managed:get_type_definition():is_a("snow.player.GreatSword") then return end
 
         if data.charge_level > -1 then managed:set_field("_TameLv", data.charge_level) end
         if data.power_sheathe then managed:set_field("MoveWpOffBuffGreatSwordTimer", 1200) end

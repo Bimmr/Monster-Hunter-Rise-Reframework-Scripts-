@@ -15,6 +15,7 @@ end
 function data.init_hooks()
     sdk.hook(sdk.find_type_definition("snow.player.Lance"):get_method("update"), function(args)
         local managed = sdk.to_managed_object(args[2])
+        if not managed then return end
 
         if data.anchor_rage > -1 then
             managed:set_field("_GuardRageTimer", 3000)

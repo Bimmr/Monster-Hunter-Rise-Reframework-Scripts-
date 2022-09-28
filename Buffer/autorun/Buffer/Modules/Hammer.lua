@@ -16,7 +16,8 @@ end
 function data.init_hooks()
     sdk.hook(sdk.find_type_definition("snow.player.Hammer"):get_method("update"), function(args)
         local managed = sdk.to_managed_object(args[2])
-
+        if not managed:get_type_definition():is_a("snow.player.Hammer") then return end
+        
         if data.charge_level > -1 then managed:set_field("<NowChargeLevel>k__BackingField", data.charge_level) end
         if data.impact_burst then
             managed:set_field("_ImpactPullsTimer", 3600)

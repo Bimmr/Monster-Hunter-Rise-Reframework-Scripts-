@@ -18,6 +18,7 @@ end
 function data.init_hooks()
     sdk.hook(sdk.find_type_definition("snow.player.GunLance"):get_method("update"), function(args)
         local managed = sdk.to_managed_object(args[2])
+        if not managed:get_type_definition():is_a("snow.player.GunLance") then return end
 
         if data.aerials then managed:set_field("_AerialCount", 0) end
         if data.auto_reload then managed:call("reloadBullet") end
