@@ -23,7 +23,6 @@ local data = {
     canteen = {
         dango_100_no_ticket = false,
         dango_100_ticket = false,
-        managed_dango_100 = nil,
         level_4 = false
     },
     hidden = {
