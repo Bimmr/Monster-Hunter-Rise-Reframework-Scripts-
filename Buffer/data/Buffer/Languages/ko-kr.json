@@ -25,7 +25,9 @@
             "to_listen": "Start Listening for inputs",
             "listening": "Listening for inputs",
             "save": "Save",
-            "cancel": "Cancel"
+            "cancel": "Cancel",
+            "enabled": "has been enabled.",
+            "disabled": "has been disabled."
         }
     },
     "bow": {

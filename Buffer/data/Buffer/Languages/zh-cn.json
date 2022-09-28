@@ -25,7 +25,9 @@
             "to_listen": "开始记录输入",
             "listening": "正在记录中...",
             "save": "保存",
-            "cancel": "取消"
+            "cancel": "取消",
+            "enabled": "has been enabled.",
+            "disabled": "has been disabled."
         }
     },
     "bow": {

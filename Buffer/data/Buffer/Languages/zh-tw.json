@@ -25,7 +25,9 @@
             "to_listen": "開始記錄快捷鍵",
             "listening": "正在等待輸入...",
             "save": "儲存",
-            "cancel": "取消"
+            "cancel": "取消",
+            "enabled": "has been enabled.",
+            "disabled": "has been disabled."
         }
     },
     "bow": {

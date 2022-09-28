@@ -25,7 +25,9 @@
             "to_listen": "Start um Tasteneingaben aufzunehmen",
             "listening": "Aufnahme von Tasteneingaben",
             "save": "Speichern",
-            "cancel": "Abbruch"
+            "cancel": "Abbruch",
+            "enabled": "has been enabled.",
+            "disabled": "has been disabled."
         }
     },
     "bow": {
