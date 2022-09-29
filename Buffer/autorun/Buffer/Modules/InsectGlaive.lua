@@ -17,8 +17,8 @@ end
 
 function data.init_hooks()
     sdk.hook(sdk.find_type_definition("snow.player.InsectGlaive"):get_method("update"), function(args)
-        if not managed:get_type_definition():is_a("snow.player.InsectGlaive") then return end
         local managed = sdk.to_managed_object(args[2])
+        if not managed:get_type_definition():is_a("snow.player.InsectGlaive") then return end
 
         if data.red_extract then managed:set_field("_RedExtractiveTime", 8000) end
         if data.white_extract then managed:set_field("_WhiteExtractiveTime", 8000) end
