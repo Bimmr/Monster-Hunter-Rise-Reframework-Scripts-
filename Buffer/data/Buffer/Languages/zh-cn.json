@@ -26,8 +26,8 @@
             "listening": "正在记录中...",
             "save": "保存",
             "cancel": "取消",
-            "enabled": "has been enabled.",
-            "disabled": "has been disabled."
+            "enabled": "已启用",
+            "disabled": "已禁用"
         }
     },
     "bow": {
