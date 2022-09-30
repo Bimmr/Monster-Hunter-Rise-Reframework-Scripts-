@@ -93,7 +93,8 @@ re.on_draw_ui(function()
                             end
                             imgui.text("   [ " .. key_string .. " ]     ")
                             imgui.table_next_column()
-                            if imgui.button(language.get(languagePrefix .. "remove")) then bindings.remove(3, k) end
+                            if imgui.button(language.get(languagePrefix .. "remove").. " "..tostring(k)) then 
+                                bindings.remove(3, k) end
                             imgui.same_line()
                             imgui.text("  ")
                         end
@@ -127,7 +128,8 @@ re.on_draw_ui(function()
                             end
                             imgui.text("   [ " .. key_string .. " ]     ")
                             imgui.table_next_column()
-                            if imgui.button(language.get(languagePrefix .. "remove")) then bindings.remove(1, k) end
+                            if imgui.button(language.get(languagePrefix .. "remove").. " ".. tostring(k)) then 
+                                bindings.remove(1, k) end
                             imgui.same_line()
                             imgui.text("  ")
                         end
