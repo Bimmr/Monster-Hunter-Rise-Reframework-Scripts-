@@ -1,4 +1,12 @@
--- Sprit Bird types w/ index for EnvironmentCreatureManager#_EcPrefabList.mItems
+local is_window_open, was_open = false, false
+local config_path = "SpiritBirds.json"
+
+local player_manager, creature_manager, quest_manager
+local application, application_type
+
+local spawned_birds = {}
+local quest_start_time = nil
+local quest_start_delay = 2
 local SPIRIT_BIRDS = {
     atk = 11,
     def = 12,
@@ -7,132 +15,139 @@ local SPIRIT_BIRDS = {
     all = 15,
     gold = 31
 }
+
 local autospawn = {
     enabled = true,
     spawned = false
 }
-local isWindowOpen, wasOpen = false, false
-
-local spawnedBirds = {}
-
-local configPath = "SpiritBirds.json"
 
 -- Load the config
-local function loadConfig()
+local function load_config()
     if json ~= nil then
-        local file = json.load_file(configPath)
+        local file = json.load_file(config_path)
         if file then
             autospawn.enabled = file.autospawn
-            isWindowOpen = file.isWindowOpen
+            is_window_open = file.isWindowOpen
         end
     end
 end
-loadConfig()
+load_config()
 
 -- Save the config
-local function saveConfig()
-    json.dump_file(configPath, {
+local function save_config()
+    json.dump_file(config_path, {
         autospawn = autospawn.enabled,
-        isWindowOpen = isWindowOpen
+        isWindowOpen = is_window_open
     })
 end
 
 -- Get the player
-local function getPlayer()
-    local player = sdk.get_managed_singleton("snow.player.PlayerManager"):call("findMasterPlayer")
+local function get_player()
+    if not player_manager then player_manager = sdk.get_managed_singleton("snow.player.PlayerManager") end
+    local player = player_manager:call("findMasterPlayer")
     if not player then return end
     player = player:call("get_GameObject")
     return player
 end
 
 -- Get the player's location
-local function getPlayerLocation()
-    local player = getPlayer()
+local function get_player_location()
+    local player = get_player()
     if not player then return end
     local location = player:call("get_Transform"):call("get_Position")
     if not location then return end
     return location
 end
 
--- Get Creature Manager
-local function getEnvCreatureManager()
-    local envCreature = sdk.get_managed_singleton("snow.envCreature.EnvironmentCreatureManager")
-    if not envCreature then return end
-    return envCreature
-end
-
 -- Get Quest State [ 0 = Lobby, 1 = Ready/Loading, 2 = Quest, 3 = End, 5 = Abandoned, 7 = Returned ]
-local function getQuestStatus()
-    local questManager = sdk.get_managed_singleton("snow.QuestManager")
-    if not questManager then return end
-    return questManager:get_field("_QuestStatus")
+local function get_quest_status()
+    if not quest_manager then quest_manager = sdk.get_managed_singleton("snow.QuestManager") end
+    return quest_manager:get_field("_QuestStatus")
 end
 
--- Function to get length of table
-local function getLength(obj)
-    local count = 0
-    for _ in pairs(obj) do count = count + 1 end
-    return count
+-- Get up time in seconds
+local function get_time()
+    if not application then application = sdk.get_native_singleton("via.Application") application_type = sdk.find_type_definition("via.Application") end
+    local time =  sdk.call_native_func(application, application_type, "get_UpTimeSecond")
+    return time
 end
 
 -- Spawn the bird
-local function spawnBird(type)
-    local envCreature = getEnvCreatureManager()
-    local location = getPlayerLocation()
+local function spawn_bird(type)
+    local location = get_player_location()
+    local creature_manager = sdk.get_managed_singleton("snow.envCreature.EnvironmentCreatureManager")
+    if not creature_manager or not location then return false end
 
     -- Create the bird
-    local ecList = envCreature:get_field("_EcPrefabList"):get_field("mItems"):get_elements()
-    local ecBird = ecList[SPIRIT_BIRDS[type]]
-    if not ecBird:call("get_Standby") then ecBird:call("set_Standby", true) end
+    local ec_list = creature_manager:get_field("_EcPrefabList")
+    if not ec_list then return false end
+    local ec_items = ec_list:get_field("mItems"):get_elements()
+    if not ec_items then return false end
+    local ec_bird = ec_items[SPIRIT_BIRDS[type]]
+    if not ec_bird then
+        log.debug("An invalid bird type was just spawned")
+        return true
+    end
+    if not ec_bird:call("get_Standby") then ec_bird:call("set_Standby", true) end
 
     -- Set the bird as active
-    local bird = ecBird:call("instantiate(via.vec3)", location)
-
-    -- If the bird isn't managed, try spawning another (This prevents the having to spawn twice if bird doesn't exist in level)
-    if not sdk.is_managed_object(bird) then
-        spawnBird(type)
-    else
-        table.insert(spawnedBirds, bird)
+    local bird = ec_bird:call("instantiate(via.vec3)", location)
+    if sdk.is_managed_object(bird) then
+        table.insert(spawned_birds, bird)
+        return true
     end
+    return false
 end
 
 -- Watch for Auto-Spawn of Prism and clear spawned birds after quest ends
 re.on_pre_application_entry("UpdateBehavior", function()
     -- If Auto spawn is enabled and quest status says it's active
-    if getQuestStatus() == 2 and autospawn.enabled and not autospawn.spawned then
+    if get_quest_status() == 2 and autospawn.enabled and not autospawn.spawned then
         if not autospawn.spawned then
-            spawnBird("all")
-            -- If you want to change the the mod to spawn in 5 birds of a different type, just replace the line above with one of the following
-            -- for i = 0, 5 do     spawnBird("hp")       end
-            -- for i = 0, 5 do     spawnBird("atk")      end
-            -- for i = 0, 5 do     spawnBird("def")      end
-            -- I have no plans to add this as a feature so you can change it if you want
-            autospawn.spawned = true
+            if quest_start_time == nil then
+                quest_start_time = get_time()
+            elseif get_time() - quest_start_time > quest_start_delay then
+                quest_start_time = nil
+
+                -- REPLACE START
+                if spawn_bird("all") then
+                    autospawn.spawned = true
+                end
+                -- REPLACE END
+                
+                -- If you want to change the the mod to spawn in 5 birds of a different type, just replace the section above with one of the following
+                -- local spawned = false    for i = 0, 5 do    if spawn_bird("hp")   then    spawned = true    end    end    if spawned then autospawn.spawned = true end
+                -- local spawned = false    for i = 0, 5 do    if spawn_bird("atk")  then    spawned = true    end    end    if spawned then autospawn.spawned = true end
+                -- local spawned = false    for i = 0, 5 do    if spawn_bird("def")  then    spawned = true    end    end    if spawned then autospawn.spawned = true end
+                -- local spawned = false    for i = 0, 5 do    if spawn_bird("spd")  then    spawned = true    end    end    if spawned then autospawn.spawned = true end
+                -- local spawned = false    for i = 0, 5 do    if spawn_bird("gold") then    spawned = true    end    end    if spawned then autospawn.spawned = true end
+                -- I have no plans to add this as a feature so you can change it if you want
+            end
         end
 
         -- If the quest status is not active, clear the spawned birds, and set autospawned.spawned to false
-    elseif getQuestStatus() ~= 2 and getLength(spawnedBirds) > 0 then
+    elseif get_quest_status() ~= 2 and #spawned_birds > 0 then
         autospawn.spawned = false
-        for i, bird in pairs(spawnedBirds) do bird:call("destroy", bird) end
-        spawnedBirds = {}
+        for i, bird in pairs(spawned_birds) do bird:call("destroy", bird) end
+        spawned_birds = {}
     end
 end)
 
 -- Remove any spawned birds on on script reset
 re.on_script_reset(function()
-    for i, bird in pairs(spawnedBirds) do bird:call("destroy", bird) end
-    spawnedBirds = {}
+    for i, bird in pairs(spawned_birds) do bird:call("destroy", bird) end
+    spawned_birds = {}
 end)
 
 -- Draw a window to the REFramework Script Generated UI
 re.on_draw_ui(function()
     if imgui.button("Toggle SpiritBird GUI") then
-        isWindowOpen = not isWindowOpen
-        saveConfig()
+        is_window_open = not is_window_open
+        save_config()
     end
-    if isWindowOpen then
-        wasOpen = true
-        isWindowOpen = imgui.begin_window("Spawn SpiritBirds", isWindowOpen, 64)
+    if is_window_open then
+        was_open = true
+        is_window_open = imgui.begin_window("Spawn SpiritBirds", is_window_open, 64)
         if imgui.button("   « Attack »    ") then spawnBird("atk") end
         imgui.same_line()
         if imgui.button("   « Defense »   ") then spawnBird("def") end
@@ -143,10 +158,10 @@ re.on_draw_ui(function()
         if imgui.button("                  « Golden »                    ") then spawnBird("gold") end
         local changed = false
         changed, autospawn.enabled = imgui.checkbox("Auto-Spawn Prism", autospawn.enabled)
-        if changed then saveConfig() end
+        if changed then save_config() end
         imgui.end_window()
-    elseif wasOpen then
-        wasOpen = false
-        saveConfig()
+    elseif was_open then
+        was_open = false
+        save_config()
     end
 end)
