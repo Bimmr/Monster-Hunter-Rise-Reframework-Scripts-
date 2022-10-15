@@ -1,8 +1,8 @@
 {
     "_IMPORTANT_NOTE": "만약 각 항목들 중에 값이 중복될 경우, 공백을 붙여서 구분될 수 있도록 작성해야 함",
     "_USE_FONT": "NotoSansKR-Medium.otf",
-    "_TRANSLATOR": "Calycekr",
-    "window":{
+    "_TRANSLATOR": "Calycekr & orge44",
+    "window": {
         "toggle_button": "Buffer GUI 켜기",
         "title": "변경 & 설정",
         "settings": "설정",
@@ -11,23 +11,23 @@
         "font_size_apply": "적용",
         "about": "정보",
         "author": "작성자",
-        "translator": "번역가",
+        "translator": "번역",
         "version": "버전",
         "bindings": {
-            "title": "Bindings",
-            "keyboard": "Keyboard",
-            "gamepad": "Controller",
-            "remove": "Remove",
-            "add_keyboard": "Add a New Keyboard Binding",
-            "add_gamepad": "Add a New Controller Binding",
-            "choose_modification": "Choose a modification",
-            "on_value": "On Value",
-            "to_listen": "Start Listening for inputs",
-            "listening": "Listening for inputs",
-            "save": "Save",
-            "cancel": "Cancel",
-            "enabled": "has been enabled.",
-            "disabled": "has been disabled."
+            "title": "단축키",
+            "keyboard": "키보드",
+            "gamepad": "컨트롤러",
+            "remove": "삭제",
+            "add_keyboard": "새 키보드 단축키 추가",
+            "add_gamepad": "새 컨트롤러 단축키 추가",
+            "choose_modification": "변경",
+            "on_value": "설정 값",
+            "to_listen": "입력을 시작하세요",
+            "listening": "입력 수신 중",
+            "save": "저장",
+            "cancel": "취소",
+            "enabled": "설정 활성화",
+            "disabled": "설정 비활성화"
         }
     },
     "bow": {
@@ -63,12 +63,12 @@
                 "poison": "독",
                 "qurio": "겁혈 피해",
                 "sleep": "수면",
-                "stun": "Stun",
-                "stun_tooltip": "The visual effect will still play",
-                "paralyze": "Paralyze",
-                "paralyze_tooltip": "The visual effect will still play",
-                "thread": "Thread",
-                "thread_tooltip": "The visual effect will still play"
+                "stun": "기절",
+                "stun_tooltip": "플레이 중 기절 이펙트는 보임",
+                "paralyze": "마비",
+                "paralyze_tooltip": "플레이 중 마비 이펙트는 보임",
+                "thread": "실 감김",
+                "thread_tooltip": "플레이 중 실 감김 이펙트는 보임"
             }
         },
         "health": {
@@ -90,9 +90,9 @@
             "defence": "방어력",
             "defence_disabled": "끄기",
             "defence_tooltip": "만약 스탯이 깨지면 슬라이더를 왼쪽으로 드래그하여 재설정",
-            "affinity": "Affinity",
-            "affinity_disabled": "Off",
-            "affinity_tooltip": "Drag slider to the left to reset if the stat breaks"
+            "affinity": "회심율",
+            "affinity_disabled": "끄기",
+            "affinity_tooltip": "만약 스탯이 깨지면 슬라이더를 왼쪽으로 드래그하여 재설정"
         },
         "unlimited_stamina": "스태미나 무한"
     },
@@ -122,7 +122,7 @@
         "wyvern_machine_gun": "기관 용탄 무한",
         "wyvern_sniper": "저격 용탄 무한",
         "no_deviation": "흔들림 없음  ",
-        "no_recoil": "No Recoil  "
+        "no_recoil": "반동없음  "
     },
     "insect_glaive": {
         "title": "조충곤",
@@ -130,7 +130,7 @@
         "kinsect_stamina": "사냥벌레 스태미나 무한",
         "orange_extract": "주황 진액 채취",
         "red_extract": "빨강 진액 채취",
-        "white_extract": "하양 진액 채취"
+        "white_extract": "흰 진액 채취"
     },
     "lance": {
         "title": "랜스",
@@ -145,7 +145,7 @@
         "fanning_maneuver": "선회 이동 버프",
         "wyvern_blast": "기폭 용탄 무한",
         "no_deviation": "흔들림 없음 ",
-        "no_recoil": "No Recoil "
+        "no_recoil": "반동없음 "
     },
     "long_sword": {
         "title": "태도",
@@ -160,15 +160,15 @@
             "title": "탄약/병",
             "auto_reload": "자동 장전",
             "no_deviation": "흔들림 없음",
-            "no_recoil": "No Recoil",
+            "no_recoil": "반동없음",
             "unlimited_ammo": "탄약 무한 (보우건)",
             "unlimited_coatings": "병 무한 (활)"
         },
         "canteen": {
             "title": "식당",
-            "dango_100_no_ticket": "경단 기술 100% (달인의 경단권 미사용)",
-            "dango_100_ticket": "경단 기술 100% (달인의 경단권 사용)",
-            "level_4": "Lv 4 경단"
+            "dango_100_no_ticket": "경단 기술 100% (달인의 경단권 미사용 시)",
+            "dango_100_ticket": "경단 기술 100% (달인의 경단권 사용 시)",
+            "level_4": "Lv 4 경단효과"
         },
         "consumables": {
             "title": "소비 아이템",
@@ -178,14 +178,14 @@
         "sharpness_level": "예리도 단계",
         "sharpness_level_tooltip": "예리도 게이지는 움직이지만, 예리도 단계는 변하지 않음",
         "sharpness_levels": {
-            "disabled":"끄기", 
-            "red": "빨강", 
-            "orange": "주황", 
-            "yellow": "노랑", 
-            "green": "초록", 
-            "blue": "파랑", 
-            "white": "하양", 
-            "purple": "보라"
+            "disabled": "끄기",
+            "red": "빨간 예리",
+            "orange": "주황 예리",
+            "yellow": "노란 예리",
+            "green": "녹 예리",
+            "blue": "파란 예리",
+            "white": "흰 예리",
+            "purple": "보라 예리"
         },
         "wirebugs": {
             "title": "밧줄벌레",
