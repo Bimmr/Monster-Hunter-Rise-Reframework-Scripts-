@@ -1,4 +1,4 @@
-local version = "2.18"
+local version = "2.18.1"
 
 local isWindowOpen, wasOpen = false, false
 
