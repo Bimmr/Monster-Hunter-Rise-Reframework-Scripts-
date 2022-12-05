@@ -42,6 +42,14 @@
     },
     "character": {
         "title": "猎人状态",
+        "ammo_and_coatings": {
+            "title": "弹药与瓶",
+            "auto_reload": "自动装填   ",
+            "no_deviation": "无偏移   ",
+            "no_recoil": "无后座力   ",
+            "unlimited_ammo": "无限弹药   ",
+            "unlimited_coatings": "无限瓶"
+        },
         "conditions_and_blights": {
             "title": "预防异常状态",
             "blights": {
@@ -187,14 +195,6 @@
     },
     "miscellaneous": {
         "title": "杂项",
-        "ammo_and_coatings": {
-            "title": "弹药与瓶",
-            "auto_reload": "自动装填   ",
-            "no_deviation": "无偏移   ",
-            "no_recoil": "无后座力   ",
-            "unlimited_ammo": "无限弹药   ",
-            "unlimited_coatings": "无限瓶"
-        },
         "canteen": {
             "title": "茶点店",
             "dango_100_no_ticket": "无票必发动团子技能",

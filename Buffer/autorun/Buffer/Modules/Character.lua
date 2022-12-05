@@ -10,6 +10,13 @@ local data = {
         max_heroics = false,
         max_adrenaline = false
     },
+    ammo_and_coatings = {
+        unlimited_ammo = false,
+        unlimited_coatings = false,
+        auto_reload = false, -- Drawn here, but no hook
+        no_deviation = false,
+        no_recoil = false
+    },
     conditions_and_blights = {
         blights = {
             fire = false,
@@ -131,6 +138,44 @@ function data.init_hooks()
             playerData:set_field("_r_Vital", math.min(max, newHealth) + .0)
             playerData:call("set__vital", math.min(max, newHealth) + .0)
         end
+        
+    sdk.hook(sdk.find_type_definition("snow.data.bulletSlider.BottleSliderFunc"):get_method("consumeItem"), function(args)
+        if data.ammo_and_coatings.unlimited_coatings then return sdk.PreHookResult.SKIP_ORIGINAL end
+    end, utils.nothing())
+
+    sdk.hook(sdk.find_type_definition("snow.data.bulletSlider.BulletSliderFunc"):get_method("consumeItem"), function(args)
+        if data.ammo_and_coatings.unlimited_ammo then return sdk.PreHookResult.SKIP_ORIGINAL end
+    end, utils.nothing())
+
+    local managed_fluctuation = nil
+    sdk.hook(sdk.find_type_definition("snow.data.BulletWeaponData"):get_method("get_Fluctuation"), function(args)
+        local managed = sdk.to_managed_object(args[2])
+        if not managed then return end
+        if not managed:get_type_definition():is_a("snow.data.BulletWeaponData") then return end
+        managed_fluctuation = true
+    end, function(retval)
+        if managed_fluctuation ~= nil then
+            managed_fluctuation = nil
+            if data.ammo_and_coatings.no_deviation then return 0 end
+        end
+        return retval
+    end)
+
+    local managed_recoil = nil
+    sdk.hook(sdk.find_type_definition("snow.data.BulletWeaponData"):get_method("getRecoil"), function(args)
+        local managed = sdk.to_managed_object(args[2])
+        if not managed then return end
+        if not managed:get_type_definition():is_a("snow.data.BulletWeaponData") then return end
+        managed_recoil = true
+    end, function(retval)
+        if managed_recoil ~= nil then
+            managed_recoil = nil
+            if data.ammo_and_coatings.no_recoil then 
+                return sdk.to_ptr(6)
+            end
+        end
+        return retval
+    end)
 
         local is_in_lobby = playerBase:get_field("<IsLobbyPlayer>k__BackingField")
 
@@ -346,6 +391,20 @@ function data.draw()
             any_changed = any_changed or changed
             imgui.tree_pop()
         end
+        languagePrefix = data.title .. ".ammo_and_coatings."
+        if imgui.tree_node(language.get(languagePrefix .. "title")) then
+            changed, data.ammo_and_coatings.unlimited_coatings = imgui.checkbox(language.get(languagePrefix .. "unlimited_coatings"), data.ammo_and_coatings.unlimited_coatings)
+            any_changed = any_changed or changed
+            changed, data.ammo_and_coatings.unlimited_ammo = imgui.checkbox(language.get(languagePrefix .. "unlimited_ammo"), data.ammo_and_coatings.unlimited_ammo)
+            any_changed = any_changed or changed
+            changed, data.ammo_and_coatings.auto_reload = imgui.checkbox(language.get(languagePrefix .. "auto_reload"), data.ammo_and_coatings.auto_reload)
+            any_changed = any_changed or changed
+            changed, data.ammo_and_coatings.no_deviation = imgui.checkbox(language.get(languagePrefix .. "no_deviation"), data.ammo_and_coatings.no_deviation)
+            any_changed = any_changed or changed
+            changed, data.ammo_and_coatings.no_recoil = imgui.checkbox(language.get(languagePrefix .. "no_recoil"), data.ammo_and_coatings.no_recoil)
+            any_changed = any_changed or changed
+            imgui.tree_pop()
+        end
         languagePrefix = data.title .. ".conditions_and_blights."
         if imgui.tree_node(language.get(languagePrefix .. "title")) then
 
@@ -478,6 +537,7 @@ function data.create_config_section()
                 max_heroics = data.health.max_heroics,
                 max_adrenaline = data.health.max_adrenaline
             },
+            ammo_and_coatings = data.ammo_and_coatings,
             conditions_and_blights = {
                 blights = {
                     fire = data.conditions_and_blights.blights.fire,
@@ -513,6 +573,7 @@ function data.load_from_config(config_section)
     data.sharpness_level = config_section.sharpness_level or data.sharpness_level
     data.unlimited_stamina = config_section.unlimited_stamina or data.unlimited_stamina
     data.health = config_section.health or data.health
+    data.ammo_and_coatings = config_section.ammo_and_coatings or data.ammo_and_coatings
     data.conditions_and_blights = config_section.conditions_and_blights or data.conditions_and_blights
 end
 

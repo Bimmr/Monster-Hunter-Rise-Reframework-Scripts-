@@ -42,6 +42,14 @@
     },
     "character": {
         "title": "캐릭터",
+        "ammo_and_coatings": {
+            "title": "탄약/병",
+            "auto_reload": "자동 장전",
+            "no_deviation": "흔들림 없음",
+            "no_recoil": "반동없음",
+            "unlimited_ammo": "탄약 무한 (보우건)",
+            "unlimited_coatings": "병 무한 (활)"
+        },
         "conditions_and_blights": {
             "title": "속성 피해/상태 이상",
             "blights": {
@@ -187,14 +195,6 @@
     },
     "miscellaneous": {
         "title": "기타",
-        "ammo_and_coatings": {
-            "title": "탄약/병",
-            "auto_reload": "자동 장전",
-            "no_deviation": "흔들림 없음",
-            "no_recoil": "반동없음",
-            "unlimited_ammo": "탄약 무한 (보우건)",
-            "unlimited_coatings": "병 무한 (활)"
-        },
         "canteen": {
             "title": "식당",
             "dango_100_no_ticket": "경단 기술 100% (달인의 경단권 미사용 시)",

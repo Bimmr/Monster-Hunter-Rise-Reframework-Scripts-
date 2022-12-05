@@ -42,6 +42,14 @@
     },
     "character": {
         "title": "Charakter",
+        "ammo_and_coatings": {
+            "title": "Munition und Beschichtungen",
+            "auto_reload": "Automatisches Nachladen",
+            "no_deviation": "Keine Abweichung",
+            "no_recoil": "Kein Rückstoß",
+            "unlimited_ammo": "Unendlich Munition (Bogengewehre)",
+            "unlimited_coatings": "Unendlich Beschichtungen (Bogen)"
+        },
         "conditions_and_blights": {
             "title": "Status-Anomalien und Zustände",
             "blights": {
@@ -187,14 +195,6 @@
     },
     "miscellaneous": {
         "title": "Sonstiges",
-        "ammo_and_coatings": {
-            "title": "Munition und Beschichtungen",
-            "auto_reload": "Automatisches Nachladen",
-            "no_deviation": "Keine Abweichung",
-            "no_recoil": "Kein Rückstoß",
-            "unlimited_ammo": "Unendlich Munition (Bogengewehre)",
-            "unlimited_coatings": "Unendlich Beschichtungen (Bogen)"
-        },
         "canteen": {
             "title": "Kantine",
             "dango_100_no_ticket": "Dango Fähigkeit 100% (Kein Gutschein)",

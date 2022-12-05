@@ -42,6 +42,14 @@
     },
     "character": {
         "title": "獵人狀態",
+        "ammo_and_coatings": {
+            "title": "彈藥與瓶",
+            "auto_reload": "自動裝填   ",
+            "no_deviation": "無偏移   ",
+            "no_recoil": "無後座力   ",
+            "unlimited_ammo": "無限彈藥   ",
+            "unlimited_coatings": "無限瓶"
+        },
         "conditions_and_blights": {
             "title": "預防異常狀態",
             "blights": {
@@ -187,14 +195,6 @@
     },
     "miscellaneous": {
         "title": "雜項",
-        "ammo_and_coatings": {
-            "title": "彈藥與瓶",
-            "auto_reload": "自動裝填   ",
-            "no_deviation": "無偏移   ",
-            "no_recoil": "無後座力   ",
-            "unlimited_ammo": "無限彈藥   ",
-            "unlimited_coatings": "無限瓶"
-        },
         "canteen": {
             "title": "茶館",
             "dango_100_no_ticket": "無票必發動糰子技能",

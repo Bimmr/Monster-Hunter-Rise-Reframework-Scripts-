@@ -1,5 +1,5 @@
 local utils, config, language
-local misc
+local character
 local data = {
     title = "bow",
     charge_level = -1,
@@ -12,7 +12,7 @@ function data.init()
     config = require("Buffer.Misc.Config")
     language = require("Buffer.Misc.Language")
 
-    misc = require("Buffer.Modules.Miscellaneous")
+    character = require("Buffer.Modules.Character")
 
     data.init_hooks()
 end
@@ -37,7 +37,7 @@ function data.draw()
         changed, data.charge_level = imgui.slider_int(language.get(languagePrefix.."charge_level"), data.charge_level, -1, 3,
                                                       data.charge_level > -1 and language.get(languagePrefix.."charge_level_prefix").." " .. (data.charge_level + 1) or language.get(languagePrefix.."charge_level_disabled"))
         any_changed = changed or any_changed
-        changed, misc.ammo_and_coatings.unlimited_coatings = imgui.checkbox(language.get(languagePrefix.."unlimited_arrows"), misc.ammo_and_coatings.unlimited_coatings)
+        changed, character.ammo_and_coatings.unlimited_coatings = imgui.checkbox(language.get(languagePrefix.."unlimited_arrows"), character.ammo_and_coatings.unlimited_coatings)
         misc_changed = changed or misc_changed
         changed, data.herculean_draw = imgui.checkbox(language.get(languagePrefix.."herculean_draw"), data.herculean_draw)
         utils.tooltip(language.get(languagePrefix.."herculean_draw_tooltip"))
@@ -46,7 +46,7 @@ function data.draw()
         any_changed = changed or any_changed
 
         if any_changed then config.save_section(data.create_config_section()) end
-        if misc_changed then config.save_section(misc.create_config_section()) end
+        if misc_changed then config.save_section(character.create_config_section()) end
         
         imgui.unindent(10)
         imgui.separator()

@@ -6,13 +6,6 @@ local data = {
         items = false,
         endemic_life = false
     },
-    ammo_and_coatings = {
-        unlimited_ammo = false,
-        unlimited_coatings = false,
-        auto_reload = false, -- Drawn here, but no hook
-        no_deviation = false,
-        no_recoil = false
-    },
     wirebugs = {
         unlimited_ooc = false,
         unlimited = false,
@@ -76,44 +69,6 @@ function data.init_hooks()
         end
 
     end, utils.nothing())
-
-    sdk.hook(sdk.find_type_definition("snow.data.bulletSlider.BottleSliderFunc"):get_method("consumeItem"), function(args)
-        if data.ammo_and_coatings.unlimited_coatings then return sdk.PreHookResult.SKIP_ORIGINAL end
-    end, utils.nothing())
-
-    sdk.hook(sdk.find_type_definition("snow.data.bulletSlider.BulletSliderFunc"):get_method("consumeItem"), function(args)
-        if data.ammo_and_coatings.unlimited_ammo then return sdk.PreHookResult.SKIP_ORIGINAL end
-    end, utils.nothing())
-
-    local managed_fluctuation = nil
-    sdk.hook(sdk.find_type_definition("snow.data.BulletWeaponData"):get_method("get_Fluctuation"), function(args)
-        local managed = sdk.to_managed_object(args[2])
-        if not managed then return end
-        if not managed:get_type_definition():is_a("snow.data.BulletWeaponData") then return end
-        managed_fluctuation = true
-    end, function(retval)
-        if managed_fluctuation ~= nil then
-            managed_fluctuation = nil
-            if data.ammo_and_coatings.no_deviation then return 0 end
-        end
-        return retval
-    end)
-
-    local managed_recoil = nil
-    sdk.hook(sdk.find_type_definition("snow.data.BulletWeaponData"):get_method("getRecoil"), function(args)
-        local managed = sdk.to_managed_object(args[2])
-        if not managed then return end
-        if not managed:get_type_definition():is_a("snow.data.BulletWeaponData") then return end
-        managed_recoil = true
-    end, function(retval)
-        if managed_recoil ~= nil then
-            managed_recoil = nil
-            if data.ammo_and_coatings.no_recoil then 
-                return sdk.to_ptr(6)
-            end
-        end
-        return retval
-    end)
 
     sdk.hook(sdk.find_type_definition("snow.player.fsm.PlayerFsm2ActionHunterWire"):get_method("start"), utils.nothing(), function(retval)
         if (data.wirebugs.unlimited_ooc and not utils.checkIfInBattle()) or data.wirebugs.unlimited then
@@ -207,20 +162,7 @@ function data.draw()
             any_changed = any_changed or changed
             imgui.tree_pop()
         end
-        languagePrefix = data.title .. ".ammo_and_coatings."
-        if imgui.tree_node(language.get(languagePrefix .. "title")) then
-            changed, data.ammo_and_coatings.unlimited_coatings = imgui.checkbox(language.get(languagePrefix .. "unlimited_coatings"), data.ammo_and_coatings.unlimited_coatings)
-            any_changed = any_changed or changed
-            changed, data.ammo_and_coatings.unlimited_ammo = imgui.checkbox(language.get(languagePrefix .. "unlimited_ammo"), data.ammo_and_coatings.unlimited_ammo)
-            any_changed = any_changed or changed
-            changed, data.ammo_and_coatings.auto_reload = imgui.checkbox(language.get(languagePrefix .. "auto_reload"), data.ammo_and_coatings.auto_reload)
-            any_changed = any_changed or changed
-            changed, data.ammo_and_coatings.no_deviation = imgui.checkbox(language.get(languagePrefix .. "no_deviation"), data.ammo_and_coatings.no_deviation)
-            any_changed = any_changed or changed
-            changed, data.ammo_and_coatings.no_recoil = imgui.checkbox(language.get(languagePrefix .. "no_recoil"), data.ammo_and_coatings.no_recoil)
-            any_changed = any_changed or changed
-            imgui.tree_pop()
-        end
+       
         languagePrefix = data.title .. ".wirebugs."
         if imgui.tree_node(language.get(languagePrefix .. "title")) then
             changed, data.wirebugs.unlimited_ooc = imgui.checkbox(language.get(languagePrefix .. "unlimited_ooc"), data.wirebugs.unlimited_ooc)
@@ -256,7 +198,6 @@ function data.create_config_section()
     return {
         [data.title] = {
             consumables = data.consumables,
-            ammo_and_coatings = data.ammo_and_coatings,
             wirebugs = data.wirebugs,
             canteen = data.canteen
         }
@@ -267,7 +208,6 @@ function data.load_from_config(config_section)
     if not config_section then return end
 
     data.consumables = config_section.consumables or data.consumables
-    data.ammo_and_coatings = config_section.ammo_and_coatings or data.ammo_and_coatings
     data.wirebugs = config_section.wirebugs or data.wirebugs
     data.canteen = config_section.canteen or data.canteen
 

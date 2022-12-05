@@ -1,13 +1,14 @@
 local utils, config, language
-local misc
+local character
 local data = {
     title = "heavy_bowgun",
     charge_level = -1,
-    -- unlimited_ammo - In Misc
-    -- auto_reload  - In Misc
+    -- unlimited_ammo - In Character
+    -- unlimited_ammo - In Character
+    -- auto_reload  - In Character
     wyvern_sniper = false,
     wyvern_machine_gun = false
-    -- no_deviation  - In Misc
+    -- no_deviation  - In Character
 }
 
 function data.init()
@@ -15,7 +16,7 @@ function data.init()
     config = require("Buffer.Misc.Config")
     language = require("Buffer.Misc.Language")
 
-    misc = require("Buffer.Modules.Miscellaneous")
+    character = require("Buffer.Modules.Character")
 
     data.init_hooks()
 end
@@ -29,7 +30,7 @@ function data.init_hooks()
             managed:set_field("_ShotChargeLv", data.charge_level)
             managed:set_field("_ShotChargeFrame", 30 * data.charge_level)
         end
-        if misc.ammo_and_coatings.auto_reload then managed:call("resetBulletNum") end
+        if character.ammo_and_coatings.auto_reload then managed:call("resetBulletNum") end
     end, utils.nothing())
 
     sdk.hook(sdk.find_type_definition("snow.player.PlayerManager"):get_method("update"), function(args)
@@ -61,9 +62,9 @@ function data.draw()
         changed, data.charge_level = imgui.slider_int(language.get(languagePrefix .. "charge_level"), data.charge_level, -1, 3, data.charge_level > -1 and
                                                           language.get(languagePrefix .. "charge_level_prefix") .. " %d" or language.get(languagePrefix .. "charge_level_disabled"))
         any_changed = changed or any_changed
-        changed, misc.ammo_and_coatings.unlimited_ammo = imgui.checkbox(language.get(languagePrefix .. "unlimited_ammo"), misc.ammo_and_coatings.unlimited_ammo)
+        changed, character.ammo_and_coatings.unlimited_ammo = imgui.checkbox(language.get(languagePrefix .. "unlimited_ammo"), character.ammo_and_coatings.unlimited_ammo)
         misc_changed = changed or misc_changed
-        changed, misc.ammo_and_coatings.auto_reload = imgui.checkbox(language.get(languagePrefix .. "auto_reload"), misc.ammo_and_coatings.auto_reload)
+        changed, character.ammo_and_coatings.auto_reload = imgui.checkbox(language.get(languagePrefix .. "auto_reload"), character.ammo_and_coatings.auto_reload)
         misc_changed = changed or misc_changed
         changed, data.wyvern_sniper = imgui.checkbox(language.get(languagePrefix .. "wyvern_sniper"), data.wyvern_sniper)
         any_changed = changed or any_changed
@@ -71,13 +72,13 @@ function data.draw()
         any_changed = changed or any_changed
         changed, data.overheat = imgui.checkbox(language.get(languagePrefix .. "overheat"), data.overheat)
         any_changed = changed or any_changed
-        changed, misc.ammo_and_coatings.no_deviation = imgui.checkbox(language.get(languagePrefix .. "no_deviation"), misc.ammo_and_coatings.no_deviation)
+        changed, character.ammo_and_coatings.no_deviation = imgui.checkbox(language.get(languagePrefix .. "no_deviation"), character.ammo_and_coatings.no_deviation)
         misc_changed = changed or misc_changed
-        changed, misc.ammo_and_coatings.no_recoil = imgui.checkbox(language.get(languagePrefix .. "no_recoil"), misc.ammo_and_coatings.no_recoil)
+        changed, character.ammo_and_coatings.no_recoil = imgui.checkbox(language.get(languagePrefix .. "no_recoil"), character.ammo_and_coatings.no_recoil)
         misc_changed = changed or misc_changed
 
         if any_changed then config.save_section(data.create_config_section()) end
-        if misc_changed then config.save_section(misc.create_config_section()) end
+        if misc_changed then config.save_section(character.create_config_section()) end
         imgui.unindent(10)
         imgui.separator()
         imgui.spacing()

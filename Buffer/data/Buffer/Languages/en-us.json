@@ -42,6 +42,14 @@
     },
     "character": {
         "title": "Character",
+        "ammo_and_coatings": {
+            "title": "Ammo and Coatings",
+            "auto_reload": "Auto Reload",
+            "no_deviation": "No Deviation",
+            "no_recoil": "No Recoil",
+            "unlimited_ammo": "Unlimited Ammo (Bowguns)",
+            "unlimited_coatings": "Unlimited Coatings (Bow)"
+        },
         "conditions_and_blights": {
             "title": "Conditions, Ailments, & Blights",
             "blights": {
@@ -187,14 +195,6 @@
     },
     "miscellaneous": {
         "title": "Miscellaneous",
-        "ammo_and_coatings": {
-            "title": "Ammo and Coatings",
-            "auto_reload": "Auto Reload",
-            "no_deviation": "No Deviation",
-            "no_recoil": "No Recoil",
-            "unlimited_ammo": "Unlimited Ammo (Bowguns)",
-            "unlimited_coatings": "Unlimited Coatings (Bow)"
-        },
         "canteen": {
             "title": "Canteen",
             "dango_100_no_ticket": "Dango Skill 100% (No Ticket)",
