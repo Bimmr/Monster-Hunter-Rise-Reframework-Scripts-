@@ -62,7 +62,8 @@ end
 -- Get Quest State [ 0 = Lobby, 1 = Ready/Loading, 2 = Quest, 3 = End, 5 = Abandoned, 7 = Returned ]
 local function get_quest_status()
     if not quest_manager then quest_manager = sdk.get_managed_singleton("snow.QuestManager") end
-    return quest_manager:get_field("_QuestStatus")
+    if quest_manager then return quest_manager:get_field("_QuestStatus")
+    else return 0 end
 end
 
 -- Get up time in seconds
@@ -110,9 +111,7 @@ re.on_pre_application_entry("UpdateBehavior", function()
                 quest_start_time = nil
 
                 -- REPLACE START
-                if spawn_bird("all") then
-                    autospawn.spawned = true
-                end
+                if spawn_bird("all") then autospawn.spawned = true end
                 -- REPLACE END
                 
                 -- If you want to change the the mod to spawn in 5 birds of a different type, just replace the section above with one of the following
