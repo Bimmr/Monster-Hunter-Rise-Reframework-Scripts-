@@ -86,15 +86,32 @@
         },
         "stats": {
             "title": "Stats",
+            "tooltip": "Drag slider to the left to reset if the stat breaks",
             "attack": "Attack",
             "attack_disabled": "Off",
-            "attack_tooltip": "Drag slider to the left to reset if the stat breaks",
             "defence": "Defence",
             "defence_disabled": "Off",
-            "defence_tooltip": "Drag slider to the left to reset if the stat breaks",
             "affinity": "Affinity",
             "affinity_disabled": "Off",
-            "affinity_tooltip": "Drag slider to the left to reset if the stat breaks"
+            "element": {
+                "title": "Element Settings",
+                "type": "Element",
+                "types": {
+                    "disabled": "Off", 
+                    "none": "None", 
+                    "fire": "Fire", 
+                    "water": "Water", 
+                    "thunder": "Thunder", 
+                    "ice": "Ice", 
+                    "dragon": "Dragon", 
+                    "poison": "Poison", 
+                    "sleep": "Sleep", 
+                    "paralyze": "Paralyze", 
+                    "blast": "Blast"
+                },
+                "value": "Elemental Damage",
+                "disabled": "Off"
+            }
         },
         "unlimited_stamina": "Unlimited Stamina"
     },

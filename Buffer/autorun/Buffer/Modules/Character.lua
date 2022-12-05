@@ -37,7 +37,11 @@ local data = {
     stats = {
         attack = -1,
         defence = -1,
-        affinity = -1
+        affinity = -1,
+        element = {
+            type = -1,
+            value = -1
+        }
     },
     hidden = {}
 }
@@ -253,6 +257,42 @@ function data.init_hooks()
         end
         return retval
     end)
+
+    local managed_element_type = nil
+    -- snow.player.HeavyBowgun > RefWeaponData > > > LocalBaseData > > > _WeaponBaseData
+    sdk.hook(sdk.find_type_definition("snow.equip.ElementWeaponBaseData"):get_method("get_MainElementType"), function(args)
+        local managed = sdk.to_managed_object(args[2])
+        if not managed then return end
+        if not managed:get_type_definition():is_a("snow.equip.ElementWeaponBaseData") then return end
+        managed_element_type = managed
+    end, function(retval)
+        if managed_element_type ~= nil then
+            if data.stats.element.type > -1 then
+                managed_element_type = nil
+                return sdk.to_ptr(data.stats.element.type)
+            end
+            managed_element_type = nil
+        end
+        return retval
+    end)
+
+    local managed_element_value = nil
+    -- snow.player.HeavyBowgun > RefWeaponData > > > LocalBaseData > > > _WeaponBaseData
+    sdk.hook(sdk.find_type_definition("snow.equip.ElementWeaponBaseData"):get_method("get_MainElementVal"), function(args)
+        local managed = sdk.to_managed_object(args[2])
+        if not managed then return end
+        if not managed:get_type_definition():is_a("snow.equip.ElementWeaponBaseData") then return end
+        managed_element_value = managed
+    end, function(retval)
+        if managed_element_value ~= nil then
+            if data.stats.element.value > -1 then
+                managed_element_value = nil
+                return sdk.to_ptr(data.stats.element.value)
+            end
+            managed_element_value = nil
+        end
+        return retval
+    end)
 end
 
 function data.draw()
@@ -337,6 +377,7 @@ function data.draw()
         end
         languagePrefix = data.title .. ".stats."
         if imgui.tree_node(language.get(languagePrefix .. "title")) then
+            utils.tooltip(language.get(languagePrefix .. "tooltip"))
             local step = 10
             local attack_max, defence_max = 2600, 4500
             local stepped_attack_max, stepped_defence_max = math.floor(attack_max / step), math.floor(defence_max / step)
@@ -347,18 +388,34 @@ function data.draw()
             changed, attack_slider = imgui.slider_int(language.get(languagePrefix .. "attack"), stepped_attack_value, -1, stepped_attack_max,
                                                       stepped_attack_value > -1 and stepped_attack_value * step or language.get(languagePrefix .. "attack_disabled"))
             any_changed = any_changed or changed
-            utils.tooltip(language.get(languagePrefix .. "attack_tooltip"))
             changed, defence_slider = imgui.slider_int(language.get(languagePrefix .. "defence"), stepped_defence_value, -1, stepped_defence_max,
                                                        stepped_defence_value > -1 and stepped_defence_value * step or language.get(languagePrefix .. "attack_disabled"))
             any_changed = any_changed or changed
-            utils.tooltip(language.get(languagePrefix .. "defence_tooltip"))
             data.stats.attack = attack_slider > -1 and attack_slider * step or -1
             data.stats.defence = defence_slider > -1 and defence_slider * step or -1
 
             changed, data.stats.affinity = imgui.slider_int(language.get(languagePrefix .. "affinity"), data.stats.affinity, -1, 100,
                                                             data.stats.affinity > -1 and " %d" .. '%%' or language.get(languagePrefix .. "affinity_disabled"))
-            utils.tooltip(language.get(languagePrefix .. "affinity_tooltip"))
             any_changed = any_changed or changed
+
+            languagePrefix = languagePrefix .. "element."
+            if imgui.tree_node(language.get(languagePrefix .. "title")) then
+                languagePrefix = languagePrefix .. "types."
+                local element_display = {language.get(languagePrefix .. "disabled"), language.get(languagePrefix .. "none"), language.get(languagePrefix .. "fire"), language.get(languagePrefix .. "water"),
+                                         language.get(languagePrefix .. "thunder"), language.get(languagePrefix .. "ice"), language.get(languagePrefix .. "dragon"),
+                                         language.get(languagePrefix .. "poison"), language.get(languagePrefix .. "sleep"), language.get(languagePrefix .. "paralyze"),
+                                         language.get(languagePrefix .. "blast")}
+
+                
+                languagePrefix = data.title .. ".stats.element."
+                local elm_type = data.stats.element.type + 2
+                changed, elm_type = imgui.combo(language.get(languagePrefix .. "type"), elm_type, element_display)
+                data.stats.element.type = elm_type - 2
+                any_changed = any_changed or changed
+                changed, data.stats.element.value = imgui.slider_int(language.get(languagePrefix .. "value"), data.stats.element.value, -1, 560,
+                data.stats.element.value > -1 and " %d" or language.get(languagePrefix .. "disabled"))
+                any_changed = any_changed or changed
+            end
             imgui.tree_pop()
         end
 

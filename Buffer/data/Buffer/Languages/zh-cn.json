@@ -86,15 +86,32 @@
         },
         "stats": {
             "title": "状态",
+            "tooltip": "如果失效 请拖动滑块到最左边后重新调节",
             "attack": "攻击力",
             "attack_disabled": "禁用",
-            "attack_tooltip": "如果失效 请拖动滑块到最左边后重新调节",
             "defence": "防御力",
             "defence_disabled": "禁用",
-            "defence_tooltip": "如果失效 请拖动滑块到最左边后重新调节",
             "affinity": "会心率",
             "affinity_disabled": "禁用",
-            "affinity_tooltip": "如果失效 请拖动滑块到最左边后重新调节"
+            "element": {
+                "title": "Element Settings",
+                "type": "Element",
+                "types": {
+                    "disabled": "Off", 
+                    "none": "None", 
+                    "fire": "Fire", 
+                    "water": "Water", 
+                    "thunder": "Thunder", 
+                    "ice": "Ice", 
+                    "dragon": "Dragon", 
+                    "poison": "Poison", 
+                    "sleep": "Sleep", 
+                    "paralyze": "Paralyze", 
+                    "blast": "Blast"
+                },
+                "value": "Elemental Damage",
+                "disabled": "Off"
+            }
         },
         "unlimited_stamina": "无限耐力"
     },

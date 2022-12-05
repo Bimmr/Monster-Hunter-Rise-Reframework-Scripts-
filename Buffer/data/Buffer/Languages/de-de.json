@@ -86,15 +86,32 @@
         },
         "stats": {
             "title": "Waffen Werte",
+            "tooltip": "Ziehe den Regler nach links zum zurücksetzten, falls der Wert defekt wird ",
             "attack": "Angriff",
             "attack_disabled": "Aus",
-            "attack_tooltip": "Ziehe den Regler nach links zum zurücksetzten, falls der Wert defekt wird ",
             "defence": "Verteidigung",
             "defence_disabled": "Aus",
-            "defence_tooltip": "Ziehe den Regler nach links zum zurücksetzten, falls der Wert defekt wird",
             "affinity": "Affinität",
             "affinity_disabled": "Aus",
-            "affinity_tooltip": "Ziehe den Regler nach links zum zurücksetzten, falls der Wert defekt wird"
+            "element": {
+                "title": "Element Settings",
+                "type": "Element",
+                "types": {
+                    "disabled": "Off", 
+                    "none": "None", 
+                    "fire": "Fire", 
+                    "water": "Water", 
+                    "thunder": "Thunder", 
+                    "ice": "Ice", 
+                    "dragon": "Dragon", 
+                    "poison": "Poison", 
+                    "sleep": "Sleep", 
+                    "paralyze": "Paralyze", 
+                    "blast": "Blast"
+                },
+                "value": "Elemental Damage",
+                "disabled": "Off"
+            }
         },
         "unlimited_stamina": "Unendlich Ausdauer"
     },

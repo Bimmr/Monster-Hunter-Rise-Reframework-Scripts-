@@ -86,15 +86,32 @@
         },
         "stats": {
             "title": "스탯",
+            "tooltip": "만약 스탯이 깨지면 슬라이더를 왼쪽으로 드래그하여 재설정",
             "attack": "공격력",
             "attack_disabled": "끄기",
-            "attack_tooltip": "만약 스탯이 깨지면 슬라이더를 왼쪽으로 드래그하여 재설정",
             "defence": "방어력",
             "defence_disabled": "끄기",
-            "defence_tooltip": "만약 스탯이 깨지면 슬라이더를 왼쪽으로 드래그하여 재설정",
             "affinity": "회심율",
             "affinity_disabled": "끄기",
-            "affinity_tooltip": "만약 스탯이 깨지면 슬라이더를 왼쪽으로 드래그하여 재설정"
+            "element": {
+                "title": "Element Settings",
+                "type": "Element",
+                "types": {
+                    "disabled": "Off", 
+                    "none": "None", 
+                    "fire": "Fire", 
+                    "water": "Water", 
+                    "thunder": "Thunder", 
+                    "ice": "Ice", 
+                    "dragon": "Dragon", 
+                    "poison": "Poison", 
+                    "sleep": "Sleep", 
+                    "paralyze": "Paralyze", 
+                    "blast": "Blast"
+                },
+                "value": "Elemental Damage",
+                "disabled": "Off"
+            }
         },
         "unlimited_stamina": "스태미나 무한"
     },
