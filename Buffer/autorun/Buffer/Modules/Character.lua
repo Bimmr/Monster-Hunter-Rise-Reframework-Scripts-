@@ -424,6 +424,8 @@ function data.draw()
                 any_changed = any_changed or changed
                 changed, data.conditions_and_blights.blights.blast = imgui.checkbox(language.get(languagePrefix .. "blast"), data.conditions_and_blights.blights.blast)
                 any_changed = any_changed or changed
+                changed, data.conditions_and_blights.blights.all = imgui.checkbox(language.get(languagePrefix .. "all"), data.conditions_and_blights.blights.all)
+                any_changed = any_changed or changed
                 imgui.tree_pop()
             end
             languagePrefix = data.title .. ".conditions_and_blights.conditions."
@@ -451,9 +453,13 @@ function data.draw()
                 changed, data.conditions_and_blights.conditions.paralyze = imgui.checkbox(language.get(languagePrefix .. "paralyze"),
                                                                                           data.conditions_and_blights.conditions.paralyze)
                 utils.tooltip(language.get(languagePrefix .. "paralyze_tooltip"))
-                any_changed = any_changed or changed
+                
                 changed, data.conditions_and_blights.conditions.thread = imgui.checkbox(language.get(languagePrefix .. "thread"), data.conditions_and_blights.conditions.thread)
                 utils.tooltip(language.get(languagePrefix .. "thread_tooltip"))
+                any_changed = any_changed or changed
+
+                changed, data.conditions_and_blights.conditions.all = imgui.checkbox(language.get(languagePrefix .. "all"), data.conditions_and_blights.conditions.all)
+                any_changed = any_changed or changed
                 imgui.tree_pop()
             end
             imgui.tree_pop()
