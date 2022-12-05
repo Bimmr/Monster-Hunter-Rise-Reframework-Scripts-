@@ -113,6 +113,18 @@
                 "disabled": "Off"
             }
         },
+        "sharpness_level": "锋利度等级",
+        "sharpness_level_tooltip": "锋利度仍会变化,但锋利度等级不会变化",
+        "sharpness_levels": {
+            "disabled":"禁用", 
+            "red": "红", 
+            "orange": "橙", 
+            "yellow": "黄", 
+            "green": "绿", 
+            "blue": "蓝", 
+            "white": "白", 
+            "purple": "紫"
+        },
         "unlimited_stamina": "无限耐力"
     },
     "great_sword": {
@@ -193,18 +205,6 @@
             "title": "消耗品",
             "endemic_life": "无限猎具生物",
             "items": "无限消耗品"
-        },
-        "sharpness_level": "锋利度等级",
-        "sharpness_level_tooltip": "锋利度仍会变化,但锋利度等级不会变化",
-        "sharpness_levels": {
-            "disabled":"禁用", 
-            "red": "红", 
-            "orange": "橙", 
-            "yellow": "黄", 
-            "green": "绿", 
-            "blue": "蓝", 
-            "white": "白", 
-            "purple": "紫"
         },
         "wirebugs": {
             "title": "翔虫",

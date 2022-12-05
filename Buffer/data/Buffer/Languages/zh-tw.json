@@ -113,6 +113,18 @@
                 "disabled": "Off"
             }
         },
+        "sharpness_level": "鋒利度等級",
+        "sharpness_level_tooltip": "鋒利度仍會變化,但鋒利度等級不會變化",
+        "sharpness_levels": {
+            "disabled":"禁用", 
+            "red": "紅", 
+            "orange": "橙", 
+            "yellow": "黃", 
+            "green": "綠", 
+            "blue": "藍", 
+            "white": "白", 
+            "purple": "紫"
+        },
         "unlimited_stamina": "無限耐力"
     },
     "great_sword": {
@@ -193,18 +205,6 @@
             "title": "消耗品",
             "endemic_life": "無限獵具生物",
             "items": "無限消耗品"
-        },
-        "sharpness_level": "鋒利度等級",
-        "sharpness_level_tooltip": "鋒利度仍會變化,但鋒利度等級不會變化",
-        "sharpness_levels": {
-            "disabled":"禁用", 
-            "red": "紅", 
-            "orange": "橙", 
-            "yellow": "黃", 
-            "green": "綠", 
-            "blue": "藍", 
-            "white": "白", 
-            "purple": "紫"
         },
         "wirebugs": {
             "title": "翔蟲",

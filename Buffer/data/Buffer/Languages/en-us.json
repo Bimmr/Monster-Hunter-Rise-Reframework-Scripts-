@@ -113,6 +113,18 @@
                 "disabled": "Off"
             }
         },
+        "sharpness_level": "Sharpness Level",
+        "sharpness_level_tooltip": "The sharpness bar will still move, but the sharpness level won't change",
+        "sharpness_levels": {
+            "disabled":"Off", 
+            "red": "Red", 
+            "orange": "Orange", 
+            "yellow": "Yellow", 
+            "green": "Green", 
+            "blue": "Blue", 
+            "white": "White", 
+            "purple": "Purple"
+        },
         "unlimited_stamina": "Unlimited Stamina"
     },
     "great_sword": {
@@ -193,18 +205,6 @@
             "title": "Consumables",
             "endemic_life": "Unlimited Endemic Life",
             "items": "Unlimited Items"
-        },
-        "sharpness_level": "Sharpness Level",
-        "sharpness_level_tooltip": "The sharpness bar will still move, but the sharpness level won't change",
-        "sharpness_levels": {
-            "disabled":"Off", 
-            "red": "Red", 
-            "orange": "Orange", 
-            "yellow": "Yellow", 
-            "green": "Green", 
-            "blue": "Blue", 
-            "white": "White", 
-            "purple": "Purple"
         },
         "wirebugs": {
             "title": "Wirebugs",

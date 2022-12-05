@@ -113,6 +113,18 @@
                 "disabled": "Off"
             }
         },
+        "sharpness_level": "Schärfe Level",
+        "sharpness_level_tooltip": "Die Schärfe Anzeige wird sich immernoch bewegen, aber das Level bleibt gleich.",
+        "sharpness_levels": {
+            "disabled":"Aus", 
+            "red": "Rot", 
+            "orange": "Orange", 
+            "yellow": "Gelb", 
+            "green": "Grün", 
+            "blue": "Blau", 
+            "white": "Weiß", 
+            "purple": "Lila"
+        },
         "unlimited_stamina": "Unendlich Ausdauer"
     },
     "great_sword": {
@@ -193,18 +205,6 @@
             "title": "Verbrauchsgüter",
             "endemic_life": "Unendlich Einheimische Wesen",
             "items": "Unendlich Items"
-        },
-        "sharpness_level": "Schärfe Level",
-        "sharpness_level_tooltip": "Die Schärfe Anzeige wird sich immernoch bewegen, aber das Level bleibt gleich.",
-        "sharpness_levels": {
-            "disabled":"Aus", 
-            "red": "Rot", 
-            "orange": "Orange", 
-            "yellow": "Gelb", 
-            "green": "Grün", 
-            "blue": "Blau", 
-            "white": "Weiß", 
-            "purple": "Lila"
         },
         "wirebugs": {
             "title": "Seilkäfer",

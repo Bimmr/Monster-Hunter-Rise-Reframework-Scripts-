@@ -1,6 +1,7 @@
 local utils, config, language
 local data = {
     title = "character",
+    sharpness_level = -1,
     unlimited_stamina = false,
     health = {
         healing = false,
@@ -43,7 +44,9 @@ local data = {
             value = -1
         }
     },
-    hidden = {}
+    hidden = {
+        sharpness_level_old = -1
+    }
 }
 
 function data.init()
@@ -63,6 +66,17 @@ function data.init_hooks()
         if not playerBase then return end
         local playerData = utils.getPlayerData()
         if not playerData then return end
+        
+        if data.sharpness_level > -1 then
+            if data.hidden.sharpness_level_old == -1 then data.hidden.sharpness_level_old = playerBase:get_field("<SharpnessLv>k__BackingField") end
+            -- | 0=Red | 1=Orange | 2=Yellow | 3=Green | 4=Blue | 5=White | 6=Purple |
+            playerBase:set_field("<SharpnessLv>k__BackingField", data.sharpness_level) -- Sharpness Level of Purple
+            -- playerBase:set_field("<SharpnessGauge>k__BackingField", 400) -- Sharpness Value
+            -- playerBase:set_field("<SharpnessGaugeMax>k__BackingField", 400) -- Max Sharpness
+        elseif data.sharpness_level == -1 and data.hidden.sharpness_level_old > -1 then
+            playerBase:set_field("<SharpnessLv>k__BackingField", data.hidden.sharpness_level_old)
+            data.hidden.sharpness_level_old = -1
+        end
 
         if data.unlimited_stamina then
             local maxStamina = playerData:get_field("_staminaMax")
@@ -302,6 +316,16 @@ function data.draw()
     if imgui.collapsing_header(language.get(languagePrefix .. "title")) then
         imgui.indent(10)
 
+        languagePrefix = data.title .. ".sharpness_levels."
+        local sharpness_display = {language.get(languagePrefix .. "disabled"), language.get(languagePrefix .. "red"), language.get(languagePrefix .. "orange"),
+                                   language.get(languagePrefix .. "yellow"), language.get(languagePrefix .. "green"), language.get(languagePrefix .. "blue"),
+                                   language.get(languagePrefix .. "white"), language.get(languagePrefix .. "purple")}
+
+        local languagePrefix = data.title .. "."
+        changed, data.sharpness_level =
+            imgui.slider_int(language.get(languagePrefix .. "sharpness_level"), data.sharpness_level, -1, 6, sharpness_display[data.sharpness_level + 2])
+        utils.tooltip(language.get(languagePrefix .. "sharpness_level_tooltip"))
+        any_changed = any_changed or changed
         changed, data.unlimited_stamina = imgui.checkbox(language.get(languagePrefix .. "unlimited_stamina"), data.unlimited_stamina)
         any_changed = any_changed or changed
 
@@ -445,6 +469,7 @@ end
 function data.create_config_section()
     return {
         [data.title] = {
+            sharpness_level = data.sharpness_level,
             unlimited_stamina = data.unlimited_stamina,
             health = {
                 healing = data.health.healing,
@@ -485,6 +510,7 @@ end
 function data.load_from_config(config_section)
     if not config_section then return end
 
+    data.sharpness_level = config_section.sharpness_level or data.sharpness_level
     data.unlimited_stamina = config_section.unlimited_stamina or data.unlimited_stamina
     data.health = config_section.health or data.health
     data.conditions_and_blights = config_section.conditions_and_blights or data.conditions_and_blights

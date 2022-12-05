@@ -6,7 +6,6 @@ local data = {
         items = false,
         endemic_life = false
     },
-    sharpness_level = -1,
     ammo_and_coatings = {
         unlimited_ammo = false,
         unlimited_coatings = false,
@@ -26,7 +25,6 @@ local data = {
         level_4 = false
     },
     hidden = {
-        sharpness_level_old = -1,
         level_4_was_enabled = false
     }
 }
@@ -65,17 +63,6 @@ function data.init_hooks()
         if not managed:get_type_definition():is_a("snow.player.PlayerManager") then return end
         local playerBase = utils.getPlayerBase()
         if not playerBase then return end
-
-        if data.sharpness_level > -1 then
-            if data.hidden.sharpness_level_old == -1 then data.hidden.sharpness_level_old = playerBase:get_field("<SharpnessLv>k__BackingField") end
-            -- | 0=Red | 1=Orange | 2=Yellow | 3=Green | 4=Blue | 5=White | 6=Purple |
-            playerBase:set_field("<SharpnessLv>k__BackingField", data.sharpness_level) -- Sharpness Level of Purple
-            -- playerBase:set_field("<SharpnessGauge>k__BackingField", 400) -- Sharpness Value
-            -- playerBase:set_field("<SharpnessGaugeMax>k__BackingField", 400) -- Max Sharpness
-        elseif data.sharpness_level == -1 and data.hidden.sharpness_level_old > -1 then
-            playerBase:set_field("<SharpnessLv>k__BackingField", data.hidden.sharpness_level_old)
-            data.hidden.sharpness_level_old = -1
-        end
 
         if data.wirebugs.give_3 then
             playerBase:set_field("<HunterWireWildNum>k__BackingField", 1)
@@ -202,7 +189,6 @@ function data.init_hooks()
             end
         end
     end, utils.nothing())
-
 end
 
 function data.draw()
@@ -213,16 +199,6 @@ function data.draw()
     if imgui.collapsing_header(language.get(languagePrefix .. "title")) then
         imgui.indent(10)
 
-        languagePrefix = data.title .. ".sharpness_levels."
-        local sharpness_display = {language.get(languagePrefix .. "disabled"), language.get(languagePrefix .. "red"), language.get(languagePrefix .. "orange"),
-                                   language.get(languagePrefix .. "yellow"), language.get(languagePrefix .. "green"), language.get(languagePrefix .. "blue"),
-                                   language.get(languagePrefix .. "white"), language.get(languagePrefix .. "purple")}
-
-        local languagePrefix = data.title .. "."
-        changed, data.sharpness_level =
-            imgui.slider_int(language.get(languagePrefix .. "sharpness_level"), data.sharpness_level, -1, 6, sharpness_display[data.sharpness_level + 2])
-        utils.tooltip(language.get(languagePrefix .. "sharpness_level_tooltip"))
-        any_changed = any_changed or changed
         languagePrefix = data.title .. ".consumables."
         if imgui.tree_node(language.get(languagePrefix .. "title")) then
             changed, data.consumables.items = imgui.checkbox(language.get(languagePrefix .. "items"), data.consumables.items)
@@ -280,7 +256,6 @@ function data.create_config_section()
     return {
         [data.title] = {
             consumables = data.consumables,
-            sharpness_level = data.sharpness_level,
             ammo_and_coatings = data.ammo_and_coatings,
             wirebugs = data.wirebugs,
             canteen = data.canteen
@@ -292,7 +267,6 @@ function data.load_from_config(config_section)
     if not config_section then return end
 
     data.consumables = config_section.consumables or data.consumables
-    data.sharpness_level = config_section.sharpness_level or data.sharpness_level
     data.ammo_and_coatings = config_section.ammo_and_coatings or data.ammo_and_coatings
     data.wirebugs = config_section.wirebugs or data.wirebugs
     data.canteen = config_section.canteen or data.canteen

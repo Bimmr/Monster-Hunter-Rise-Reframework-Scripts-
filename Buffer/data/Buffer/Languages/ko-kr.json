@@ -113,6 +113,18 @@
                 "disabled": "Off"
             }
         },
+        "sharpness_level": "예리도 단계",
+        "sharpness_level_tooltip": "예리도 게이지는 움직이지만, 예리도 단계는 변하지 않음",
+        "sharpness_levels": {
+            "disabled": "끄기",
+            "red": "빨간 예리",
+            "orange": "주황 예리",
+            "yellow": "노란 예리",
+            "green": "녹 예리",
+            "blue": "파란 예리",
+            "white": "흰 예리",
+            "purple": "보라 예리"
+        },
         "unlimited_stamina": "스태미나 무한"
     },
     "great_sword": {
@@ -193,18 +205,6 @@
             "title": "소비 아이템",
             "endemic_life": "환경 생물 사용 무한",
             "items": "소비 아이템 사용 무한"
-        },
-        "sharpness_level": "예리도 단계",
-        "sharpness_level_tooltip": "예리도 게이지는 움직이지만, 예리도 단계는 변하지 않음",
-        "sharpness_levels": {
-            "disabled": "끄기",
-            "red": "빨간 예리",
-            "orange": "주황 예리",
-            "yellow": "노란 예리",
-            "green": "녹 예리",
-            "blue": "파란 예리",
-            "white": "흰 예리",
-            "purple": "보라 예리"
         },
         "wirebugs": {
             "title": "밧줄벌레",
