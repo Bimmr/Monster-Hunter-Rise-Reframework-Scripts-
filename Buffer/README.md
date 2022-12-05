@@ -15,7 +15,6 @@
                      <ul>
                         <li>Items &amp; Endemic Life</li>
                      </ul>
-                     <li>Sharpness</li>
                      <li>Wirebugs</li>
                      <ul>
                         <li>Unlimited (out of combat/anywhere)</li>
@@ -32,6 +31,7 @@
                <li>
                   Character
                   <ul>
+                     <li>Sharpness</li>
                      <li>Unlimited Stamina</li>
                      <li>Health</li>
                      <ul>
