@@ -52,7 +52,8 @@
                 "fire": "火属性",
                 "ice": "冰属性",
                 "thunder": "雷属性",
-                "water": "水属性"
+                "water": "水属性",
+                "all": "All"
             },
             "conditions": {
                 "title": "特殊类异常",
@@ -68,7 +69,8 @@
                 "paralyze": "麻痹",
                 "paralyze_tooltip": "仍然有视觉效果",
                 "thread": "丝线束缚",
-                "thread_tooltip": "仍然有视觉效果"
+                "thread_tooltip": "仍然有视觉效果",
+                "all": "All "
             }
         },
         "health": {

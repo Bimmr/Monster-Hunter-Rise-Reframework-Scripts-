@@ -52,7 +52,8 @@
                 "fire": "Feuerpest",
                 "ice": "Eispest",
                 "thunder": "Donnerpest",
-                "water": "Wasserpest"
+                "water": "Wasserpest",
+                "all": "All"
             },
             "conditions": {
                 "title": "Verhindert Zustände",
@@ -68,7 +69,8 @@
                 "paralyze": "Lähmung",
                 "paralyze_tooltip": "Der Visuelle Effekt spielt trotzem",
                 "thread": "Eingenetzt",
-                "thread_tooltip": "Der Visuelle Effekt spielt trotzem"
+                "thread_tooltip": "Der Visuelle Effekt spielt trotzem",
+                "all": "All "
             }
         },
         "health": {

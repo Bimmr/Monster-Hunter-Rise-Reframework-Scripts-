@@ -52,7 +52,8 @@
                 "fire": "불속성 피해",
                 "ice": "얼음속성 피해",
                 "thunder": "번개속성 피해",
-                "water": "물속성 피해"
+                "water": "물속성 피해",
+                "all": "All"
             },
             "conditions": {
                 "title": "상태 이상 방지",
@@ -68,7 +69,8 @@
                 "paralyze": "마비",
                 "paralyze_tooltip": "플레이 중 마비 이펙트는 보임",
                 "thread": "실 감김",
-                "thread_tooltip": "플레이 중 실 감김 이펙트는 보임"
+                "thread_tooltip": "플레이 중 실 감김 이펙트는 보임",
+                "all": "All "
             }
         },
         "health": {

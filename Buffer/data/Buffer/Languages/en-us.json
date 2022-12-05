@@ -52,7 +52,8 @@
                 "fire": "Fire",
                 "ice": "Ice",
                 "thunder": "Thunder",
-                "water": "Water"
+                "water": "Water",
+                "all": "All"
             },
             "conditions": {
                 "title": "Prevent Conditions",
@@ -68,7 +69,8 @@
                 "paralyze": "Paralyze",
                 "paralyze_tooltip": "The visual effect will still play",
                 "thread": "Thread",
-                "thread_tooltip": "The visual effect will still play"
+                "thread_tooltip": "The visual effect will still play",
+                "all": "All "
             }
         },
         "health": {

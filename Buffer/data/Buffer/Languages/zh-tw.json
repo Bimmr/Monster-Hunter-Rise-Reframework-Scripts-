@@ -52,7 +52,8 @@
                 "fire": "火屬性",
                 "ice": "冰屬性",
                 "thunder": "雷屬性",
-                "water": "水屬性"
+                "water": "水屬性",
+                "all": "All"
             },
             "conditions": {
                 "title": "特殊類異常",
@@ -68,7 +69,8 @@
                 "paralyze": "麻痹",
                 "paralyze_tooltip": "仍然有視覺效果",
                 "thread": "絲線束縛",
-                "thread_tooltip": "仍然有視覺效果"
+                "thread_tooltip": "仍然有視覺效果",
+                "all": "All "
             }
         },
         "health": {

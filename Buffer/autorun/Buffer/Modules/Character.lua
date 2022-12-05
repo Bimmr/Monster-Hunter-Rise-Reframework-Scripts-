@@ -17,7 +17,8 @@ local data = {
             thunder = false,
             dragon = false,
             bubble = false,
-            blast = false
+            blast = false,
+            all = false
         },
         conditions = {
             bleeding = false,
@@ -29,7 +30,8 @@ local data = {
             defence_and_resistance = false,
             hellfire_and_stentch = false,
             paralyze = false,
-            thread = false
+            thread = false,
+            all = false
         }
     },
     stats = {
@@ -37,7 +39,7 @@ local data = {
         defence = -1,
         affinity = -1
     },
-    hidden = { }
+    hidden = {}
 }
 
 function data.init()
@@ -114,80 +116,80 @@ function data.init_hooks()
 
         local is_in_lobby = playerBase:get_field("<IsLobbyPlayer>k__BackingField")
 
-        if data.conditions_and_blights.blights.fire and not is_in_lobby then
+        if (data.conditions_and_blights.blights.fire or data.conditions_and_blights.blights.all) and not is_in_lobby then
             playerBase:set_field("_FireLDurationTimer", 0) -- The fire timer
             playerBase:set_field("_FireDamageTimer", 0) -- The fire damage timer
         end
 
-        if data.conditions_and_blights.blights.water and not is_in_lobby then
+        if (data.conditions_and_blights.blights.water or data.conditions_and_blights.blights.all) and not is_in_lobby then
             playerBase:set_field("_WaterLDurationTimer", 0) -- The water blight timer
         end
 
-        if data.conditions_and_blights.blights.ice and not is_in_lobby then
+        if (data.conditions_and_blights.blights.ice or data.conditions_and_blights.blights.all) and not is_in_lobby then
             playerBase:set_field("_IceLDurationTimer", 0) -- The ice blight timer
         end
 
-        if data.conditions_and_blights.blights.thunder and not is_in_lobby then
+        if (data.conditions_and_blights.blights.thunder or data.conditions_and_blights.blights.all) and not is_in_lobby then
             playerBase:set_field("_ThunderLDurationTimer", 0) -- The thunder blight timer
         end
 
-        if data.conditions_and_blights.blights.dragon and not is_in_lobby then
+        if (data.conditions_and_blights.blights.dragon or data.conditions_and_blights.blights.all) and not is_in_lobby then
             playerBase:set_field("_DragonLDurationTimer", 0) -- The dragon blight timer
         end
 
-        if data.conditions_and_blights.blights.bubble and not is_in_lobby then
+        if (data.conditions_and_blights.blights.bubble or data.conditions_and_blights.blights.all) and not is_in_lobby then
             playerBase:set_field("_BubbleDamageTimer", 0) -- The bubble timer
             -- playerData:set_field("_BubbleType", 0) -- | 0=None | 1=BubbleS | 2=BubbleL |
         end
 
-        if data.conditions_and_blights.blights.blast and not is_in_lobby then
+        if (data.conditions_and_blights.blights.blast or data.conditions_and_blights.blights.all) and not is_in_lobby then
             playerBase:set_field("_BombDurationTimer", 0) -- The blast timer
         end
 
-        if data.conditions_and_blights.conditions.bleeding and not is_in_lobby then
+        if (data.conditions_and_blights.conditions.bleeding or data.conditions_and_blights.conditions.all) and not is_in_lobby then
             playerBase:set_field("_BleedingDebuffTimer", 0) -- The bleeding timer
         end
 
-        if data.conditions_and_blights.conditions.poison and not is_in_lobby then
+        if (data.conditions_and_blights.conditions.poison or data.conditions_and_blights.conditions.all) and not is_in_lobby then
             playerBase:set_field("_PoisonDurationTimer", 0) -- The poison timer
             playerBase:set_field("_PoisonDamageTimer", 0) -- How long till next poison tick
             -- playerData:set_field("_PoisonLv", 0) -- | 0=None | 1=Poison | 2=NoxiousPoison | 3=DeadlyPoison | 
         end
 
-        if data.conditions_and_blights.conditions.stun and not is_in_lobby then
+        if (data.conditions_and_blights.conditions.stun or data.conditions_and_blights.conditions.all) and not is_in_lobby then
             playerBase:set_field("_StunDurationTimer", 0) -- The stun timer -- DOESN'T REMOVE ANIMATION TIME
         end
 
-        if data.conditions_and_blights.conditions.sleep and not is_in_lobby then
+        if (data.conditions_and_blights.conditions.sleep or data.conditions_and_blights.conditions.all) and not is_in_lobby then
             playerBase:set_field("_SleepDurationTimer", 0) -- The sleep timer
             playerBase:set_field("<SleepMovableTimer>k__BackingField", 0) -- The sleep walking timer
         end
 
-        if data.conditions_and_blights.conditions.paralyze and not is_in_lobby then
+        if (data.conditions_and_blights.conditions.paralyze or data.conditions_and_blights.conditions.all) and not is_in_lobby then
             playerBase:set_field("_ParalyzeDurationTimer", 0) -- The paralysis recovery timer -- DOESN'T REMOVE ANIMATION TIME
         end
 
-        if data.conditions_and_blights.conditions.frenzy and not is_in_lobby then
+        if (data.conditions_and_blights.conditions.frenzy or data.conditions_and_blights.conditions.all) and not is_in_lobby then
             playerBase:set_field("_IsVirusLatency", false) -- The frenzy virus
             playerBase:set_field("_VirusTimer", 0) -- How long till the next frenzy virus tick
             playerBase:set_field("_VirusAccumulator", 0) -- Total ticks of Frenzy
         end
 
-        if data.conditions_and_blights.conditions.qurio and not is_in_lobby then
+        if (data.conditions_and_blights.conditions.qurio or data.conditions_and_blights.conditions.all) and not is_in_lobby then
             playerBase:set_field("_MysteryDebuffTimer", 0) -- The qurio timer
             playerBase:set_field("_MysteryDebuffDamageTimer", 0) -- The qurio damage timer")
         end
 
-        if data.conditions_and_blights.conditions.defence_and_resistance and not is_in_lobby then
+        if (data.conditions_and_blights.conditions.defence_and_resistance or data.conditions_and_blights.conditions.all) and not is_in_lobby then
             playerBase:set_field("_ResistanceDownDurationTimer", 0) -- The resistance down timer
             playerBase:set_field("_DefenceDownDurationTimer", 0) -- The defence down timer
         end
 
-        if data.conditions_and_blights.conditions.hellfire_and_stentch and not is_in_lobby then
+        if (data.conditions_and_blights.conditions.hellfire_and_stentch or data.conditions_and_blights.conditions.all) and not is_in_lobby then
             playerBase:set_field("_OniBombDurationTimer", 0) -- The hellfire timer
             playerBase:set_field("_StinkDurationTimer", 0) -- The putrid gas damage timer
         end
-        if data.conditions_and_blights.conditions.thread and not is_in_lobby then
+        if (data.conditions_and_blights.conditions.thread or data.conditions_and_blights.conditions.all) and not is_in_lobby then
             playerBase:set_field("_BetoDurationTimer", 0) -- The covered in spider web recovery timer -- DOESN'T REMOVE ANIMATION TIME
         end
 
@@ -220,13 +222,12 @@ function data.init_hooks()
 
             -- Add the extra defence
             playerData:set_field("_DefUpAlive", defenceMod)
-               -- Restore the original defence value if disabled    
+            -- Restore the original defence value if disabled    
         elseif data.hidden.defence ~= nil then
             playerData:set_field("_DefUpAlive", 0)
             data.hidden.defence = nil
         end
-    end,
-    utils.nothing())
+    end, utils.nothing())
 
     local managed_crit = nil
     -- snow.player.HeavyBowgun > RefWeaponData > > > LocalBaseData > > > _WeaponBaseData
@@ -242,14 +243,15 @@ function data.init_hooks()
                 local player = data.hidden.affinity
                 local weapon = managed_crit:get_field("_CriticalRate")
                 local target = data.stats.affinity
-                local to_set = target - player + weapon 
+                local to_set = target - player + weapon
                 managed_crit = nil
                 return sdk.to_ptr(to_set)
-            else if data.hidden.affinity ~= nil then data.hidden.affinity = nil end
+            else
+                if data.hidden.affinity ~= nil then data.hidden.affinity = nil end
+            end
+            managed_crit = nil
         end
-        managed_crit = nil
-    end
-    return retval
+        return retval
     end)
 end
 
@@ -402,7 +404,8 @@ function data.create_config_section()
                     thunder = data.conditions_and_blights.blights.thunder,
                     dragon = data.conditions_and_blights.blights.dragon,
                     bubble = data.conditions_and_blights.blights.bubble,
-                    blast = data.conditions_and_blights.blights.blast
+                    blast = data.conditions_and_blights.blights.blast,
+                    all = data.conditions_and_blights.blights.all
                 },
                 conditions = {
                     bleeding = data.conditions_and_blights.conditions.bleeding,
@@ -414,7 +417,8 @@ function data.create_config_section()
                     defence_and_resistance = data.conditions_and_blights.conditions.defence_and_resistance,
                     hellfire_and_stentch = data.conditions_and_blights.conditions.hellfire_and_stentch,
                     stun = data.conditions_and_blights.conditions.stun,
-                    thread = data.conditions_and_blights.conditions.thread
+                    thread = data.conditions_and_blights.conditions.thread,
+                    all = data.conditions_and_blights.conditions.all
                 }
             }
         }
