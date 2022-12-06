@@ -62,14 +62,20 @@ end
 -- Get Quest State [ 0 = Lobby, 1 = Ready/Loading, 2 = Quest, 3 = End, 5 = Abandoned, 7 = Returned ]
 local function get_quest_status()
     if not quest_manager then quest_manager = sdk.get_managed_singleton("snow.QuestManager") end
-    if quest_manager then return quest_manager:get_field("_QuestStatus")
-    else return 0 end
+    if quest_manager then
+        return quest_manager:get_field("_QuestStatus")
+    else
+        return 0
+    end
 end
 
 -- Get up time in seconds
 local function get_time()
-    if not application then application = sdk.get_native_singleton("via.Application") application_type = sdk.find_type_definition("via.Application") end
-    local time =  sdk.call_native_func(application, application_type, "get_UpTimeSecond")
+    if not application then
+        application = sdk.get_native_singleton("via.Application")
+        application_type = sdk.find_type_definition("via.Application")
+    end
+    local time = sdk.call_native_func(application, application_type, "get_UpTimeSecond")
     return time
 end
 
@@ -82,7 +88,13 @@ local function spawn_bird(type)
     -- Create the bird
     local ec_list = creature_manager:get_field("_EcPrefabList")
     if not ec_list then return false end
-    local ec_items = ec_list:get_field("mItems"):get_elements()
+    local ec_items = ec_list:get_field("mItems")
+    if not ec_items then
+        log.debug("Unable to get elements from _EcPrefabList ")
+        return false
+    else
+        ec_items = ec_items:get_elements()
+    end
     if not ec_items then return false end
     local ec_bird = ec_items[SPIRIT_BIRDS[type]]
     if not ec_bird then
@@ -111,16 +123,19 @@ re.on_pre_application_entry("UpdateBehavior", function()
                 quest_start_time = nil
 
                 -- REPLACE START
-                if spawn_bird("all") then autospawn.spawned = true end
+                if spawn_bird("all") then autospawn.spawned = true else
                 -- REPLACE END
-                
-                -- If you want to change the the mod to spawn in 5 birds of a different type, just replace the section above with one of the following
-                -- local spawned = false    for i = 0, 5 do    if spawn_bird("hp")   then    spawned = true    end    end    if spawned then autospawn.spawned = true end
-                -- local spawned = false    for i = 0, 5 do    if spawn_bird("atk")  then    spawned = true    end    end    if spawned then autospawn.spawned = true end
-                -- local spawned = false    for i = 0, 5 do    if spawn_bird("def")  then    spawned = true    end    end    if spawned then autospawn.spawned = true end
-                -- local spawned = false    for i = 0, 5 do    if spawn_bird("spd")  then    spawned = true    end    end    if spawned then autospawn.spawned = true end
-                -- local spawned = false    for i = 0, 5 do    if spawn_bird("gold") then    spawned = true    end    end    if spawned then autospawn.spawned = true end
-                -- I have no plans to add this as a feature so you can change it if you want
+
+                    -- If you want to change the the mod to spawn in 5 birds of a different type, just replace the section above with one of the following
+                    -- local spawned = false    for i = 0, 5 do    if spawn_bird("hp")   then    spawned = true    end    end    if spawned then autospawn.spawned = true else
+                    -- local spawned = false    for i = 0, 5 do    if spawn_bird("atk")  then    spawned = true    end    end    if spawned then autospawn.spawned = true else
+                    -- local spawned = false    for i = 0, 5 do    if spawn_bird("def")  then    spawned = true    end    end    if spawned then autospawn.spawned = true else
+                    -- local spawned = false    for i = 0, 5 do    if spawn_bird("spd")  then    spawned = true    end    end    if spawned then autospawn.spawned = true else
+                    -- local spawned = false    for i = 0, 5 do    if spawn_bird("gold") then    spawned = true    end    end    if spawned then autospawn.spawned = true else
+                    -- I have no plans to add this as a feature so you can change it if you want
+
+                    quest_start_time = get_time()
+                end
             end
         end
 
