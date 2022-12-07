@@ -155,24 +155,39 @@ end)
 
 -- Draw a window to the REFramework Script Generated UI
 re.on_draw_ui(function()
+    
+
     if imgui.button("Toggle SpiritBird GUI") then
         is_window_open = not is_window_open
         save_config()
     end
     if is_window_open then
+        
+        imgui.push_style_var(11, 5.0) -- Rounded elements
+        imgui.push_style_var(2, 10.0) -- Window Padding
+
         was_open = true
         is_window_open = imgui.begin_window("Spawn SpiritBirds", is_window_open, 64)
+        imgui.spacing()
         if imgui.button("   « Attack »    ") then spawnBird("atk") end
         imgui.same_line()
         if imgui.button("   « Defense »   ") then spawnBird("def") end
         if imgui.button("   « Health »    ") then spawnBird("hp") end
         imgui.same_line()
         if imgui.button("   « Stamina »   ") then spawnBird("spd") end
+        imgui.spacing()
         if imgui.button("                 « Rainbow »                  ") then spawnBird("all") end
         if imgui.button("                  « Golden »                    ") then spawnBird("gold") end
         local changed = false
+        imgui.indent(25)
+        imgui.spacing()
         changed, autospawn.enabled = imgui.checkbox("Auto-Spawn Prism", autospawn.enabled)
+        imgui.unindent(25)
         if changed then save_config() end
+    
+        imgui.spacing()
+        imgui.spacing()
+        imgui.pop_style_var(2)
         imgui.end_window()
     elseif was_open then
         was_open = false
