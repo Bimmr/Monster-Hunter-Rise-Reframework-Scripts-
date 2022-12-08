@@ -139,44 +139,6 @@ function data.init_hooks()
             playerData:call("set__vital", math.min(max, newHealth) + .0)
         end
         
-    sdk.hook(sdk.find_type_definition("snow.data.bulletSlider.BottleSliderFunc"):get_method("consumeItem"), function(args)
-        if data.ammo_and_coatings.unlimited_coatings then return sdk.PreHookResult.SKIP_ORIGINAL end
-    end, utils.nothing())
-
-    sdk.hook(sdk.find_type_definition("snow.data.bulletSlider.BulletSliderFunc"):get_method("consumeItem"), function(args)
-        if data.ammo_and_coatings.unlimited_ammo then return sdk.PreHookResult.SKIP_ORIGINAL end
-    end, utils.nothing())
-
-    local managed_fluctuation = nil
-    sdk.hook(sdk.find_type_definition("snow.data.BulletWeaponData"):get_method("get_Fluctuation"), function(args)
-        local managed = sdk.to_managed_object(args[2])
-        if not managed then return end
-        if not managed:get_type_definition():is_a("snow.data.BulletWeaponData") then return end
-        managed_fluctuation = true
-    end, function(retval)
-        if managed_fluctuation ~= nil then
-            managed_fluctuation = nil
-            if data.ammo_and_coatings.no_deviation then return 0 end
-        end
-        return retval
-    end)
-
-    local managed_recoil = nil
-    sdk.hook(sdk.find_type_definition("snow.data.BulletWeaponData"):get_method("getRecoil"), function(args)
-        local managed = sdk.to_managed_object(args[2])
-        if not managed then return end
-        if not managed:get_type_definition():is_a("snow.data.BulletWeaponData") then return end
-        managed_recoil = true
-    end, function(retval)
-        if managed_recoil ~= nil then
-            managed_recoil = nil
-            if data.ammo_and_coatings.no_recoil then 
-                return sdk.to_ptr(6)
-            end
-        end
-        return retval
-    end)
-
         local is_in_lobby = playerBase:get_field("<IsLobbyPlayer>k__BackingField")
 
         if (data.conditions_and_blights.blights.fire or data.conditions_and_blights.blights.all) and not is_in_lobby then
@@ -319,10 +281,11 @@ function data.init_hooks()
 
     local managed_element_type = nil
     -- snow.player.HeavyBowgun > RefWeaponData > > > LocalBaseData > > > _WeaponBaseData
-    sdk.hook(sdk.find_type_definition("snow.equip.ElementWeaponBaseData"):get_method("get_MainElementType"), function(args)
+    sdk.hook(sdk.find_type_definition("snow.data.ElementData"):get_method("get_Element"), function(args)
+        if data.stats.element.type == -1 then return end
         local managed = sdk.to_managed_object(args[2])
         if not managed then return end
-        if not managed:get_type_definition():is_a("snow.equip.ElementWeaponBaseData") then return end
+        if not managed:get_type_definition():is_a("snow.data.ElementData") then return end
         managed_element_type = managed
     end, function(retval)
         if managed_element_type ~= nil then
@@ -337,11 +300,12 @@ function data.init_hooks()
 
     local managed_element_value = nil
     -- snow.player.HeavyBowgun > RefWeaponData > > > LocalBaseData > > > _WeaponBaseData
-    sdk.hook(sdk.find_type_definition("snow.equip.ElementWeaponBaseData"):get_method("get_MainElementVal"), function(args)
-        local managed = sdk.to_managed_object(args[2])
-        if not managed then return end
-        if not managed:get_type_definition():is_a("snow.equip.ElementWeaponBaseData") then return end
-        managed_element_value = managed
+    sdk.hook(sdk.find_type_definition("snow.data.ElementData"):get_method("get_ElementVal"), function(args)
+        if data.stats.element.value == -1 then return end
+            local managed = sdk.to_managed_object(args[2])
+            if not managed then return end
+            if not managed:get_type_definition():is_a("snow.data.ElementData") then return end
+            managed_element_value = managed
     end, function(retval)
         if managed_element_value ~= nil then
             if data.stats.element.value > -1 then
@@ -352,6 +316,45 @@ function data.init_hooks()
         end
         return retval
     end)
+    
+    sdk.hook(sdk.find_type_definition("snow.data.bulletSlider.BottleSliderFunc"):get_method("consumeItem"), function(args)
+        if data.ammo_and_coatings.unlimited_coatings then return sdk.PreHookResult.SKIP_ORIGINAL end
+    end, utils.nothing())
+
+    sdk.hook(sdk.find_type_definition("snow.data.bulletSlider.BulletSliderFunc"):get_method("consumeItem"), function(args)
+        if data.ammo_and_coatings.unlimited_ammo then return sdk.PreHookResult.SKIP_ORIGINAL end
+    end, utils.nothing())
+
+    local managed_fluctuation = nil
+    sdk.hook(sdk.find_type_definition("snow.data.BulletWeaponData"):get_method("get_Fluctuation"), function(args)
+        local managed = sdk.to_managed_object(args[2])
+        if not managed then return end
+        if not managed:get_type_definition():is_a("snow.data.BulletWeaponData") then return end
+        managed_fluctuation = true
+    end, function(retval)
+        if managed_fluctuation ~= nil then
+            managed_fluctuation = nil
+            if data.ammo_and_coatings.no_deviation then return 0 end
+        end
+        return retval
+    end)
+
+    local managed_recoil = nil
+    sdk.hook(sdk.find_type_definition("snow.data.BulletWeaponData"):get_method("getRecoil"), function(args)
+        local managed = sdk.to_managed_object(args[2])
+        if not managed then return end
+        if not managed:get_type_definition():is_a("snow.data.BulletWeaponData") then return end
+        managed_recoil = true
+    end, function(retval)
+        if managed_recoil ~= nil then
+            managed_recoil = nil
+            if data.ammo_and_coatings.no_recoil then 
+                return sdk.to_ptr(6)
+            end
+        end
+        return retval
+    end)
+
 end
 
 function data.draw()
