@@ -1,0 +1,36 @@
+name: Bug report
+description: Create a bug/issue report
+title: '[Bug]: '
+labels: ['Bug']
+body:
+  - type: dropdown
+    id: mod
+    attributes:
+      label: 'Which mod is this report for:'
+      options:
+        - Buffer
+        - SpiritBirds
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: Describe the bug
+      description: A clear description of what the bug and/or issue is.
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional context
+      description: Add any other context about the problem here
+  - type: markdown
+    attributes:
+      value: >-
+        ---
+
+        <br>
+
+
+        > __Note:__ Make sure to attach any screenshots or images that will help
+        explain or show the issue.
