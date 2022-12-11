@@ -1,4 +1,4 @@
-name: Bug report
+name: ⚠ Bug report
 description: Create a bug/issue report
 title: '[Bug]: '
 labels: ['Bug']
@@ -32,5 +32,5 @@ body:
         <br>
 
 
-        > __Note:__ Make sure to attach any screenshots or images that will help
-        explain or show the issue.
+        > __Note:__ Make sure to add any screenshots or images that will help
+        explain or show the issue after you submit.

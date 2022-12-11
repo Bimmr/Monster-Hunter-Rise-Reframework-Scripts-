@@ -1,6 +1,7 @@
-name: Feature request
+name: 🧾 Feature request
 description: Suggest an idea
 title: '[Feature]: '
+labels: ['Enhancement']
 body:
   - type: dropdown
     id: mod
@@ -36,5 +37,5 @@ body:
         <br>
 
 
-        > __Note:__ Make sure to attach any screenshots or images that will help
-        explain or show the chage.
+        > __Note:__ Make sure to add any screenshots or images that will help
+        explain or show the chage after you submit.
