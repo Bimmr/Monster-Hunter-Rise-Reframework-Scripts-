@@ -15,15 +15,19 @@ body:
   - type: textarea
     id: description
     attributes:
-      label:  Is your feature request related to a problem? Please describe.
-      description: Please note that I will not be making any changes/edits to skills, changing activation of skills, or enabling skills.
+      label: Is your feature request related to a problem? Please describe.
+      description: >-
+        Please note that I will not be making any changes/edits to skills,
+        changing activation of skills, or enabling skills.
     validations:
       required: true
   - type: textarea
-    id: context
+    id: solution
     attributes:
       label: Describe the solution you'd like
       description: A clear description of what you want to happen.
+    validations:
+      required: true
   - type: textarea
     id: context
     attributes:
@@ -38,4 +42,4 @@ body:
 
 
         > __Note:__ Make sure to add any screenshots or images that will help
-        explain or show the chage after you submit.
+        explain or show the issue after you submit.
