@@ -169,15 +169,15 @@ re.on_draw_ui(function()
         was_open = true
         is_window_open = imgui.begin_window("Spawn SpiritBirds", is_window_open, 64)
         imgui.spacing()
-        if imgui.button("   « Attack »    ") then spawnBird("atk") end
+        if imgui.button("   « Attack »    ") then spawn_bird("atk") end
         imgui.same_line()
-        if imgui.button("   « Defense »   ") then spawnBird("def") end
-        if imgui.button("   « Health »    ") then spawnBird("hp") end
+        if imgui.button("   « Defense »   ") then spawn_bird("def") end
+        if imgui.button("   « Health »    ") then spawn_bird("hp") end
         imgui.same_line()
-        if imgui.button("   « Stamina »   ") then spawnBird("spd") end
+        if imgui.button("   « Stamina »   ") then spawn_bird("spd") end
         imgui.spacing()
-        if imgui.button("                 « Rainbow »                  ") then spawnBird("all") end
-        if imgui.button("                  « Golden »                    ") then spawnBird("gold") end
+        if imgui.button("                 « Rainbow »                  ") then spawn_bird("all") end
+        if imgui.button("                  « Golden »                    ") then spawn_bird("gold") end
         local changed = false
         imgui.indent(25)
         imgui.spacing()
