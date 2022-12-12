@@ -82,6 +82,8 @@ end
 -- Spawn the bird
 local function spawn_bird(type)
     local location = get_player_location()
+    if not location then return false end
+    
     local creature_manager = sdk.get_managed_singleton("snow.envCreature.EnvironmentCreatureManager")
     if not creature_manager or not location then return false end
 
