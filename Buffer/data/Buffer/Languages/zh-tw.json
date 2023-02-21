@@ -133,7 +133,8 @@
             "white": "白", 
             "purple": "紫"
         },
-        "unlimited_stamina": "無限耐力"
+        "unlimited_stamina": "無限耐力",
+        "hyper_armor": "Hyper Armor"
     },
     "great_sword": {
         "title": "大劍",

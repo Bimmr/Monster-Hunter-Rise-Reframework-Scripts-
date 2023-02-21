@@ -3,6 +3,7 @@ local data = {
     title = "character",
     sharpness_level = -1,
     unlimited_stamina = false,
+    hyper_armor = false,
     health = {
         healing = false,
         insta_healing = false,
@@ -88,6 +89,10 @@ function data.init_hooks()
         if data.unlimited_stamina then
             local maxStamina = playerData:get_field("_staminaMax")
             playerData:set_field("_stamina", maxStamina)
+        end
+
+        if data.hyper_armor then
+            playerBase:set_field("_HyperArmorTimer", 500)
         end
 
         if data.health.healing then
@@ -385,6 +390,8 @@ function data.draw()
         any_changed = any_changed or changed
         changed, data.unlimited_stamina = imgui.checkbox(language.get(languagePrefix .. "unlimited_stamina"), data.unlimited_stamina)
         any_changed = any_changed or changed
+        changed, data.hyper_armor = imgui.checkbox(language.get(languagePrefix .. "hyper_armor"), data.hyper_armor)
+        any_changed = any_changed or changed
 
         languagePrefix = data.title .. ".health."
         if imgui.tree_node(language.get(languagePrefix .. "title")) then
@@ -548,6 +555,7 @@ function data.create_config_section()
         [data.title] = {
             sharpness_level = data.sharpness_level,
             unlimited_stamina = data.unlimited_stamina,
+            hyper_armor = data.hyper_armor,
             health = {
                 healing = data.health.healing,
                 insta_healing = data.health.insta_healing,
@@ -590,6 +598,7 @@ function data.load_from_config(config_section)
 
     data.sharpness_level = config_section.sharpness_level or data.sharpness_level
     data.unlimited_stamina = config_section.unlimited_stamina or data.unlimited_stamina
+    data.hyper_armor = config_section.hyper_armor or data.hyper_armor
     data.health = config_section.health or data.health
     data.ammo_and_coatings = config_section.ammo_and_coatings or data.ammo_and_coatings
     data.conditions_and_blights = config_section.conditions_and_blights or data.conditions_and_blights

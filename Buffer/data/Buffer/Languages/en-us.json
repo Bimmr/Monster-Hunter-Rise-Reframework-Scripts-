@@ -133,7 +133,8 @@
             "white": "White", 
             "purple": "Purple"
         },
-        "unlimited_stamina": "Unlimited Stamina"
+        "unlimited_stamina": "Unlimited Stamina",
+        "hyper_armor": "Hyper Armor"
     },
     "great_sword": {
         "title": "Great Sword",
