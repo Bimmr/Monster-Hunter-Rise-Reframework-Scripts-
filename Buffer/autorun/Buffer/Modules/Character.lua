@@ -113,30 +113,39 @@ function data.init_hooks()
 
                     -- Depending on level set health percent
                     local newHealth = max
+                    local currentHealth = playerData:get_field("_r_Vital")
                     if dhLevel == 1 or dhLevel == 2 then newHealth = math.floor(max * 0.5) end
                     if dhLevel == 3 or dhLevel == 4 then newHealth = math.floor(max * 0.7) end
                     if dhLevel == 5 then newHealth = math.floor(max * 0.8) end
 
-                    playerData:set_field("_r_Vital", math.min(max, newHealth) + .0)
-                    playerData:call("set__vital", math.min(max, newHealth) + .0)
+                    if currentHealth > newHealth then
+                        playerData:set_field("_r_Vital", math.min(currentHealth, newHealth) + .0)
+                        playerData:call("set__vital", math.min(currentHealth, newHealth) + .0)
+                    end
                 end
             end
         end
 
         if data.health.max_heroics then
             local max = playerData:get_field("_vitalMax")
-            local newHealth = math.floor(max * 0.35)
-
-            playerData:set_field("_r_Vital", math.min(max, newHealth) + .0)
-            playerData:call("set__vital", math.min(max, newHealth) + .0)
+            local currentHealth = playerData:get_field("_r_Vital")
+            local newHealth = Math.floor(max * 0.35)
+            
+            if currentHealth > newHealth then
+                playerData:set_field("_r_Vital", math.min(max, newHealth) + .0)
+                playerData:call("set__vital", math.min(max, newHealth) + .0)
+            end
         end
 
         if data.health.max_adrenaline then
             local max = playerData:get_field("_vitalMax")
+            local currentHealth = playerData:get_field("_r_Vital")
             local newHealth = 10.0
 
-            playerData:set_field("_r_Vital", math.min(max, newHealth) + .0)
-            playerData:call("set__vital", math.min(max, newHealth) + .0)
+            if currentHealth > newHealth then
+                playerData:set_field("_r_Vital", math.min(max, newHealth) + .0)
+                playerData:call("set__vital", math.min(max, newHealth) + .0)
+            end
         end
         
         local is_in_lobby = playerBase:get_field("<IsLobbyPlayer>k__BackingField")
