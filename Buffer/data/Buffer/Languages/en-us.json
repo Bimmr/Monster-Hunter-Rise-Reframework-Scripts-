@@ -86,7 +86,7 @@
             "healing": "Constant Healing",
             "healing_tooltip": "Any missing health will become recoverable.",
             "insta_healing": "Instant Healing",
-            "insta_healing_tooltip": "When you take damage, you will instantly heal back to full health.",
+            "insta_healing_tooltip": "When you take damage, you will instantly heal back to max health.",
             "max_adrenaline": "Max Adrenaline Health",
             "max_dragonheart": "Max Dragonheart Health",
             "max_dragonheart_tooltip": "Will adjust max health depending on the level of Dragonheart equipped",
