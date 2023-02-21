@@ -7,7 +7,8 @@ local data = {
     -- unlimited_ammo - In Character
     -- auto_reload  - In Character
     wyvern_sniper = false,
-    wyvern_machine_gun = false
+    wyvern_machine_gun = false,
+    counter_charger = false
     -- no_deviation  - In Character
 }
 
@@ -29,6 +30,9 @@ function data.init_hooks()
         if data.charge_level > -1 then
             managed:set_field("_ShotChargeLv", data.charge_level)
             managed:set_field("_ShotChargeFrame", 30 * data.charge_level)
+        end
+        if data.counter_charger then
+            managed:set_field("_ReduseChargeTimer", 3000)
         end
         if character.ammo_and_coatings.auto_reload then managed:call("resetBulletNum") end
     end, utils.nothing())
@@ -71,6 +75,8 @@ function data.draw()
         changed, data.wyvern_machine_gun = imgui.checkbox(language.get(languagePrefix .. "wyvern_machine_gun"), data.wyvern_machine_gun)
         any_changed = changed or any_changed
         changed, data.overheat = imgui.checkbox(language.get(languagePrefix .. "overheat"), data.overheat)
+        any_changed = changed or any_changed
+        changed, data.counter_charger = imgui.checkbox(language.get(languagePrefix .. "counter_charger"), data.counter_charger)
         any_changed = changed or any_changed
         changed, character.ammo_and_coatings.no_deviation = imgui.checkbox(language.get(languagePrefix .. "no_deviation"), character.ammo_and_coatings.no_deviation)
         misc_changed = changed or misc_changed
