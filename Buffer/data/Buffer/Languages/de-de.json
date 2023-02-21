@@ -133,7 +133,8 @@
             "white": "Weiß", 
             "purple": "Lila"
         },
-        "unlimited_stamina": "Unendlich Ausdauer"
+        "unlimited_stamina": "Unendlich Ausdauer",
+        "hyper_armor": "Hyper Armor"
     },
     "great_sword": {
         "title": "Großschwert",

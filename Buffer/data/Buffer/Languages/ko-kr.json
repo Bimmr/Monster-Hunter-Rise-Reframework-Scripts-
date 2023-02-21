@@ -133,7 +133,8 @@
             "white": "흰 예리",
             "purple": "보라 예리"
         },
-        "unlimited_stamina": "스태미나 무한"
+        "unlimited_stamina": "스태미나 무한",
+        "hyper_armor": "Hyper Armor"
     },
     "great_sword": {
         "title": "대검",
