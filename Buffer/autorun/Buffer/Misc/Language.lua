@@ -34,7 +34,7 @@ end
 -- Loads all languages from the language folder
 function language.load_languages()
     local files = fs.glob([[Buffer\\Languages\\.*json]])
-    if files == nil or #files == 0 then re.msg("Buffer:\nUnable to load Language files. \n\nIf you're using a mod manager such as Vortex you may need to manually install this mod as it looks like language files wern't moved over. If you're not using a mod manager then looks like you forgot to move all the files. \n\nThis will now produce an error and the mod will not load!") return end
+    if files == nil or #files == 0 then re.msg("Buffer:\nUnable to load Language files. \n\nIf you're using a mod manager such as Vortex you may need to manually install this mod as it looks like language files weren't moved over. If you're not using a mod manager then looks like you forgot to move all the files. \n\nThis will now produce an error and the mod will not load!") return end
     for i = 1, #files do
         local file = files[i]
         local fileName = utils.split(file, "\\")[#utils.split(file, "\\")]
