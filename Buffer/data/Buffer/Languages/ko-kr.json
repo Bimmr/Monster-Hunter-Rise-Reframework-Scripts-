@@ -134,7 +134,11 @@
             "purple": "보라 예리"
         },
         "unlimited_stamina": "스태미나 무한",
-        "hyper_armor": "하이퍼 아머"
+        "hyper_armor": "하이퍼 아머",
+        "skills": {
+            "title": "Skills",
+            "frost_craft": "Frost Craft"
+        }
     },
     "great_sword": {
         "title": "대검",
