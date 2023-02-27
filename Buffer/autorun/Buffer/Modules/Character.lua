@@ -74,6 +74,7 @@ function data.init_hooks()
         if not playerBase then return end
         local playerData = utils.getPlayerData()
         if not playerData then return end
+        local is_in_lobby = playerBase:get_field("<IsLobbyPlayer>k__BackingField")
         
         if data.sharpness_level > -1 then
             if data.hidden.sharpness_level_old == -1 then data.hidden.sharpness_level_old = playerBase:get_field("<SharpnessLv>k__BackingField") end
@@ -91,7 +92,7 @@ function data.init_hooks()
             playerData:set_field("_stamina", maxStamina)
         end
 
-        if data.hyper_armor then
+        if data.hyper_armor and not is_in_lobby then
             playerBase:set_field("_HyperArmorTimer", 500)
         end
 
@@ -99,6 +100,7 @@ function data.init_hooks()
             local max = playerData:get_field("_vitalMax")
             playerData:set_field("_r_Vital", max)
         end
+        
 
         if data.health.insta_healing then
             local max = playerData:get_field("_vitalMax")
@@ -153,7 +155,6 @@ function data.init_hooks()
             end
         end
         
-        local is_in_lobby = playerBase:get_field("<IsLobbyPlayer>k__BackingField")
 
         if (data.conditions_and_blights.blights.fire or data.conditions_and_blights.blights.all) and not is_in_lobby then
             playerBase:set_field("_FireLDurationTimer", 0) -- The fire timer
