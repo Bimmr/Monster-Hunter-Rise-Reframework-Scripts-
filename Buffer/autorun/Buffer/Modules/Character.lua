@@ -5,7 +5,8 @@ local data = {
     unlimited_stamina = false,
     hyper_armor = false,
     skills = {
-        frost_craft= true
+        intrepid_heart = false,
+        frost_craft = false
     },
     health = {
         healing = false,
@@ -97,6 +98,10 @@ function data.init_hooks()
 
         if data.hyper_armor and not is_in_lobby then
             playerBase:set_field("_HyperArmorTimer", 500)
+        end
+
+        if data.skills.intrepid_heart and not is_in_lobby then
+            playerData:set_field("_EquipSkill223Accumulator", 100) -- Intrepid Heart
         end
 
         if data.skills.frost_craft and not is_in_lobby then
@@ -405,6 +410,8 @@ function data.draw()
         if imgui.tree_node(language.get(languagePrefix .. "title")) then        
             changed, data.skills.frost_craft = imgui.checkbox(language.get(languagePrefix .. "frost_craft"), data.skills.frost_craft)
             any_changed = any_changed or changed
+            changed, data.skills.intrepid_heart = imgui.checkbox(language.get(languagePrefix .. "intrepid_heart"), data.skills.intrepid_heart)
+            any_changed = any_changed or changed
             imgui.tree_pop()
         end
         languagePrefix = data.title .. ".health."
@@ -570,7 +577,10 @@ function data.create_config_section()
             sharpness_level = data.sharpness_level,
             unlimited_stamina = data.unlimited_stamina,
             hyper_armor = data.hyper_armor,
-            skills = data.skills,
+            skills = {
+                intrepid_heart = data.skills.intrepid_heart,
+                frost_craft = data.skills.frost_craft  
+            },
             health = {
                 healing = data.health.healing,
                 insta_healing = data.health.insta_healing,

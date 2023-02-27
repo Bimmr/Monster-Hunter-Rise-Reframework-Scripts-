@@ -137,6 +137,7 @@
         "hyper_armor": "Hyper Armor",
         "skills": {
             "title": "Skills",
+            "intrepid_heart": "Intrepid Heart",
             "frost_craft": "Frost Craft"
         }
     },
