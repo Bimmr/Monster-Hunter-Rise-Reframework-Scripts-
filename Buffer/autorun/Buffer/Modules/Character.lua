@@ -101,7 +101,7 @@ function data.init_hooks()
         end
 
         if data.skills.intrepid_heart and not is_in_lobby then
-            playerData:set_field("_EquipSkill223Accumulator", 100) -- Intrepid Heart
+            playerData:set_field("_EquipSkill223Accumulator", 400) -- Intrepid Heart
         end
 
         if data.skills.frost_craft and not is_in_lobby then
