@@ -33,6 +33,7 @@
                   <ul>
                      <li>Sharpness</li>
                      <li>Unlimited Stamina</li>
+                     <li>Hyper Armor</li>
                      <li>Health</li>
                      <ul>
                         <li>Constant Healing/Instant Healing</li>
@@ -149,6 +150,7 @@
                      <li>Charge Level</li>
                      <li>Unlimited Ammo</li>
                      <li>Auto Reload</li>
+                     <li>Counter Charger</li>
                      <li>Unlimited Wyvern Sniper</li>
                      <li>Unlimited Wyvern Machine Gun</li>
                      <li>Prevent Overheat</li>
