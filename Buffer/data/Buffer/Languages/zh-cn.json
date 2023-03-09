@@ -134,7 +134,12 @@
             "purple": "紫"
         },
         "unlimited_stamina": "无限耐力",
-        "hyper_armor": "Hyper Armor"
+        "hyper_armor": "Hyper Armor",
+        "skills": {
+            "title": "Skills",
+            "intrepid_heart": "Intrepid Heart",
+            "frost_craft": "Frost Craft"
+        }
     },
     "great_sword": {
         "title": "大剑",

@@ -134,7 +134,12 @@
             "purple": "Lila"
         },
         "unlimited_stamina": "Unendlich Ausdauer",
-        "hyper_armor": "Hyper Armor"
+        "hyper_armor": "Hyper Armor",
+        "skills": {
+            "title": "Skills",
+            "intrepid_heart": "Intrepid Heart",
+            "frost_craft": "Frost Craft"
+        }
     },
     "great_sword": {
         "title": "Großschwert",
