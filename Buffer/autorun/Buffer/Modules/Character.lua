@@ -4,6 +4,7 @@ local data = {
     sharpness_level = -1,
     unlimited_stamina = false,
     hyper_armor = false,
+    super_armor = false,
     skills = {
         intrepid_heart = false,
         frost_craft = false
@@ -98,6 +99,9 @@ function data.init_hooks()
 
         if data.hyper_armor and not is_in_lobby then
             playerBase:set_field("_HyperArmorTimer", 500)
+        end
+        if data.super_armor and not is_in_lobby then
+            playerBase:set_field("_SuperArmorTimer", 500)
         end
 
         if data.skills.intrepid_heart and not is_in_lobby then
@@ -403,6 +407,8 @@ function data.draw()
         any_changed = any_changed or changed
         changed, data.unlimited_stamina = imgui.checkbox(language.get(languagePrefix .. "unlimited_stamina"), data.unlimited_stamina)
         any_changed = any_changed or changed
+        changed, data.super_armor = imgui.checkbox(language.get(languagePrefix .. "super_armor"), data.super_armor)
+        any_changed = any_changed or changed
         changed, data.hyper_armor = imgui.checkbox(language.get(languagePrefix .. "hyper_armor"), data.hyper_armor)
         any_changed = any_changed or changed
         
@@ -576,6 +582,7 @@ function data.create_config_section()
         [data.title] = {
             sharpness_level = data.sharpness_level,
             unlimited_stamina = data.unlimited_stamina,
+            super_armor = data.super_armor,
             hyper_armor = data.hyper_armor,
             skills = {
                 intrepid_heart = data.skills.intrepid_heart,
@@ -623,6 +630,7 @@ function data.load_from_config(config_section)
 
     data.sharpness_level = config_section.sharpness_level or data.sharpness_level
     data.unlimited_stamina = config_section.unlimited_stamina or data.unlimited_stamina
+    data.super_armor = config_section.super_armor or data.super_armor
     data.hyper_armor = config_section.hyper_armor or data.hyper_armor
     data.skills = config_section.skills or data.skills
     data.health = config_section.health or data.health

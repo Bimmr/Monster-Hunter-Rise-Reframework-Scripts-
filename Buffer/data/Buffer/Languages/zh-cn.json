@@ -135,6 +135,7 @@
         },
         "unlimited_stamina": "无限耐力",
         "hyper_armor": "Hyper Armor",
+        "super_armor": "Super Armor",
         "skills": {
             "title": "Skills",
             "intrepid_heart": "Intrepid Heart",
