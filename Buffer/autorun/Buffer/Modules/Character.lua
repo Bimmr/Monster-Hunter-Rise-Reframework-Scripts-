@@ -508,7 +508,7 @@ function data.draw()
         if imgui.tree_node(language.get(languagePrefix .. "title")) then
             utils.tooltip(language.get(languagePrefix .. "tooltip"))
             local step = 10
-            local attack_max, defence_max = 2600, 4500
+            local attack_max, defence_max = 2600, 5400
             local stepped_attack_max, stepped_defence_max = math.floor(attack_max / step), math.floor(defence_max / step)
             local stepped_attack_value, stepped_defence_value = -1, -1
             if data.stats.attack > -1 then stepped_attack_value = math.floor(data.stats.attack / step) end
