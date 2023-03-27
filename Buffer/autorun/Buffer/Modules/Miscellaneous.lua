@@ -108,15 +108,15 @@ function data.init_hooks()
     end)
 
     sdk.hook(sdk.find_type_definition("snow.facility.kitchen.MealFunc"):get_method("updateList"), function(args)
-        if data.canteen.level_4 and not data.hidden.level_4_wasEnabled then
-            data.hidden.level_4_wasEnabled = true
+        if data.canteen.level_4 and not data.hidden.level_4_was_enabled then
+            data.hidden.level_4_was_enabled = true
             local dangoLevels = utils.getMealFunc():get_field("SpecialSkewerDangoLv")
             local level4 = sdk.create_uint32(4)
             level4:set_field("mValue", 4)
             for i = 0, 2 do dangoLevels[i] = level4 end
 
-        elseif not data.canteen.level_4 and data.hidden.level_4_wasEnabled then
-            data.hidden.level_4_wasEnabled = false
+        elseif not data.canteen.level_4 and data.hidden.level_4_was_enabled then
+            data.hidden.level_4_was_enabled = false
             local dangoLevels = utils.getMealFunc():get_field("SpecialSkewerDangoLv")
             for i = 0, 2 do
                 dangoLevels[i] = sdk.create_uint32(i == 0 and 4 or i == 1 and 3 or 1)-- lua version of i == 0 ? 4 : i == 1 ? 3 : 1
@@ -125,8 +125,8 @@ function data.init_hooks()
     end, utils.nothing())
     
     sdk.hook(sdk.find_type_definition("snow.gui.fsm.kitchen.GuiKitchen"):get_method("setDangoTabList"), function(args)
-        if data.canteen.level_4 and not data.hidden.level_4GUI_wasEnabled then
-            data.hidden.level_4GUI_wasEnabled = true
+        if data.canteen.level_4 and not data.hidden.level_4GUI_was_enabled then
+            data.hidden.level_4GUI_was_enabled = true
             local managed = sdk.to_managed_object(args[2])
             if not managed then return end
             local dangoLevels = managed:get_field("SpecialSkewerDangoLv")
@@ -134,8 +134,8 @@ function data.init_hooks()
             level4:set_field("mValue", 4)
             for i = 0, 2 do dangoLevels[i] = level4 end
 
-        elseif not data.canteen.level_4 and data.hidden.level_4GUI_wasEnabled then
-            data.hidden.level_4GUI_wasEnabled = false
+        elseif not data.canteen.level_4 and data.hidden.level_4GUI_was_enabled then
+            data.hidden.level_4GUI_was_enabled = false
             local managed = sdk.to_managed_object(args[2])
             if not managed then return end
             local dangoLevels = managed:get_field("SpecialSkewerDangoLv")
