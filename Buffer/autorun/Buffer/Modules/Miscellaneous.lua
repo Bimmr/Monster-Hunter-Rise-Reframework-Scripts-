@@ -15,10 +15,12 @@ local data = {
     canteen = {
         dango_100_no_ticket = false,
         dango_100_ticket = false,
-        level_4 = false
+        level_4 = false,
+        show_all_daily = false
     },
     hidden = {
-        level_4_was_enabled = false
+        level_4_was_enabled = false,
+        show_all_daily_was_enabled = false
     }
 }
 
@@ -144,6 +146,38 @@ function data.init_hooks()
             end
         end
     end, utils.nothing())
+    sdk.hook(sdk.find_type_definition("snow.facility.kitchen.MealFunc"):get_method("updateList"), function(args)
+        if data.canteen.show_all_daily and not data.hidden.show_all_daily_was_enabled then
+            local dangoList = utils.getMealFunc():get_field("<AvailableDangoList>k__BackingField"):get_field("mItems")
+            
+            log.debug("Modifying Dango List: ".. #dangoList)
+            if #dangoList >= 0 then
+                data.hidden.show_all_daily_was_enabled = true
+                for i, dango in ipairs(dangoList) do
+                    local dangoParam = dango:get_field("_Param")
+                    data.hidden.dango[dangoParam:get_field("_Id")] = {
+                        [1] = dangoParam:get_field("_UnlockFlag"),
+                        [2] = dangoParam:get_field("_DailyRate")
+                    }
+                    dangoParam:set_field("_UnlockFlag", 5)
+                    dangoParam:set_field("_DailyRate", 0)
+                    log.debug("Saving "..dangoParam:get_field("_Id") .. ": "..dangoParam:get_field("_UnlockFlag").." | ".. dangoParam:get_field("_DailyRate"))
+                end
+            elseif not data.canteen.show_all_daily and data.hidden.show_all_daily_was_enabled then
+                local dangoList = utils.getMealFunc():get_field("<AvailableDangoList>k__BackingField"):get_field("mItems")
+                log.debug("Resetting Dango List: "..#dangoList)
+                    data.hidden.show_all_daily_was_enabled = false
+                    for i, dango in ipairs(dangoList) do
+                        local dangoParam = dango:get_field("_Param")
+                        local dangoOrigParam = data.hidden.dango[dangoParam:get_field("_Id")]
+                        dangoParam:set_field("_UnlockFlag", dangoOrigParam[1])
+                        dangoParam:set_field("_DailyRate", dangoOrigParam[2])
+                        log.debug("Resetting "..dangoParam:get_field("_Id") .. ": "..dangoOrigParam[1].." | ".. dangoOrigParam[2])
+                    end
+                    data.hidden.dango = {}
+            end
+        end
+    end, utils.nothing())
 end
 
 function data.draw()
@@ -183,6 +217,8 @@ function data.draw()
             changed, data.canteen.dango_100_ticket = imgui.checkbox(language.get(languagePrefix .. "dango_100_ticket"), data.canteen.dango_100_ticket)
             any_changed = any_changed or changed
             changed, data.canteen.level_4 = imgui.checkbox(language.get(languagePrefix .. "level_4"), data.canteen.level_4)
+            any_changed = any_changed or changed
+            changed, data.canteen.show_all_daily = imgui.checkbox(language.get(languagePrefix .. "show_all_daily"), data.canteen.show_all_daily)
             any_changed = any_changed or changed
             imgui.tree_pop()
         end
