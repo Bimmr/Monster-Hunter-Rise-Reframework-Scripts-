@@ -152,7 +152,7 @@ sdk.hook(sdk.find_type_definition("snow.facility.kitchen.MealFunc"):get_method("
     local managed = sdk.to_managed_object(args[2])
     if not managed then return end
     local dangoList = managed:get_field("<DangoDataList>k__BackingField"):get_field("mItems")
-    for i, dango in ipairs(dangoList) do
+    for i, dango in pairs(dangoList) do
         local dangoParam = dango:get_field("_Param")
         -- Set unlock Flag to Village_1 and Dailyrate to 0
         dangoParam:set_field("_UnlockFlag", 5)
