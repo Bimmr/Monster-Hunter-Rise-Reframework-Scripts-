@@ -17,6 +17,7 @@ local data = {
         dango_100_ticket = false,
         level_4 = false
     },
+    unlimited_recon = false,
     hidden = {
         level_4_was_enabled = false
     }
@@ -144,6 +145,21 @@ function data.init_hooks()
             end
         end
     end, utils.nothing())
+
+    local recon_managed = nil
+    sdk.hook(sdk.find_type_definition("snow.otomo.OtomoReconCharaManager"):get_method("onCompleteReconOtomoAct"), function(args)
+        recon_managed = nil
+        if data.unlimited_recon then
+            local managed = sdk.to_managed_object(args[2])
+            if not managed then return end
+            recon_managed = managed
+        end
+    end, function(retval)
+        if recon_managed then
+            recon_managed:set_field("_IsUseOtomoReconFastTravel", false)
+        end
+    end)
+
 end
 
 function data.draw()
@@ -153,6 +169,13 @@ function data.draw()
 
     if imgui.collapsing_header(language.get(languagePrefix .. "title")) then
         imgui.indent(10)
+
+        local unlimited_recon_change = false
+        unlimited_recon_change, data.unlimited_recon = imgui.checkbox(language.get(languagePrefix .. "unlimited_recon"), data.unlimited_recon)
+        if unlimited_recon_change and data.unlimited_recon then
+            sdk.get_managed_singleton("snow.data.OtomoReconManager"):set_field("_IsUseOtomoReconFastTravel", false)
+        end
+        any_changed = any_changed or unlimited_recon_change
 
         languagePrefix = data.title .. ".consumables."
         if imgui.tree_node(language.get(languagePrefix .. "title")) then
@@ -176,6 +199,7 @@ function data.draw()
             any_changed = any_changed or changed
             imgui.tree_pop()
         end
+
         languagePrefix = data.title .. ".canteen."
         if imgui.tree_node(language.get(languagePrefix .. "title")) then
             changed, data.canteen.dango_100_no_ticket = imgui.checkbox(language.get(languagePrefix .. "dango_100_no_ticket"), data.canteen.dango_100_no_ticket)
@@ -206,7 +230,6 @@ end
 
 function data.load_from_config(config_section)
     if not config_section then return end
-
     data.consumables = config_section.consumables or data.consumables
     data.wirebugs = config_section.wirebugs or data.wirebugs
     data.canteen = config_section.canteen or data.canteen
