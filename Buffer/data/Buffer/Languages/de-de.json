@@ -221,7 +221,8 @@
             "unlimited_ooc": "Unendlich Seilkäfer (Außerhalb vom Kampf)",
             "unlimited_powerup": "Unendliche Verstärkungen",
             "unlimited_powerup_tooltip": "Erfordert das aufnehmen eines Gold oder Rubinseilkäfers vorher."
-        }
+        },
+        "unlimited_recon": "Unlimited Buddy Recon"
     },
     "charge_blade": {
         "title": "Energieklinge",

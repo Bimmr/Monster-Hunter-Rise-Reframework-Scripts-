@@ -221,7 +221,8 @@
             "unlimited_ooc": "밧줄벌레 무한 (마을)",
             "unlimited_powerup": "변환밧줄벌레 효과 무한",
             "unlimited_powerup_tooltip": "변환밧줄벌레-홍/금을 먼저 소지해야 함"
-        }
+        },
+        "unlimited_recon": "Unlimited Buddy Recon"
     },
     "charge_blade": {
         "title": "차지액스",
