@@ -207,7 +207,9 @@
             "title": "茶点店",
             "dango_100_no_ticket": "无票必发动团子技能",
             "dango_100_ticket": "有票必发动团子技能",
-            "level_4": "全团子技能等级4"
+            "level_4": "全团子技能等级4",
+            "all_dangos": "Show all Dangos",
+            "all_dangos_tooltip": "You will need to turn off and then restart the game to disable this"
         },
         "consumables": {
             "title": "消耗品",

@@ -207,7 +207,9 @@
             "title": "茶館",
             "dango_100_no_ticket": "無票必發動糰子技能",
             "dango_100_ticket": "有票必發動糰子技能",
-            "level_4": "全糰子技能等級4"
+            "level_4": "全糰子技能等級4",
+            "all_dangos": "Show all Dangos",
+            "all_dangos_tooltip": "You will need to turn off and then restart the game to disable this"
         },
         "consumables": {
             "title": "消耗品",
