@@ -223,7 +223,8 @@
             "unlimited_ooc": "战斗外无限翔虫",
             "unlimited_powerup": "无限变幻翔虫",
             "unlimited_powerup_tooltip": "需要你持有红或金变幻翔虫"
-        }
+        },
+        "unlimited_recon": "Unlimited Buddy Recon"
     },
     "charge_blade": {
         "title": "盾斧",

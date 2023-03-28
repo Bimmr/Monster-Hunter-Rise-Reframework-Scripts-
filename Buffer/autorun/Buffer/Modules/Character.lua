@@ -584,50 +584,16 @@ function data.create_config_section()
             unlimited_stamina = data.unlimited_stamina,
             super_armor = data.super_armor,
             hyper_armor = data.hyper_armor,
-            skills = {
-                intrepid_heart = data.skills.intrepid_heart,
-                frost_craft = data.skills.frost_craft  
-            },
-            health = {
-                healing = data.health.healing,
-                insta_healing = data.health.insta_healing,
-                max_dragonheart = data.health.max_dragonheart,
-                max_heroics = data.health.max_heroics,
-                max_adrenaline = data.health.max_adrenaline
-            },
+            skills = data.skills,
+            health = data.health,
             ammo_and_coatings = data.ammo_and_coatings,
-            conditions_and_blights = {
-                blights = {
-                    fire = data.conditions_and_blights.blights.fire,
-                    water = data.conditions_and_blights.blights.water,
-                    ice = data.conditions_and_blights.blights.ice,
-                    thunder = data.conditions_and_blights.blights.thunder,
-                    dragon = data.conditions_and_blights.blights.dragon,
-                    bubble = data.conditions_and_blights.blights.bubble,
-                    blast = data.conditions_and_blights.blights.blast,
-                    all = data.conditions_and_blights.blights.all
-                },
-                conditions = {
-                    bleeding = data.conditions_and_blights.conditions.bleeding,
-                    poison = data.conditions_and_blights.conditions.poison,
-                    sleep = data.conditions_and_blights.conditions.sleep,
-                    paralyze = data.conditions_and_blights.conditions.paralyze,
-                    frenzy = data.conditions_and_blights.conditions.frenzy,
-                    qurio = data.conditions_and_blights.conditions.qurio,
-                    defence_and_resistance = data.conditions_and_blights.conditions.defence_and_resistance,
-                    hellfire_and_stentch = data.conditions_and_blights.conditions.hellfire_and_stentch,
-                    stun = data.conditions_and_blights.conditions.stun,
-                    thread = data.conditions_and_blights.conditions.thread,
-                    all = data.conditions_and_blights.conditions.all
-                }
-            }
+            conditions_and_blights = data.conditions_and_blights
         }
     }
 end
 
 function data.load_from_config(config_section)
     if not config_section then return end
-
     data.sharpness_level = config_section.sharpness_level or data.sharpness_level
     data.unlimited_stamina = config_section.unlimited_stamina or data.unlimited_stamina
     data.super_armor = config_section.super_armor or data.super_armor

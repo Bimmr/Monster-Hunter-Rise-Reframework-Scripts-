@@ -223,7 +223,8 @@
             "unlimited_ooc": "Unlimited Wirebugs (Out of Combat)",
             "unlimited_powerup": "Unlimited Powerup",
             "unlimited_powerup_tooltip": "Requires you to pick up a red or yellow wirebug first"
-        }
+        },
+        "unlimited_recon": "Unlimited Buddy Recon"
     },
     "charge_blade": {
         "title": "Charge Blade",
