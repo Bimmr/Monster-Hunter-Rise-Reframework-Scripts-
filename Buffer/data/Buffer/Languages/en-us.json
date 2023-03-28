@@ -207,7 +207,9 @@
             "title": "Canteen",
             "dango_100_no_ticket": "Dango Skill 100% (No Ticket)",
             "dango_100_ticket": "Dango Skill 100% (Ticket)",
-            "level_4": "Level 4 Dango"
+            "level_4": "Level 4 Dango",
+            "all_dangos": "Show all Dangos",
+            "all_dangos_tooltip": "You will need to turn off and then restart the game to disable this"
         },
         "consumables": {
             "title": "Consumables",

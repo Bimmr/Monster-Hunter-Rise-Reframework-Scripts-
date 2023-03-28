@@ -15,11 +15,13 @@ local data = {
     canteen = {
         dango_100_no_ticket = false,
         dango_100_ticket = false,
-        level_4 = false
+        level_4 = false,
+        all_dangos = false
     },
     unlimited_recon = false,
     hidden = {
-        level_4_was_enabled = false
+        level_4_was_enabled = false,
+        dango_list = false
     }
 }
 
@@ -145,6 +147,19 @@ function data.init_hooks()
             end
         end
     end, utils.nothing())
+  
+    sdk.hook(sdk.find_type_definition("snow.facility.kitchen.MealFunc"):get_method("updateList"), function(args)
+      local managed = sdk.to_managed_object(args[2])
+      if not managed then return end
+      local dangoList = managed:get_field("<DangoDataList>k__BackingField"):get_field("mItems")
+      for i, dango in pairs(dangoList) do
+          local dangoParam = dango:get_field("_Param")
+          -- Set unlock Flag to Village_1 and Dailyrate to 0
+          dangoParam:set_field("_UnlockFlag", 5)
+          dangoParam:set_field("_DailyRate", 0)
+      end
+      managed:set_field("<AvailableDangoList>k__BackingField", managed:get_field("<DangoDataList>k__BackingField"))
+    end, utils.nothing())
 
     local recon_managed = nil
     sdk.hook(sdk.find_type_definition("snow.otomo.OtomoReconCharaManager"):get_method("onCompleteReconOtomoAct"), function(args)
@@ -159,7 +174,7 @@ function data.init_hooks()
             recon_managed:set_field("_IsUseOtomoReconFastTravel", false)
         end
     end)
-
+    
 end
 
 function data.draw()
@@ -207,6 +222,9 @@ function data.draw()
             changed, data.canteen.dango_100_ticket = imgui.checkbox(language.get(languagePrefix .. "dango_100_ticket"), data.canteen.dango_100_ticket)
             any_changed = any_changed or changed
             changed, data.canteen.level_4 = imgui.checkbox(language.get(languagePrefix .. "level_4"), data.canteen.level_4)
+            any_changed = any_changed or changed
+            changed, data.canteen.all_dangos = imgui.checkbox(language.get(languagePrefix .. "all_dangos"), data.canteen.all_dangos)
+            utils.tooltip(language.get(languagePrefix.."all_dangos_tooltip"))
             any_changed = any_changed or changed
             imgui.tree_pop()
         end

@@ -207,7 +207,9 @@
             "title": "Kantine",
             "dango_100_no_ticket": "Dango Fähigkeit 100% (Kein Gutschein)",
             "dango_100_ticket": "Dango Fähigkeit 100% (Gutschein)",
-            "level_4": "Level 4 Dango"
+            "level_4": "Level 4 Dango",
+            "all_dangos": "Show all Dangos",
+            "all_dangos_tooltip": "You will need to turn off and then restart the game to disable this"
         },
         "consumables": {
             "title": "Verbrauchsgüter",

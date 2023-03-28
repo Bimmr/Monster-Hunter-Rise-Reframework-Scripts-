@@ -207,7 +207,9 @@
             "title": "식당",
             "dango_100_no_ticket": "경단 기술 100% (달인의 경단권 미사용 시)",
             "dango_100_ticket": "경단 기술 100% (달인의 경단권 사용 시)",
-            "level_4": "Lv 4 경단효과"
+            "level_4": "Lv 4 경단효과",
+            "all_dangos": "Show all Dangos",
+            "all_dangos_tooltip": "You will need to turn off and then restart the game to disable this"
         },
         "consumables": {
             "title": "소비 아이템",
