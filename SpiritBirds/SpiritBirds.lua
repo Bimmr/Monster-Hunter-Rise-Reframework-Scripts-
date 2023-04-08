@@ -134,7 +134,11 @@ re.on_pre_application_entry("UpdateBehavior", function()
                     -- local spawned = false    for i = 0, 5 do    if spawn_bird("def")  then    spawned = true    end    end    if spawned then autospawn.spawned = true else
                     -- local spawned = false    for i = 0, 5 do    if spawn_bird("spd")  then    spawned = true    end    end    if spawned then autospawn.spawned = true else
                     -- local spawned = false    for i = 0, 5 do    if spawn_bird("gold") then    spawned = true    end    end    if spawned then autospawn.spawned = true else
-                    -- I have no plans to add this as a feature so you can change it if you want
+                    
+                    -- If you want to spawn multiple then you have to do something like this - just change hp and spd to the ones you want
+                    -- local spawned = false for i = 0, 5 do if spawn_bird("hp") and spawn_bird("spd")then spawned = true end end if spawned then autospawn.spawned = true else
+                    
+                     -- I have no plans to add this as a feature so you can change it if you want
 
                     quest_start_time = get_time()
                 end
