@@ -85,22 +85,24 @@ end
 local function getECItems()
     local creature_manager = sdk.get_managed_singleton("snow.envCreature.EnvironmentCreatureManager")
     if not creature_manager then return nil end
+
     local ec_list = creature_manager:get_field("_EcPrefabList")
     if not ec_list then return nil end
+
     local ec_items = ec_list:get_field("mItems")
     if not ec_items then
         log.debug("Unable to get elements from _EcPrefabList")
         return nil
-    else
-        if type(ec_items.get_elements) == "function" then
-            ec_items = ec_items:get_elements()
-        else
-            log.debug("Unable to get elements from mItems")
-            if cached_ec_items then return cached_ec_items end
-            return nil
-        end
+    elseif type(ec_items.get_elements) ~= "function" then
+        log.debug("get_elements isn't a function")
+        if cached_ec_items then
+            log.debug("Returning cached ec_items") 
+            return cached_ec_items end
+        return nil
+    else 
+        ec_items = ec_items:get_elements()
     end
-    if not ec_items then return nil end
+    
     cached_ec_items = ec_items
     return ec_items
 end
@@ -110,10 +112,14 @@ local function spawn_bird(type)
     local location = get_player_location()
     if not location then return false end
     
+    -- Get the EC_Items
     local ec_items = getECItems()
-    if not ec_items then return false end
+    if not ec_items then     
+        log.debug("EC_Items isn't valid")
+        return false
+    end
 
-    if not ec_items then return false end
+    -- Get the EC Bird
     local ec_bird = ec_items[SPIRIT_BIRDS[type]]
     if not ec_bird then
         log.debug("An invalid bird type was just spawned")
