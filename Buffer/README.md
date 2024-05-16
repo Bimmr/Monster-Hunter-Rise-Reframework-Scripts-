@@ -19,13 +19,14 @@
                      <ul>
                         <li>Unlimited (out of combat/anywhere)</li>
                         <li>Give 3</li>
-                        <li>Unlimited Red/Yellow Powerup</li>
+                        <li>Unlimited Red/Yellow Power-up</li>
                      </ul>
                      <li>Canteen</li>
                      <ul>
                         <li>100% Dango Skill (With/Without ticket)</li>
                         <li>Level 4 skills</li>
                      </ul>
+                     <li>Unlimited Buddy Recon</li>
                   </ul>
                </li>
                <li>
@@ -34,18 +35,24 @@
                      <li>Sharpness</li>
                      <li>Unlimited Stamina</li>
                      <li>Hyper Armor</li>
-                     <li>Health</li>
+                     <li>Super Armor</li>
+                     <li>Skills
+                     <ul>
+                        <li>Intrepid Heart</li>
+                        <li>Frost Craft</li>
+                     </ul></li>
+                     <li>Health
                      <ul>
                         <li>Constant Healing/Instant Healing</li>
                         <li>Max Dragonheart health depending on skill level</li>
                         <li>Max Heroics health</li>
                         <li>Max Adrenaline Health</li>
-                     </ul>
+                     </ul></li>
                      <li>Prevent Conditions, Blights, Ailments</li>
-                     <li>Stat Modifiers</li>
+                     <li>Stat Modifiers
                      <ul>
                         <li>Attack &amp; Defence Modifiers</li>
-                     </ul>
+                     </ul></li>
                   </ul>
                </li>
                <li>
