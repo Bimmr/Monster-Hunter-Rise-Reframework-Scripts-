@@ -152,7 +152,7 @@ function data.init_hooks()
         if data.health.max_heroics then
             local max = playerData:get_field("_vitalMax")
             local currentHealth = playerData:get_field("_r_Vital")
-            local newHealth = Math.floor(max * 0.35)
+            local newHealth = math.floor(max * 0.35)
             
             if currentHealth > newHealth then
                 playerData:set_field("_r_Vital", math.min(max, newHealth) + .0)
