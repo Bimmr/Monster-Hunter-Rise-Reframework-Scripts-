@@ -239,6 +239,7 @@ end
 function data.create_config_section()
     return {
         [data.title] = {
+            unlimited_recon = data.unlimited_recon,
             consumables = data.consumables,
             wirebugs = data.wirebugs,
             canteen = data.canteen
@@ -248,6 +249,7 @@ end
 
 function data.load_from_config(config_section)
     if not config_section then return end
+    data.unlimited_recon = config_section.unlimited_recon or data.unlimited_recon
     data.consumables = config_section.consumables or data.consumables
     data.wirebugs = config_section.wirebugs or data.wirebugs
     data.canteen = config_section.canteen or data.canteen
