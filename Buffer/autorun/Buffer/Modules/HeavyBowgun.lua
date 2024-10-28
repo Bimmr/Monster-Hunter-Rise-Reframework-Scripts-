@@ -111,7 +111,7 @@ function data.load_from_config(config_section)
     data.wyvern_sniper = config_section.wyvern_sniper or data.wyvern_sniper
     data.wyvern_machine_gun = config_section.wyvern_machine_gun or data.wyvern_machine_gun
     data.overheat = config_section.overheat or data.overheat
-    data.counter_charger = config_section or data.counter_charger
+    data.counter_charger = config_section.counter_charger or data.counter_charger
 end
 
 return data
