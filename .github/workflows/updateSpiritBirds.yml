@@ -8,12 +8,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: dev-drprasad/delete-tag-and-release@v1.1
-      with:
-        delete_release: true # default: false
-        tag_name: SpiritBirds # tag name to delete
+    - name: Delete release and tag
+      run: gh release delete SpiritBirds --cleanup-tag -y --repo ${{ github.repository }}
       env:
-        GITHUB_TOKEN: ${{ secrets.TOKEN }}
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - uses: actions/checkout@master
     - name: Archive Release
       uses: thedoctor0/zip-release@main
