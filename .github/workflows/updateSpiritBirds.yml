@@ -28,4 +28,4 @@ jobs:
         tag: 'SpiritBirds'
         body: 'SpiritBirds Update - Check Commits for changelog'
         replacesArtifacts: true
-        token: ${{ secrets.TOKEN }}
+        token: ${{ secrets.GITHUB_TOKEN }}
