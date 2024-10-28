@@ -141,6 +141,8 @@ function data.init_hooks()
                     if dhLevel == 3 or dhLevel == 4 then newHealth = math.floor(max * 0.7) end
                     if dhLevel == 5 then newHealth = math.floor(max * 0.8) end
 
+                    newHealth = newHealth-1 -- Lower new health by one to prevent Kushala Bless/SuperRecDango from activating/deactivating
+
                     if currentHealth > newHealth then
                         playerData:set_field("_r_Vital", math.min(currentHealth, newHealth) + .0)
                         playerData:call("set__vital", math.min(currentHealth, newHealth) + .0)
