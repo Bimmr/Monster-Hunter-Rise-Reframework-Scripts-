@@ -8,11 +8,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: dev-drprasad/delete-tag-and-release@v1.1
-      with:
-        delete_release: true # default: false
-        tag_name: Buffer # tag name to delete
-        github_token: ${{ secrets.TOKEN }}
+    - name: Delete tag
+      run: gh release delete Buffer --cleanup-tag -y
+      env:
+        GITHUB_TOKEN: ${{ secrets.TOKEN }}
     - uses: actions/checkout@master
     - name: Archive Release
       uses: thedoctor0/zip-release@main
