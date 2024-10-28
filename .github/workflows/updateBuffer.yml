@@ -8,10 +8,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - name: Delete tag
+    - name: Delete release and tag
       run: gh release delete Buffer --cleanup-tag -y --repo ${{ github.repository }}
       env:
-        GH_TOKEN: ${{ secrets.TOKEN }}
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - uses: actions/checkout@master
     - name: Archive Release
       uses: thedoctor0/zip-release@main
@@ -28,4 +28,4 @@ jobs:
         tag: 'Buffer'
         body: 'Buffer Update - Check Commits for changelog'
         replacesArtifacts: true
-        token: ${{ secrets.TOKEN }}
+        token: ${{ secrets.GITHUB_TOKEN }}
