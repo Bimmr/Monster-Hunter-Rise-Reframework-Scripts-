@@ -8,8 +8,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - name: Delete tag
-      run: gh release delete Buffer --cleanup-tag -y
+    - uses: ClementTsang/delete-tag-and-release@v0.4.0
+      with:
+        delete_release: true
+        tag_name: Buffer
       env:
         GITHUB_TOKEN: ${{ secrets.TOKEN }}
     - uses: actions/checkout@master
