@@ -191,8 +191,8 @@ re.on_draw_ui(function()
     end
     if is_window_open then
         
-        imgui.push_style_var(11, 5.0) -- Rounded elements
-        imgui.push_style_var(2, 10.0) -- Window Padding
+        imgui.push_style_var(3, 7.5) -- Rounded window
+        imgui.push_style_var(12, 5.0) -- Rounded elements
 
         was_open = true
         is_window_open = imgui.begin_window("Spawn SpiritBirds", is_window_open, 64)

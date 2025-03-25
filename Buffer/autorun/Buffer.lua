@@ -61,8 +61,8 @@ re.on_draw_ui(function()
     if isWindowOpen then
         wasOpen = true
 
-        imgui.push_style_var(11, 5.0) -- Rounded elements
-        imgui.push_style_var(2, 10.0) -- Window Padding
+        imgui.push_style_var(3, 7.5) -- Rounded window
+        imgui.push_style_var(12, 5.0) -- Rounded elements
 
         imgui.set_next_window_size(Vector2f.new(520, 450), 4)
 
