@@ -391,6 +391,8 @@ function Module.add_ui()
         imgui.tree_pop()
     end
     
+    -- Note: Language prefix uses "conditions_and_blights" for backward compatibility with language files
+    -- while the internal data structure uses "blights_and_conditions" to match MHWS-Buffer naming
     languagePrefix = Module.title .. ".conditions_and_blights."
     if imgui.tree_node(Language.get(languagePrefix .. "title")) then
 
