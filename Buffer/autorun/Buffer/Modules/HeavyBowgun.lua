@@ -1,117 +1,112 @@
-local utils, config, language
+local ModuleBase = require("Buffer.Misc.ModuleBase")
+local Language = require("Buffer.Misc.Language")
+local Utils = require("Buffer.Misc.Utils")
+
 local character
-local data = {
-    title = "heavy_bowgun",
+
+local Module = ModuleBase:new("heavy_bowgun", {
     charge_level = -1,
-    -- unlimited_ammo - In Character
-    -- unlimited_ammo - In Character
-    -- auto_reload  - In Character
     wyvern_sniper = false,
     wyvern_machine_gun = false,
+    overheat = false,
     counter_charger = false
-    -- no_deviation  - In Character
-}
+})
 
-function data.init()
-    utils = require("Buffer.Misc.Utils")
-    config = require("Buffer.Misc.Config")
-    language = require("Buffer.Misc.Language")
-
+function Module:init()
     character = require("Buffer.Modules.Character")
-
-    data.init_hooks()
+    ModuleBase.init(self)
 end
 
-function data.init_hooks()
+function Module.create_hooks()
+    
+    Module:init_stagger("heavy_bowgun_update", 10)
     sdk.hook(sdk.find_type_definition("snow.player.HeavyBowgun"):get_method("update"), function(args)
         local managed = sdk.to_managed_object(args[2])
-        if not managed:get_type_definition():is_a("snow.player.HeavyBowgun") then return end
+        if not Module:weapon_hook_guard(managed, "snow.player.HeavyBowgun") then return end
 
-        if data.charge_level > -1 then
-            managed:set_field("_ShotChargeLv", data.charge_level)
-            managed:set_field("_ShotChargeFrame", 30 * data.charge_level)
+        if not Module:should_execute_staggered("heavy_bowgun_update") then return end
+
+        -- Charge level
+        if Module.data.charge_level > -1 then
+            managed:set_field("_ShotChargeLv", Module.data.charge_level)
+            managed:set_field("_ShotChargeFrame", 30 * Module.data.charge_level)
         end
-        if data.counter_charger then
+        
+        -- Counter charger
+        if Module.data.counter_charger then
             managed:set_field("_ReduseChargeTimer", 3000)
         end
-        if character.ammo_and_coatings.auto_reload then managed:call("resetBulletNum") end
-    end, utils.nothing())
+        
+        -- Auto reload
+        if character.data.ammo_and_coatings.auto_reload then 
+            managed:call("resetBulletNum") 
+        end
+    end, Utils.nothing())
 
+    Module:init_stagger("heavy_bowgun_player_manager_update", 10)
     sdk.hook(sdk.find_type_definition("snow.player.PlayerManager"):get_method("update"), function(args)
         local managed = sdk.to_managed_object(args[2])
+        if not managed then return end
         if not managed:get_type_definition():is_a("snow.player.PlayerManager") then return end
-        local playerData = utils.getPlayerData()
+        local playerData = Utils.getPlayerData()
         if not playerData then return end
 
-        if data.wyvern_sniper then
+        if not Module:should_execute_staggered("heavy_bowgun_player_manager_update") then return end
+
+        -- Wyvern sniper
+        if Module.data.wyvern_sniper then
             playerData:set_field("_HeavyBowgunWyvernSnipeBullet", 1)
             playerData:set_field("_HeavyBowgunWyvernSnipeTimer", 0)
         end
-        if data.wyvern_machine_gun then
+        
+        -- Wyvern machine gun
+        if Module.data.wyvern_machine_gun then
             playerData:set_field("_HeavyBowgunWyvernMachineGunBullet", 50)
             playerData:set_field("_HeavyBowgunWyvernMachineGunTimer", 0)
         end
-        if data.overheat then playerData:set_field("_HeavyBowgunHeatGauge", 0) end
-    end, utils.nothing())
+        
+        -- Overheat
+        if Module.data.overheat then 
+            playerData:set_field("_HeavyBowgunHeatGauge", 0) 
+        end
+    end, Utils.nothing())
 end
 
-function data.draw()
-
+function Module.add_ui()
     local changed, any_changed, misc_changed = false, false, false
-    local languagePrefix = data.title .. "."
+    local languagePrefix = Module.title .. "."
 
-    if imgui.collapsing_header(language.get(languagePrefix .. "title")) then
-        imgui.indent(10)
+    changed, Module.data.charge_level = imgui.slider_int(Language.get(languagePrefix .. "charge_level"), Module.data.charge_level, -1, 3, Module.data.charge_level > -1 and
+                                                          Language.get(languagePrefix .. "charge_level_prefix") .. " %d" or Language.get(languagePrefix .. "charge_level_disabled"))
+    any_changed = changed or any_changed
+    
+    changed, character.data.ammo_and_coatings.unlimited_ammo = imgui.checkbox(Language.get(languagePrefix .. "unlimited_ammo"), character.data.ammo_and_coatings.unlimited_ammo)
+    misc_changed = changed or misc_changed
+    
+    changed, character.data.ammo_and_coatings.auto_reload = imgui.checkbox(Language.get(languagePrefix .. "auto_reload"), character.data.ammo_and_coatings.auto_reload)
+    misc_changed = changed or misc_changed
+    
+    changed, Module.data.wyvern_sniper = imgui.checkbox(Language.get(languagePrefix .. "wyvern_sniper"), Module.data.wyvern_sniper)
+    any_changed = changed or any_changed
+    
+    changed, Module.data.wyvern_machine_gun = imgui.checkbox(Language.get(languagePrefix .. "wyvern_machine_gun"), Module.data.wyvern_machine_gun)
+    any_changed = changed or any_changed
+    
+    changed, Module.data.overheat = imgui.checkbox(Language.get(languagePrefix .. "overheat"), Module.data.overheat)
+    any_changed = changed or any_changed
+    
+    changed, Module.data.counter_charger = imgui.checkbox(Language.get(languagePrefix .. "counter_charger"), Module.data.counter_charger)
+    any_changed = changed or any_changed
+    
+    changed, character.data.ammo_and_coatings.no_deviation = imgui.checkbox(Language.get(languagePrefix .. "no_deviation"), character.data.ammo_and_coatings.no_deviation)
+    misc_changed = changed or misc_changed
+    
+    changed, character.data.ammo_and_coatings.no_recoil = imgui.checkbox(Language.get(languagePrefix .. "no_recoil"), character.data.ammo_and_coatings.no_recoil)
+    misc_changed = changed or misc_changed
 
-        changed, data.charge_level = imgui.slider_int(language.get(languagePrefix .. "charge_level"), data.charge_level, -1, 3, data.charge_level > -1 and
-                                                          language.get(languagePrefix .. "charge_level_prefix") .. " %d" or language.get(languagePrefix .. "charge_level_disabled"))
-        any_changed = changed or any_changed
-        changed, character.ammo_and_coatings.unlimited_ammo = imgui.checkbox(language.get(languagePrefix .. "unlimited_ammo"), character.ammo_and_coatings.unlimited_ammo)
-        misc_changed = changed or misc_changed
-        changed, character.ammo_and_coatings.auto_reload = imgui.checkbox(language.get(languagePrefix .. "auto_reload"), character.ammo_and_coatings.auto_reload)
-        misc_changed = changed or misc_changed
-        changed, data.wyvern_sniper = imgui.checkbox(language.get(languagePrefix .. "wyvern_sniper"), data.wyvern_sniper)
-        any_changed = changed or any_changed
-        changed, data.wyvern_machine_gun = imgui.checkbox(language.get(languagePrefix .. "wyvern_machine_gun"), data.wyvern_machine_gun)
-        any_changed = changed or any_changed
-        changed, data.overheat = imgui.checkbox(language.get(languagePrefix .. "overheat"), data.overheat)
-        any_changed = changed or any_changed
-        changed, data.counter_charger = imgui.checkbox(language.get(languagePrefix .. "counter_charger"), data.counter_charger)
-        any_changed = changed or any_changed
-        changed, character.ammo_and_coatings.no_deviation = imgui.checkbox(language.get(languagePrefix .. "no_deviation"), character.ammo_and_coatings.no_deviation)
-        misc_changed = changed or misc_changed
-        changed, character.ammo_and_coatings.no_recoil = imgui.checkbox(language.get(languagePrefix .. "no_recoil"), character.ammo_and_coatings.no_recoil)
-        misc_changed = changed or misc_changed
+    if misc_changed then character:save_config() end
 
-        if any_changed then config.save_section(data.create_config_section()) end
-        if misc_changed then config.save_section(character.create_config_section()) end
-        imgui.unindent(10)
-        imgui.separator()
-        imgui.spacing()
-    end
-
+    return any_changed
 end
 
-function data.create_config_section()
-    return {
-        [data.title] = {
-            charge_level = data.charge_level,
-            wyvern_sniper = data.wyvern_sniper,
-            wyvern_machine_gun = data.wyvern_machine_gun,
-            overheat = data.overheat,
-            counter_charger = data.counter_charger
-        }
-    }
-end
-
-function data.load_from_config(config_section)
-    if not config_section then return end
-
-    data.charge_level = config_section.charge_level or data.charge_level
-    data.wyvern_sniper = config_section.wyvern_sniper or data.wyvern_sniper
-    data.wyvern_machine_gun = config_section.wyvern_machine_gun or data.wyvern_machine_gun
-    data.overheat = config_section.overheat or data.overheat
-    data.counter_charger = config_section.counter_charger or data.counter_charger
-end
-
-return data
+return Module

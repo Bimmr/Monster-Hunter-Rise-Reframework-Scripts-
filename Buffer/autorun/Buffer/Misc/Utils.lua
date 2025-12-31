@@ -128,4 +128,18 @@ function utils.send_message(text)
     chatManager:call("reqAddChatInfomation", text, 0);
 end
 
+--- Update a table with another table, only updating the values that exist in the base table
+--- @param baseTable table The base table to update
+--- @param newTable table The new table to update from
+function utils.update_table_with_existing_table(baseTable, newTable)
+    if not newTable then return end
+    for key, value in pairs(baseTable) do
+        if type(value) == "table" and type(newTable[key]) == "table" then
+            utils.update_table_with_existing_table(value, newTable[key])
+        elseif newTable[key] ~= nil then
+            baseTable[key] = newTable[key]
+        end
+    end
+end
+
 return utils
