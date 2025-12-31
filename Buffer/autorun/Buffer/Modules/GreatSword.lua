@@ -1,64 +1,46 @@
-local utils, config, language
-local data = {
-    title = "great_sword",
+local ModuleBase = require("Buffer.Misc.ModuleBase")
+local Language = require("Buffer.Misc.Language")
+local Utils = require("Buffer.Misc.Utils")
+
+local Module = ModuleBase:new("great_sword", {
     charge_level = -1,
     power_sheathe = false
-}
+})
 
-function data.init()
-    utils = require("Buffer.Misc.Utils")
-    config = require("Buffer.Misc.Config")
-    language = require("Buffer.Misc.Language")
-
-    data.init_hooks()
-end
-
-function data.init_hooks()
+function Module.create_hooks()
+    
+    Module:init_stagger("great_sword_update", 10)
     sdk.hook(sdk.find_type_definition("snow.player.GreatSword"):get_method("update"), function(args)
         local managed = sdk.to_managed_object(args[2])
-        if not managed:get_type_definition():is_a("snow.player.GreatSword") then return end
+        if not Module:weapon_hook_guard(managed, "snow.player.GreatSword") then return end
 
-        if data.charge_level > -1 then managed:set_field("_TameLv", data.charge_level) end
-        if data.power_sheathe then managed:set_field("MoveWpOffBuffGreatSwordTimer", 1200) end
-    end, utils.nothing())
-end
+        if not Module:should_execute_staggered("great_sword_update") then return end
 
-function data.draw()
-
-    local changed, any_changed = false, false
-    local languagePrefix = data.title .. "."
-
-    if imgui.collapsing_header(language.get(languagePrefix .. "title")) then
-        imgui.indent(10)
-
-        changed, data.charge_level = imgui.slider_int(language.get(languagePrefix .. "charge_level"), data.charge_level, -1, 3, data.charge_level > -1 and
-                                                          language.get(languagePrefix .. "charge_level_prefix") .. " %d" or language.get(languagePrefix .. "charge_level_disabled"))
-        any_changed = changed or any_changed
-        changed, data.power_sheathe = imgui.checkbox(language.get(languagePrefix .. "power_sheathe"), data.power_sheathe)
-        utils.tooltip(language.get(languagePrefix .. "power_sheathe_tooltip"))
-        any_changed = changed or any_changed
+        -- Charge level
+        if Module.data.charge_level > -1 then 
+            managed:set_field("_TameLv", Module.data.charge_level) 
+        end
         
-    if any_changed then config.save_section(data.create_config_section()) end
-        imgui.unindent(10)
-        imgui.separator()
-        imgui.spacing()
-    end
-
+        -- Power sheathe
+        if Module.data.power_sheathe then 
+            managed:set_field("MoveWpOffBuffGreatSwordTimer", 1200) 
+        end
+    end, Utils.nothing())
 end
 
-function data.create_config_section()
-    return {
-        [data.title] = {
-            charge_level = data.charge_level,
-            power_sheathe = data.power_sheathe
-        }
-    }
+function Module.add_ui()
+    local changed, any_changed = false, false
+    local languagePrefix = Module.title .. "."
+
+    changed, Module.data.charge_level = imgui.slider_int(Language.get(languagePrefix .. "charge_level"), Module.data.charge_level, -1, 3, Module.data.charge_level > -1 and
+                                                          Language.get(languagePrefix .. "charge_level_prefix") .. " %d" or Language.get(languagePrefix .. "charge_level_disabled"))
+    any_changed = changed or any_changed
+    
+    changed, Module.data.power_sheathe = imgui.checkbox(Language.get(languagePrefix .. "power_sheathe"), Module.data.power_sheathe)
+    Utils.tooltip(Language.get(languagePrefix .. "power_sheathe_tooltip"))
+    any_changed = changed or any_changed
+
+    return any_changed
 end
 
-function data.load_from_config(config_section)
-    if not config_section then return end
-    data.charge_level = config_section.charge_level or data.charge_level
-    data.power_sheathe = config_section.power_sheathe or data.power_sheathe
-end
-
-return data
+return Module

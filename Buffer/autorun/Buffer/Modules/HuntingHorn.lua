@@ -1,61 +1,44 @@
-local utils, config, language
-local data = {
-    title = "hunting_horn",
+local ModuleBase = require("Buffer.Misc.ModuleBase")
+local Language = require("Buffer.Misc.Language")
+local Utils = require("Buffer.Misc.Utils")
+
+local Module = ModuleBase:new("hunting_horn", {
     infernal_mode = false,
     skillbind_shockwave = false
-}
+})
 
-function data.init()
-    utils = require("Buffer.Misc.Utils")
-    config = require("Buffer.Misc.Config")
-    language = require("Buffer.Misc.Language")
-
-    data.init_hooks()
-end
-
-function data.init_hooks()
+function Module.create_hooks()
+    
+    Module:init_stagger("hunting_horn_update", 10)
     sdk.hook(sdk.find_type_definition("snow.player.Horn"):get_method("update"), function(args)
         local managed = sdk.to_managed_object(args[2])
-        if not managed:get_type_definition():is_a("snow.player.Horn") then return end
+        if not Module:weapon_hook_guard(managed, "snow.player.Horn") then return end
 
-        if data.infernal_mode then managed:set_field("<RevoltGuage>k__BackingField", 100) end
-        if data.skillbind_shockwave then managed:set_field("_ImpactPullsTimer", 1800) end
-    end, utils.nothing())
-end
+        if not Module:should_execute_staggered("hunting_horn_update") then return end
 
-function data.draw()
-
-    local changed, any_changed = false, false
-    local languagePrefix = data.title .. "."
-
-    if imgui.collapsing_header(language.get(languagePrefix .. "title")) then
-        imgui.indent(10)
-
-        changed, data.infernal_mode = imgui.checkbox(language.get(languagePrefix .. "infernal_mode"), data.infernal_mode)
-        any_changed = changed or any_changed
-        changed, data.skillbind_shockwave = imgui.checkbox(language.get(languagePrefix .. "skillbind_shockwave"), data.skillbind_shockwave)
-        any_changed = changed or any_changed
+        -- Infernal mode
+        if Module.data.infernal_mode then 
+            managed:set_field("<RevoltGuage>k__BackingField", 100) 
+        end
         
-        if any_changed then config.save_section(data.create_config_section()) end
-        imgui.unindent(10)
-        imgui.separator()
-        imgui.spacing()
-    end
+        -- Skillbind shockwave
+        if Module.data.skillbind_shockwave then 
+            managed:set_field("_ImpactPullsTimer", 1800) 
+        end
+    end, Utils.nothing())
 end
 
-function data.create_config_section()
-    return {
-        [data.title] = {
-            infernal_mode = data.infernal_mode,
-            skillbind_shockwave = data.skillbind_shockwave
-        }
-    }
+function Module.add_ui()
+    local changed, any_changed = false, false
+    local languagePrefix = Module.title .. "."
+
+    changed, Module.data.infernal_mode = imgui.checkbox(Language.get(languagePrefix .. "infernal_mode"), Module.data.infernal_mode)
+    any_changed = changed or any_changed
+    
+    changed, Module.data.skillbind_shockwave = imgui.checkbox(Language.get(languagePrefix .. "skillbind_shockwave"), Module.data.skillbind_shockwave)
+    any_changed = changed or any_changed
+
+    return any_changed
 end
 
-function data.load_from_config(config_section)
-    if not config_section then return end
-    data.infernal_mode = config_section.infernal_mode or data.infernal_mode
-    data.skillbind_shockwave = config_section.skillbind_shockwave or data.skillbind_shockwave
-end
-
-return data
+return Module

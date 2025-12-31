@@ -1,93 +1,82 @@
-local utils, config, language
-local data = {
-    title = "gun_lance",
+local ModuleBase = require("Buffer.Misc.ModuleBase")
+local Language = require("Buffer.Misc.Language")
+local Utils = require("Buffer.Misc.Utils")
+
+local Module = ModuleBase:new("gun_lance", {
     dragon_cannon = false,
     aerials = false,
     auto_reload = false,
     ground_splitter = false,
     errupting_cannon = false
-}
+})
 
-function data.init()
-    utils = require("Buffer.Misc.Utils")
-    config = require("Buffer.Misc.Config")
-    language = require("Buffer.Misc.Language")
-
-    data.init_hooks()
-end
-function data.init_hooks()
+function Module.create_hooks()
+    
+    Module:init_stagger("gun_lance_update", 10)
     sdk.hook(sdk.find_type_definition("snow.player.GunLance"):get_method("update"), function(args)
         local managed = sdk.to_managed_object(args[2])
-        if not managed:get_type_definition():is_a("snow.player.GunLance") then return end
+        if not Module:weapon_hook_guard(managed, "snow.player.GunLance") then return end
 
-        if data.aerials then managed:set_field("_AerialCount", 0) end
-        if data.auto_reload then managed:call("reloadBullet") end
-        if data.ground_splitter then managed:set_field("_ShotDamageUpDurationTimer", 1800) end
-        if data.errupting_cannon then
+        if not Module:should_execute_staggered("gun_lance_update") then return end
+
+        -- Aerials
+        if Module.data.aerials then 
+            managed:set_field("_AerialCount", 0) 
+        end
+        
+        -- Auto reload
+        if Module.data.auto_reload then 
+            managed:call("reloadBullet") 
+        end
+        
+        -- Ground splitter
+        if Module.data.ground_splitter then 
+            managed:set_field("_ShotDamageUpDurationTimer", 1800) 
+        end
+        
+        -- Errupting cannon
+        if Module.data.errupting_cannon then
             managed:set_field("_ExplodePileBuffTimer", 1800)
             managed:set_field("_ExplodePileAttackRate", 1.3)
             managed:set_field("_ExplodePileElemRate", 1.3)
         end
-    end, utils.nothing())
+    end, Utils.nothing())
 
+    Module:init_stagger("gun_lance_player_manager_update", 10)
     sdk.hook(sdk.find_type_definition("snow.player.PlayerManager"):get_method("update"), function(args)
         local managed = sdk.to_managed_object(args[2])
-        local playerData = utils.getPlayerData()
+        local playerData = Utils.getPlayerData()
         if not playerData then return end
 
-        if data.dragon_cannon then playerData:set_field("_ChargeDragonSlayCannonTime", 0) end
-    end, utils.nothing())
+        if not Module:should_execute_staggered("gun_lance_player_manager_update") then return end
+
+        -- Dragon cannon
+        if Module.data.dragon_cannon then 
+            playerData:set_field("_ChargeDragonSlayCannonTime", 0) 
+        end
+    end, Utils.nothing())
 end
 
-
-function data.draw()
+function Module.add_ui()
     local changed, any_changed = false, false
-    local languagePrefix = data.title .. "."
+    local languagePrefix = Module.title .. "."
 
-    if imgui.collapsing_header(language.get(languagePrefix .. "title")) then
-        imgui.indent(10)
+    changed, Module.data.dragon_cannon = imgui.checkbox(Language.get(languagePrefix .. "dragon_cannon"), Module.data.dragon_cannon)
+    any_changed = changed or any_changed
+    
+    changed, Module.data.aerials = imgui.checkbox(Language.get(languagePrefix .. "aerials"), Module.data.aerials)
+    any_changed = changed or any_changed
+    
+    changed, Module.data.auto_reload = imgui.checkbox(Language.get(languagePrefix .. "auto_reload"), Module.data.auto_reload)
+    any_changed = changed or any_changed
+    
+    changed, Module.data.ground_splitter = imgui.checkbox(Language.get(languagePrefix .. "ground_splitter"), Module.data.ground_splitter)
+    any_changed = changed or any_changed
+    
+    changed, Module.data.errupting_cannon = imgui.checkbox(Language.get(languagePrefix .. "errupting_cannon"), Module.data.errupting_cannon)
+    any_changed = changed or any_changed
 
-        changed, data.dragon_cannon = imgui.checkbox(language.get(languagePrefix .. "dragon_cannon"), data.dragon_cannon)
-        any_changed = changed or any_changed
-        changed, data.aerials = imgui.checkbox(language.get(languagePrefix .. "aerials"), data.aerials)
-        any_changed = changed or any_changed
-        changed, data.auto_reload = imgui.checkbox(language.get(languagePrefix .. "auto_reload"), data.auto_reload)
-        any_changed = changed or any_changed
-        changed, data.ground_splitter = imgui.checkbox(language.get(languagePrefix .. "ground_splitter"), data.ground_splitter)
-        any_changed = changed or any_changed
-        changed, data.errupting_cannon = imgui.checkbox(language.get(languagePrefix .. "errupting_cannon"), data.errupting_cannon)
-        any_changed = changed or any_changed
-        
-        if any_changed then config.save_section(data.create_config_section()) end
-         
-        imgui.unindent(10)
-        imgui.separator()
-        imgui.spacing()
-    end
-
+    return any_changed
 end
 
-
-function data.create_config_section()
-    return {
-        [data.title] = {
-            dragon_cannon = data.dragon_cannon,
-            aerials = data.aerials,
-            auto_reload = data.auto_reload,
-            ground_splitter = data.ground_splitter,
-            errupting_cannon = data.errupting_cannon
-        }
-    }
-end
-
-function data.load_from_config(config_section)
-    if not config_section then return end
-    data.dragon_cannon = config_section.dragon_cannon or data.dragon_cannon
-    data.aerials = config_section.aerials or data.aerials
-    data.auto_reload = config_section.auto_reload or data.auto_reload
-    data.ground_splitter = config_section.ground_splitter or data.ground_splitter
-    data.errupting_cannon = config_section.errupting_cannon or data.errupting_cannon
-end
-
-
-return data
+return Module
