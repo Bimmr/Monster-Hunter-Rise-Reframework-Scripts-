@@ -108,6 +108,19 @@ local CONDITIONS_DATA = {
     }
 }
 
+-- UI display order arrays
+local BLIGHT_KEYS = {
+    "fire", "water", "ice",
+    "thunder", "dragon", "bubble",
+    "blast", "all"
+}
+
+local CONDITION_KEYS = {
+    "bleeding", "stun", "poison", "sleep",
+    "frenzy", "qurio", "defence_and_resistance",
+    "hellfire_and_stentch", "paralyze", "thread", "all"
+}
+
 function Module.create_hooks()
     sdk.hook(sdk.find_type_definition("snow.player.PlayerManager"):get_method("update"), function(args)
         local managed = sdk.to_managed_object(args[2])
@@ -384,12 +397,6 @@ function Module.add_ui()
         languagePrefix = Module.title .. ".conditions_and_blights.blights."
         if imgui.tree_node(Language.get(languagePrefix .. "title")) then
 
-            local BLIGHT_KEYS = {
-                "fire", "water", "ice",
-                "thunder", "dragon", "bubble",
-                "blast", "all"
-            }
-
             local max_width = 0
             for _, key in ipairs(BLIGHT_KEYS) do
                 local text = Language.get(languagePrefix .. key)
@@ -415,12 +422,6 @@ function Module.add_ui()
         
         languagePrefix = Module.title .. ".conditions_and_blights.conditions."
         if imgui.tree_node(Language.get(languagePrefix .. "title")) then
-
-            local CONDITION_KEYS = {
-                "bleeding", "stun", "poison", "sleep",
-                "frenzy", "qurio", "defence_and_resistance",
-                "hellfire_and_stentch", "paralyze", "thread", "all"
-            }
 
             local max_width = 0
             for _, key in ipairs(CONDITION_KEYS) do
