@@ -12,7 +12,7 @@ function Module.create_hooks()
     Module:init_stagger("great_sword_update", 10)
     sdk.hook(sdk.find_type_definition("snow.player.GreatSword"):get_method("update"), function(args)
         local managed = sdk.to_managed_object(args[2])
-        if not Module:weapon_hook_guard(managed, "snow.player.GreatSword") then return end
+        if managed:get_type_definition():is_a("snow.player.GreatSword") == false then return end
 
         if not Module:should_execute_staggered("great_sword_update") then return end
 
@@ -25,18 +25,17 @@ function Module.create_hooks()
         if Module.data.power_sheathe then 
             managed:set_field("MoveWpOffBuffGreatSwordTimer", 1200) 
         end
-    end, Utils.nothing())
+    end)
 end
 
 function Module.add_ui()
     local changed, any_changed = false, false
     local languagePrefix = Module.title .. "."
 
-    changed, Module.data.charge_level = imgui.slider_int(Language.get(languagePrefix .. "charge_level"), Module.data.charge_level, -1, 3, Module.data.charge_level > -1 and
-                                                          Language.get(languagePrefix .. "charge_level_prefix") .. " %d" or Language.get(languagePrefix .. "charge_level_disabled"))
+    changed, Module.data.charge_level       = imgui.slider_int(Language.get(languagePrefix .. "charge_level"), Module.data.charge_level, -1, 3, Module.data.charge_level == -1 and Language.get("base.disabled") or "%d")
     any_changed = changed or any_changed
     
-    changed, Module.data.power_sheathe = imgui.checkbox(Language.get(languagePrefix .. "power_sheathe"), Module.data.power_sheathe)
+    changed, Module.data.power_sheathe      = imgui.checkbox(Language.get(languagePrefix .. "power_sheathe"), Module.data.power_sheathe)
     Utils.tooltip(Language.get(languagePrefix .. "power_sheathe_tooltip"))
     any_changed = changed or any_changed
 

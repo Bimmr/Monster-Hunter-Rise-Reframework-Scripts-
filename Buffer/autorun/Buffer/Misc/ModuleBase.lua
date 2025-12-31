@@ -1,3 +1,4 @@
+local icons = require("Buffer.Misc.Icons")
 local Utils = require("Buffer.Misc.Utils")
 local Config = require("Buffer.Misc.Config")
 local Language = require("Buffer.Misc.Language")
@@ -253,36 +254,30 @@ function ModuleBase:load_config()
     Utils.update_table_with_existing_table(self.data, Config.get_section(self.title))
 end
 
---- Create a standard weapon hook guard for MH Rise
---- Checks if managed object is valid, correct type, and for MH Rise compatibility
---- @param managed userdata The managed object
---- @param weapon_class string The weapon class to check (e.g., "snow.player.GreatSword")
---- @return boolean True if all checks pass
-function ModuleBase:weapon_hook_guard(managed, weapon_class)
-    if not managed then return false end
-    if not managed:get_type_definition():is_a(weapon_class) then return false end
-    return true
-end
-
-
 function ModuleBase:draw_module()
     local any_changed = false
-    local languagePrefix = self.title .. "."
+    local header_pos = imgui.get_cursor_pos()
 
     -- Setup id for imgui elements
     imgui.push_id(self.title)
 
-    -- Draw the header with collapsing header
-    if imgui.collapsing_header(Language.get(languagePrefix .. "title")) then
+    -- Draw the header. Add spaces to the left to add space for the icon
+    if imgui.collapsing_header("     " .. Language.get(self.title .. ".title")) then
 
         -- Draw the module content
         imgui.indent(10)
         any_changed = self:add_ui()
         imgui.unindent(10)
-        imgui.separator()
-        imgui.spacing()
 
     end
+
+    -- Draw the icon
+    local pos = imgui.get_cursor_pos()
+    -- Scale icon x offset based on font size (19 at size 16, 23 at size 24)
+    local icon_x_offset = 11 + (Language.font.size * 0.5)
+    imgui.set_cursor_pos({header_pos.x + icon_x_offset, header_pos.y + 2})
+    icons.draw_icon(self.title)
+    imgui.set_cursor_pos(pos)
 
     -- Pop the id
     imgui.pop_id()

@@ -1,7 +1,6 @@
 {
-    "_IMPORTANT_NOTE": "If multiple items have the same value but control different things, you need to make them different by using spaces",
-    
-    
+    "_LANGUAGE_NAME": "English (US)",
+
     "window":{
         "toggle_button": "Toggle Buffer GUI",
         "title": "Modifiers & Settings",
@@ -13,6 +12,11 @@
         "author": "Author",
         "translator": "Translator",
         "version": "Version",
+        "options": "Options",
+        "disable_all": "Disable all",
+        "enabled_buffs": "Enabled buffs",
+        "nothing_enabled": "Nothing is enabled",
+        "disable": "Disable",
         "bindings": {
             "title": "Bindings",
             "keyboard": "Keyboard",
@@ -27,31 +31,17 @@
             "save": "Save",
             "cancel": "Cancel",
             "enabled": "has been enabled.",
-            "disabled": "has been disabled."
+            "disabled": "has been disabled.",
+            "set_to": "has been set to %d."
         }
     },
-    "bow": {
-        "title": "Bow",
-        "charge_level": "Charge Level   ",
-        "charge_level_prefix": "Level",
-        "charge_level_disabled": "Off",
-        "unlimited_arrows": "Unlimited Arrows",
-        "herculean_draw": "Herculean Draw",
-        "herculean_draw_tooltip": "No effect will appear on the weapon",
-        "bolt_boost": "Bolt Boost"
+    "base": {
+        "disabled": "Disabled"
     },
     "character": {
         "title": "Character",
-        "ammo_and_coatings": {
-            "title": "Ammo and Coatings",
-            "auto_reload": "Auto Reload",
-            "no_deviation": "No Deviation",
-            "no_recoil": "No Recoil",
-            "unlimited_ammo": "Unlimited Ammo (Bowguns)",
-            "unlimited_coatings": "Unlimited Coatings (Bow)"
-        },
         "conditions_and_blights": {
-            "title": "Conditions, Ailments, & Blights",
+            "title": "Blights & Conditions",
             "blights": {
                 "title": "Prevent Blights",
                 "blast": "Blast",
@@ -142,65 +132,6 @@
             "frost_craft": "Frost Craft"
         }
     },
-    "great_sword": {
-        "title": "Great Sword",
-        "charge_level": "Charge Level",
-        "charge_level_prefix": "Level",
-        "charge_level_disabled": "Off",
-        "power_sheathe": "Power Sheathe",
-        "power_sheathe_tooltip": "No effect will appear on the weapon"
-    },
-    "hammer": {
-        "title": "Hammer",
-        "charge_level": "Charge Level ",
-        "charge_level_prefix": "Level",
-        "charge_level_disabled": "Off",
-        "impact_burst": "Impact Burst"
-    },
-    "heavy_bowgun": {
-        "title": "Heavy Bowgun",
-        "charge_level": "Charge Level  ",
-        "charge_level_prefix": "Level",
-        "charge_level_disabled": "Off",
-        "unlimited_ammo": "Unlimited Ammo ",
-        "auto_reload": "Auto Reload  ",
-        "overheat": "Prevent Overheat",
-        "wyvern_machine_gun": "Unlimited Wyvern Machine Gun",
-        "wyvern_sniper": "Unlimited Wyvern Sniper",
-        "counter_charger": "Counter Charger",
-        "no_deviation": "No Deviation  ",
-        "no_recoil": "No Recoil  "
-    },
-    "insect_glaive": {
-        "title": "Insect Glaive",
-        "aerials": "Unlimited Aerials ",
-        "kinsect_stamina": "Unlimited Kinsect Stamina",
-        "orange_extract": "Orange Extract",
-        "red_extract": "Red Extract",
-        "white_extract": "White Extract"
-    },
-    "lance": {
-        "title": "Lance",
-        "anchor_rage": "Anchor Rage",
-        "anchor_rage_prefix": "Level",
-        "anchor_rage_disabled": "Off"
-    },
-    "light_bowgun": {
-        "title": "Light Bowgun",
-        "unlimited_ammo": "Unlimited Ammo",
-        "auto_reload": "Auto Reload ",
-        "fanning_maneuver": "Fanning Maneuver",
-        "wyvern_blast": "Unlimited Wyvern Blast",
-        "no_deviation": "No Deviation ",
-        "no_recoil": "No Recoil "
-    },
-    "long_sword": {
-        "title": "Long Sword",
-        "guage_level": "Spirit Level",
-        "guage_level_prefix": "Level",
-        "guage_level_disabled": "Off",
-        "guage_max": "Spirit Guage Max"
-    },
     "miscellaneous": {
         "title": "Miscellaneous",
         "canteen": {
@@ -226,6 +157,63 @@
         },
         "unlimited_recon": "Unlimited Buddy Recon"
     },
+    "bow": {
+        "title": "Bow",
+        "charge_level": "Charge Level",
+        "herculean_draw": "Herculean Draw",
+        "herculean_draw_tooltip": "No effect will appear on the weapon",
+        "bolt_boost": "Bolt Boost",
+        "unlimited_coatings": "Unlimited Coatings"
+    },
+    "great_sword": {
+        "title": "Great Sword",
+        "charge_level": "Charge Level",
+        "power_sheathe": "Power Sheathe",
+        "power_sheathe_tooltip": "No effect will appear on the weapon"
+    },
+    "hammer": {
+        "title": "Hammer",
+        "charge_level": "Charge Level",
+        "impact_burst": "Impact Burst"
+    },
+    "heavy_bowgun": {
+        "title": "Heavy Bowgun",
+        "charge_level": "Charge Level",
+        "unlimited_ammo": "Unlimited Ammo ",
+        "auto_reload": "Auto Reload  ",
+        "overheat": "Prevent Overheat",
+        "wyvern_machine_gun": "Unlimited Wyvern Machine Gun",
+        "wyvern_sniper": "Unlimited Wyvern Sniper",
+        "counter_charger": "Counter Charger",
+        "no_deviation": "No Deviation  ",
+        "no_recoil": "No Recoil  "
+    },
+    "insect_glaive": {
+        "title": "Insect Glaive",
+        "aerials": "Unlimited Aerials ",
+        "kinsect_stamina": "Unlimited Kinsect Stamina",
+        "orange_extract": "Orange Extract",
+        "red_extract": "Red Extract",
+        "white_extract": "White Extract"
+    },
+    "lance": {
+        "title": "Lance",
+        "anchor_rage": "Anchor Rage"
+    },
+    "light_bowgun": {
+        "title": "Light Bowgun",
+        "unlimited_ammo": "Unlimited Ammo",
+        "auto_reload": "Auto Reload",
+        "fanning_maneuver": "Fanning Maneuver",
+        "wyvern_blast": "Unlimited Wyvern Blast",
+        "no_deviation": "No Deviation",
+        "no_recoil": "No Recoil"
+    },
+    "long_sword": {
+        "title": "Long Sword",
+        "guage_level": "Spirit Level",
+        "guage_max": "Spirit Guage Max"
+    },
     "charge_blade": {
         "title": "Charge Blade",
         "full_bottles": "Full Bottles",
@@ -238,8 +226,8 @@
         "archdemon_mode": "ArchDemon Mode",
         "ironshine_silk": "Ironshine Silk"
     },
-    "gun_lance": {
-        "title": "Gun Lance",
+    "gunlance": {
+        "title": "Gunlance",
         "aerials": "Unlimited Aerials",
         "auto_reload": "Auto Reload",
         "dragon_cannon": "Unlimited Dragon Cannon",

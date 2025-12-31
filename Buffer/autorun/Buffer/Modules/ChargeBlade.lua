@@ -1,6 +1,5 @@
 local ModuleBase = require("Buffer.Misc.ModuleBase")
 local Language = require("Buffer.Misc.Language")
-local Utils = require("Buffer.Misc.Utils")
 
 local Module = ModuleBase:new("charge_blade", {
     full_bottles = false,
@@ -14,7 +13,7 @@ function Module.create_hooks()
     Module:init_stagger("charge_blade_update", 10)
     sdk.hook(sdk.find_type_definition("snow.player.ChargeAxe"):get_method("update"), function(args)
         local managed = sdk.to_managed_object(args[2])
-        if not Module:weapon_hook_guard(managed, "snow.player.ChargeAxe") then return end
+        if managed:get_type_definition():is_a("snow.player.ChargeAxe") == false then return end
 
         if not Module:should_execute_staggered("charge_blade_update") then return end
 
@@ -38,23 +37,23 @@ function Module.create_hooks()
         if Module.data.chainsaw_buff then 
             managed:set_field("_IsChainsawBuff", true) 
         end
-    end, Utils.nothing())
+    end)
 end
 
 function Module.add_ui()
     local changed, any_changed = false, false
     local languagePrefix = Module.title .. "."
 
-    changed, Module.data.full_bottles = imgui.checkbox(Language.get(languagePrefix .. "full_bottles"), Module.data.full_bottles)
+    changed, Module.data.full_bottles       = imgui.checkbox(Language.get(languagePrefix .. "full_bottles"), Module.data.full_bottles)
     any_changed = changed or any_changed
     
-    changed, Module.data.sword_charged = imgui.checkbox(Language.get(languagePrefix .. "sword_charged"), Module.data.sword_charged)
+    changed, Module.data.sword_charged      = imgui.checkbox(Language.get(languagePrefix .. "sword_charged"), Module.data.sword_charged)
     any_changed = changed or any_changed
     
-    changed, Module.data.shield_charged = imgui.checkbox(Language.get(languagePrefix .. "shield_charged"), Module.data.shield_charged)
+    changed, Module.data.shield_charged     = imgui.checkbox(Language.get(languagePrefix .. "shield_charged"), Module.data.shield_charged)
     any_changed = changed or any_changed
     
-    changed, Module.data.chainsaw_buff = imgui.checkbox(Language.get(languagePrefix .. "chainsaw_buff"), Module.data.chainsaw_buff)
+    changed, Module.data.chainsaw_buff      = imgui.checkbox(Language.get(languagePrefix .. "chainsaw_buff"), Module.data.chainsaw_buff)
     any_changed = changed or any_changed
 
     return any_changed

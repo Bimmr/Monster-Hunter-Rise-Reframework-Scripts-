@@ -15,7 +15,7 @@ function Module.create_hooks()
     Module:init_stagger("insect_glaive_update", 10)
     sdk.hook(sdk.find_type_definition("snow.player.InsectGlaive"):get_method("update"), function(args)
         local managed = sdk.to_managed_object(args[2])
-        if not Module:weapon_hook_guard(managed, "snow.player.InsectGlaive") then return end
+        if managed:get_type_definition():is_a("snow.player.InsectGlaive") == false then return end
 
         if not Module:should_execute_staggered("insect_glaive_update") then return end
 
@@ -38,7 +38,7 @@ function Module.create_hooks()
         if Module.data.aerials then 
             managed:set_field("_AerialCount", 2) 
         end
-    end, Utils.nothing())
+    end)
 
     Module:init_stagger("ig_insect_update", 10)
     sdk.hook(sdk.find_type_definition("snow.player.IG_Insect"):get_method("update"), function(args)
@@ -52,7 +52,7 @@ function Module.create_hooks()
         if Module.data.kinsect_stamina then 
             managed:set_field("<_Stamina>k__BackingField", 100) 
         end
-    end, Utils.nothing())
+    end)
 end
 
 function Module.add_ui()

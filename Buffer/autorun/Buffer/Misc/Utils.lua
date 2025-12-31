@@ -1,28 +1,21 @@
 local utils = {}
 
 local kitchenFacility, mealFunc
-local playerInput
+local player_manager
 
 local musicManager, questManager
 
--- Do nothing
-function utils.nothing(retval)
-    return retval
-end
-
--- Get Player Base, player input is used to ensure the player is the one making the inputs so things work on when not the master player(host)
-function utils.getPlayerBase()
-    if not playerInput then
-        local inputManager = sdk.get_managed_singleton("snow.StmInputManager")
-        local inGameInputDevice = inputManager:get_field("_InGameInputDevice")
-        playerInput = inGameInputDevice:get_field("_pl_input")
+--- get Master Player WITH weapon type (ie. snow.player.Bow)
+function utils.getMasterPlayer()
+    if not player_manager then
+        player_manager = sdk.get_managed_singleton("snow.player.PlayerManager")
     end
-    return playerInput:get_field("RefPlayer")
+    return player_manager:findMasterPlayer()
 end
 
--- Get Player Data from Player Base
+-- Get Player Data from MasterPlayer
 function utils.getPlayerData()
-    local playerBase = utils.getPlayerBase()
+    local playerBase = utils.getMasterPlayer()
     if not playerBase then return end
     return playerBase:call("get_PlayerData")
 end

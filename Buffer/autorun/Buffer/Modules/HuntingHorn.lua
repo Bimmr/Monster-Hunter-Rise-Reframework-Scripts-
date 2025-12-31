@@ -1,6 +1,5 @@
 local ModuleBase = require("Buffer.Misc.ModuleBase")
 local Language = require("Buffer.Misc.Language")
-local Utils = require("Buffer.Misc.Utils")
 
 local Module = ModuleBase:new("hunting_horn", {
     infernal_mode = false,
@@ -12,7 +11,7 @@ function Module.create_hooks()
     Module:init_stagger("hunting_horn_update", 10)
     sdk.hook(sdk.find_type_definition("snow.player.Horn"):get_method("update"), function(args)
         local managed = sdk.to_managed_object(args[2])
-        if not Module:weapon_hook_guard(managed, "snow.player.Horn") then return end
+        if managed:get_type_definition():is_a("snow.player.Horn") == false then return end
 
         if not Module:should_execute_staggered("hunting_horn_update") then return end
 
@@ -25,7 +24,7 @@ function Module.create_hooks()
         if Module.data.skillbind_shockwave then 
             managed:set_field("_ImpactPullsTimer", 1800) 
         end
-    end, Utils.nothing())
+    end)
 end
 
 function Module.add_ui()

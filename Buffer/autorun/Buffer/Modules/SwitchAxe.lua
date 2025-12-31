@@ -14,7 +14,7 @@ function Module.create_hooks()
     Module:init_stagger("switch_axe_update", 10)
     sdk.hook(sdk.find_type_definition("snow.player.SlashAxe"):get_method("update"), function(args)
         local managed = sdk.to_managed_object(args[2])
-        if not Module:weapon_hook_guard(managed, "snow.player.SlashAxe") then return end
+        if managed:get_type_definition():is_a("snow.player.SlashAxe") == false then return end
 
         if not Module:should_execute_staggered("switch_axe_update") then return end
 
@@ -37,23 +37,23 @@ function Module.create_hooks()
         if Module.data.switch_charger then 
             managed:set_field("_NoUseSlashGaugeTimer", 400) 
         end
-    end, Utils.nothing())
+    end)
 end
 
 function Module.add_ui()
     local changed, any_changed = false, false
     local languagePrefix = Module.title .. "."
 
-    changed, Module.data.max_charge = imgui.checkbox(Language.get(languagePrefix .. "max_charge"), Module.data.max_charge)
+    changed, Module.data.max_charge         = imgui.checkbox(Language.get(languagePrefix .. "max_charge"), Module.data.max_charge)
     any_changed = changed or any_changed
     
-    changed, Module.data.max_sword_ammo = imgui.checkbox(Language.get(languagePrefix .. "max_sword_ammo"), Module.data.max_sword_ammo)
+    changed, Module.data.max_sword_ammo     = imgui.checkbox(Language.get(languagePrefix .. "max_sword_ammo"), Module.data.max_sword_ammo)
     any_changed = changed or any_changed
     
-    changed, Module.data.power_axe = imgui.checkbox(Language.get(languagePrefix .. "power_axe"), Module.data.power_axe)
+    changed, Module.data.power_axe          = imgui.checkbox(Language.get(languagePrefix .. "power_axe"), Module.data.power_axe)
     any_changed = changed or any_changed
     
-    changed, Module.data.switch_charger = imgui.checkbox(Language.get(languagePrefix .. "switch_charger"), Module.data.switch_charger)
+    changed, Module.data.switch_charger     = imgui.checkbox(Language.get(languagePrefix .. "switch_charger"), Module.data.switch_charger)
     any_changed = changed or any_changed
 
     return any_changed
