@@ -18,7 +18,7 @@ local Module = ModuleBase:new("character", {
         max_heroics = false,
         max_adrenaline = false
     },
-    conditions_and_blights = {
+    blights_and_conditions = {
         blights = {
             fire = false,
             water = false,
@@ -55,6 +55,58 @@ local Module = ModuleBase:new("character", {
     hidden = {
     }
 })
+
+-- Lookup tables for blights and conditions
+local BLIGHTS_DATA = {
+    fire = {
+        fields = {"_FireLDurationTimer", "_FireDamageTimer"}
+    },
+    water = {
+        fields = {"_WaterLDurationTimer"}
+    },
+    ice = {
+        fields = {"_IceLDurationTimer"}
+    },
+    thunder = {
+        fields = {"_ThunderLDurationTimer"}
+    },
+    dragon = {
+        fields = {"_DragonLDurationTimer"}
+    },
+    bubble = {
+        fields = {"_BubbleDamageTimer"}
+    },
+    blast = {
+        fields = {"_BombDurationTimer"}
+    }
+}
+
+local CONDITIONS_DATA = {
+    bleeding = {
+        fields = {"_BleedingDebuffTimer"}
+    },
+    poison = {
+        fields = {"_PoisonDurationTimer", "_PoisonDamageTimer"}
+    },
+    sleep = {
+        fields = {"_SleepDurationTimer", "<SleepMovableTimer>k__BackingField"}
+    },
+    paralyze = {
+        fields = {"_ParalyzeDurationTimer"}
+    },
+    qurio = {
+        fields = {"_MysteryDebuffTimer", "_MysteryDebuffDamageTimer"}
+    },
+    defence_and_resistance = {
+        fields = {"_ResistanceDownDurationTimer", "_DefenceDownDurationTimer"}
+    },
+    hellfire_and_stentch = {
+        fields = {"_OniBombDurationTimer", "_StinkDurationTimer"}
+    },
+    thread = {
+        fields = {"_BetoDurationTimer"}
+    }
+}
 
 function Module.create_hooks()
     sdk.hook(sdk.find_type_definition("snow.player.PlayerManager"):get_method("update"), function(args)
@@ -152,81 +204,38 @@ function Module.create_hooks()
         end
         
 
-        if (Module.data.conditions_and_blights.blights.fire or Module.data.conditions_and_blights.blights.all) and not is_in_lobby then
-            playerBase:set_field("_FireLDurationTimer", 0) -- The fire timer
-            playerBase:set_field("_FireDamageTimer", 0) -- The fire damage timer
+        -- Blights
+        if not is_in_lobby then
+            for blight_name, blight_data in pairs(BLIGHTS_DATA) do
+                if Module.data.blights_and_conditions.blights[blight_name] or Module.data.blights_and_conditions.blights.all then
+                    for _, field in ipairs(blight_data.fields) do
+                        playerBase:set_field(field, 0)
+                    end
+                end
+            end
         end
 
-        if (Module.data.conditions_and_blights.blights.water or Module.data.conditions_and_blights.blights.all) and not is_in_lobby then
-            playerBase:set_field("_WaterLDurationTimer", 0) -- The water blight timer
+        -- Conditions (using lookup table)
+        if not is_in_lobby then
+            for condition_name, condition_data in pairs(CONDITIONS_DATA) do
+                if Module.data.blights_and_conditions.conditions[condition_name] or Module.data.blights_and_conditions.conditions.all then
+                    for _, field in ipairs(condition_data.fields) do
+                        playerBase:set_field(field, 0)
+                    end
+                end
+            end
         end
 
-        if (Module.data.conditions_and_blights.blights.ice or Module.data.conditions_and_blights.blights.all) and not is_in_lobby then
-            playerBase:set_field("_IceLDurationTimer", 0) -- The ice blight timer
+        -- Special case: Stun - DOESN'T REMOVE ANIMATION TIME
+        if (Module.data.blights_and_conditions.conditions.stun or Module.data.blights_and_conditions.conditions.all) and not is_in_lobby then
+            playerBase:set_field("_StunDurationTimer", 0)
         end
 
-        if (Module.data.conditions_and_blights.blights.thunder or Module.data.conditions_and_blights.blights.all) and not is_in_lobby then
-            playerBase:set_field("_ThunderLDurationTimer", 0) -- The thunder blight timer
-        end
-
-        if (Module.data.conditions_and_blights.blights.dragon or Module.data.conditions_and_blights.blights.all) and not is_in_lobby then
-            playerBase:set_field("_DragonLDurationTimer", 0) -- The dragon blight timer
-        end
-
-        if (Module.data.conditions_and_blights.blights.bubble or Module.data.conditions_and_blights.blights.all) and not is_in_lobby then
-            playerBase:set_field("_BubbleDamageTimer", 0) -- The bubble timer
-            -- playerData:set_field("_BubbleType", 0) -- | 0=None | 1=BubbleS | 2=BubbleL |
-        end
-
-        if (Module.data.conditions_and_blights.blights.blast or Module.data.conditions_and_blights.blights.all) and not is_in_lobby then
-            playerBase:set_field("_BombDurationTimer", 0) -- The blast timer
-        end
-
-        if (Module.data.conditions_and_blights.conditions.bleeding or Module.data.conditions_and_blights.conditions.all) and not is_in_lobby then
-            playerBase:set_field("_BleedingDebuffTimer", 0) -- The bleeding timer
-        end
-
-        if (Module.data.conditions_and_blights.conditions.poison or Module.data.conditions_and_blights.conditions.all) and not is_in_lobby then
-            playerBase:set_field("_PoisonDurationTimer", 0) -- The poison timer
-            playerBase:set_field("_PoisonDamageTimer", 0) -- How long till next poison tick
-            -- playerData:set_field("_PoisonLv", 0) -- | 0=None | 1=Poison | 2=NoxiousPoison | 3=DeadlyPoison | 
-        end
-
-        if (Module.data.conditions_and_blights.conditions.stun or Module.data.conditions_and_blights.conditions.all) and not is_in_lobby then
-            playerBase:set_field("_StunDurationTimer", 0) -- The stun timer -- DOESN'T REMOVE ANIMATION TIME
-        end
-
-        if (Module.data.conditions_and_blights.conditions.sleep or Module.data.conditions_and_blights.conditions.all) and not is_in_lobby then
-            playerBase:set_field("_SleepDurationTimer", 0) -- The sleep timer
-            playerBase:set_field("<SleepMovableTimer>k__BackingField", 0) -- The sleep walking timer
-        end
-
-        if (Module.data.conditions_and_blights.conditions.paralyze or Module.data.conditions_and_blights.conditions.all) and not is_in_lobby then
-            playerBase:set_field("_ParalyzeDurationTimer", 0) -- The paralysis recovery timer -- DOESN'T REMOVE ANIMATION TIME
-        end
-
-        if (Module.data.conditions_and_blights.conditions.frenzy or Module.data.conditions_and_blights.conditions.all) and not is_in_lobby then
-            playerBase:set_field("_IsVirusLatency", false) -- The frenzy virus
-            playerBase:set_field("_VirusTimer", 0) -- How long till the next frenzy virus tick
-            playerBase:set_field("_VirusAccumulator", 0) -- Total ticks of Frenzy
-        end
-
-        if (Module.data.conditions_and_blights.conditions.qurio or Module.data.conditions_and_blights.conditions.all) and not is_in_lobby then
-            playerBase:set_field("_MysteryDebuffTimer", 0) -- The qurio timer
-            playerBase:set_field("_MysteryDebuffDamageTimer", 0) -- The qurio damage timer")
-        end
-
-        if (Module.data.conditions_and_blights.conditions.defence_and_resistance or Module.data.conditions_and_blights.conditions.all) and not is_in_lobby then
-            playerBase:set_field("_ResistanceDownDurationTimer", 0) -- The resistance down timer
-            playerBase:set_field("_DefenceDownDurationTimer", 0) -- The defence down timer
-        end
-
-        if (Module.data.conditions_and_blights.conditions.hellfire_and_stentch or Module.data.conditions_and_blights.conditions.all) and not is_in_lobby then
-            playerBase:set_field("_OniBombDurationTimer", 0) -- The hellfire timer
-            playerBase:set_field("_StinkDurationTimer", 0) -- The putrid gas damage timer
-        end
-        if (Module.data.conditions_and_blights.conditions.thread or Module.data.conditions_and_blights.conditions.all) and not is_in_lobby then
-            playerBase:set_field("_BetoDurationTimer", 0) -- The covered in spider web recovery timer -- DOESN'T REMOVE ANIMATION TIME
+        -- Special case: Frenzy - has unique fields
+        if (Module.data.blights_and_conditions.conditions.frenzy or Module.data.blights_and_conditions.conditions.all) and not is_in_lobby then
+            playerBase:set_field("_IsVirusLatency", false)
+            playerBase:set_field("_VirusTimer", 0)
+            playerBase:set_field("_VirusAccumulator", 0)
         end
 
         local attack_mod = -1
@@ -374,56 +383,70 @@ function Module.add_ui()
 
         languagePrefix = Module.title .. ".conditions_and_blights.blights."
         if imgui.tree_node(Language.get(languagePrefix .. "title")) then
-            changed, Module.data.conditions_and_blights.blights.fire = imgui.checkbox(Language.get(languagePrefix .. "fire"), Module.data.conditions_and_blights.blights.fire)
-            any_changed = any_changed or changed
-            changed, Module.data.conditions_and_blights.blights.water = imgui.checkbox(Language.get(languagePrefix .. "water"), Module.data.conditions_and_blights.blights.water)
-            any_changed = any_changed or changed
-            changed, Module.data.conditions_and_blights.blights.ice = imgui.checkbox(Language.get(languagePrefix .. "ice"), Module.data.conditions_and_blights.blights.ice)
-            any_changed = any_changed or changed
-            changed, Module.data.conditions_and_blights.blights.thunder = imgui.checkbox(Language.get(languagePrefix .. "thunder"), Module.data.conditions_and_blights.blights.thunder)
-            any_changed = any_changed or changed
-            changed, Module.data.conditions_and_blights.blights.dragon = imgui.checkbox(Language.get(languagePrefix .. "dragon"), Module.data.conditions_and_blights.blights.dragon)
-            any_changed = any_changed or changed
-            changed, Module.data.conditions_and_blights.blights.bubble = imgui.checkbox(Language.get(languagePrefix .. "bubble"), Module.data.conditions_and_blights.blights.bubble)
-            any_changed = any_changed or changed
-            changed, Module.data.conditions_and_blights.blights.blast = imgui.checkbox(Language.get(languagePrefix .. "blast"), Module.data.conditions_and_blights.blights.blast)
-            any_changed = any_changed or changed
-            changed, Module.data.conditions_and_blights.blights.all = imgui.checkbox(Language.get(languagePrefix .. "all"), Module.data.conditions_and_blights.blights.all)
-            any_changed = any_changed or changed
+
+            local BLIGHT_KEYS = {
+                "fire", "water", "ice",
+                "thunder", "dragon", "bubble",
+                "blast", "all"
+            }
+
+            local max_width = 0
+            for _, key in ipairs(BLIGHT_KEYS) do
+                local text = Language.get(languagePrefix .. key)
+                max_width = math.max(max_width, imgui.calc_text_size(text).x)
+            end
+            local row_width = imgui.calc_item_width()
+            local col_width = math.max(max_width + 24 + 20, row_width / 2)
+
+            imgui.begin_table(Module.title .. "_blights", 2, 0)
+            imgui.table_setup_column("1", 16 + 4096, col_width)
+            imgui.table_setup_column("2", 16 + 4096, col_width)
+            imgui.table_next_row()
+
+            for i, key in ipairs(BLIGHT_KEYS) do
+                if i == 1 or i == math.ceil(#BLIGHT_KEYS / 2) + 1 then imgui.table_next_column() end
+                changed, Module.data.blights_and_conditions.blights[key] = imgui.checkbox(Language.get(languagePrefix .. key), Module.data.blights_and_conditions.blights[key])
+                any_changed = any_changed or changed
+            end
+
+            imgui.end_table()
             imgui.tree_pop()
         end
+        
         languagePrefix = Module.title .. ".conditions_and_blights.conditions."
         if imgui.tree_node(Language.get(languagePrefix .. "title")) then
-            changed, Module.data.conditions_and_blights.conditions.bleeding = imgui.checkbox(Language.get(languagePrefix .. "bleeding"),
-                                                                                        Module.data.conditions_and_blights.conditions.bleeding)
-            any_changed = any_changed or changed
-            changed, Module.data.conditions_and_blights.conditions.stun = imgui.checkbox(Language.get(languagePrefix .. "stun"), Module.data.conditions_and_blights.conditions.stun)
-            Utils.tooltip(Language.get(languagePrefix .. "stun_tooltip"))
-            any_changed = any_changed or changed
-            changed, Module.data.conditions_and_blights.conditions.poison = imgui.checkbox(Language.get(languagePrefix .. "poison"), Module.data.conditions_and_blights.conditions.poison)
-            any_changed = any_changed or changed
-            changed, Module.data.conditions_and_blights.conditions.sleep = imgui.checkbox(Language.get(languagePrefix .. "sleep"), Module.data.conditions_and_blights.conditions.sleep)
-            any_changed = any_changed or changed
-            changed, Module.data.conditions_and_blights.conditions.frenzy = imgui.checkbox(Language.get(languagePrefix .. "frenzy"), Module.data.conditions_and_blights.conditions.frenzy)
-            any_changed = any_changed or changed
-            changed, Module.data.conditions_and_blights.conditions.qurio = imgui.checkbox(Language.get(languagePrefix .. "qurio"), Module.data.conditions_and_blights.conditions.qurio)
-            any_changed = any_changed or changed
-            changed, Module.data.conditions_and_blights.conditions.defence_and_resistance = imgui.checkbox(Language.get(languagePrefix .. "defence_and_resistance"),
-                                                                                                    Module.data.conditions_and_blights.conditions.defence_and_resistance)
-            any_changed = any_changed or changed
-            changed, Module.data.conditions_and_blights.conditions.hellfire_and_stentch = imgui.checkbox(Language.get(languagePrefix .. "hellfire_and_stentch"),
-                                                                                                    Module.data.conditions_and_blights.conditions.hellfire_and_stentch)
-            any_changed = any_changed or changed
-            changed, Module.data.conditions_and_blights.conditions.paralyze = imgui.checkbox(Language.get(languagePrefix .. "paralyze"),
-                                                                                        Module.data.conditions_and_blights.conditions.paralyze)
-            Utils.tooltip(Language.get(languagePrefix .. "paralyze_tooltip"))
-            
-            changed, Module.data.conditions_and_blights.conditions.thread = imgui.checkbox(Language.get(languagePrefix .. "thread"), Module.data.conditions_and_blights.conditions.thread)
-            Utils.tooltip(Language.get(languagePrefix .. "thread_tooltip"))
-            any_changed = any_changed or changed
 
-            changed, Module.data.conditions_and_blights.conditions.all = imgui.checkbox(Language.get(languagePrefix .. "all"), Module.data.conditions_and_blights.conditions.all)
-            any_changed = any_changed or changed
+            local CONDITION_KEYS = {
+                "bleeding", "stun", "poison", "sleep",
+                "frenzy", "qurio", "defence_and_resistance",
+                "hellfire_and_stentch", "paralyze", "thread", "all"
+            }
+
+            local max_width = 0
+            for _, key in ipairs(CONDITION_KEYS) do
+                local text = Language.get(languagePrefix .. key)
+                max_width = math.max(max_width, imgui.calc_text_size(text).x)
+            end
+            local row_width = imgui.calc_item_width()
+            local col_width = math.max(max_width + 24 + 20, row_width / 2)
+
+            imgui.begin_table(Module.title .. "_conditions", 2, 0)
+            imgui.table_setup_column("1", 16 + 4096, col_width)
+            imgui.table_setup_column("2", 16 + 4096, col_width)
+            imgui.table_next_row()
+
+            for i, key in ipairs(CONDITION_KEYS) do
+                if i == 1 or i == math.ceil(#CONDITION_KEYS / 2) + 1 then imgui.table_next_column() end
+                changed, Module.data.blights_and_conditions.conditions[key] = imgui.checkbox(Language.get(languagePrefix .. key), Module.data.blights_and_conditions.conditions[key])
+                any_changed = any_changed or changed
+                
+                -- Add tooltips for special conditions
+                if key == "stun" or key == "paralyze" or key == "thread" then
+                    Utils.tooltip(Language.get(languagePrefix .. key .. "_tooltip"))
+                end
+            end
+
+            imgui.end_table()
             imgui.tree_pop()
         end
         imgui.tree_pop()
