@@ -40,34 +40,33 @@
     },
     "character": {
         "title": "Character",
-        "conditions_and_blights": {
+        "blights_and_conditions": {
             "title": "Blights & Conditions",
             "blights": {
                 "title": "Prevent Blights",
-                "blast": "Blast",
-                "bubble": "Bubble",
-                "dragon": "Dragon",
                 "fire": "Fire",
-                "ice": "Ice",
-                "thunder": "Thunder",
                 "water": "Water",
+                "ice": "Ice",
+                "dragon": "Dragon",
+                "thunder": "Thunder",
                 "all": "All"
             },
             "conditions": {
                 "title": "Prevent Conditions",
-                "bleeding": "Bleeding",
-                "defence_and_resistance": "Defence and Resistance",
-                "frenzy": "Frenzy",
-                "hellfire_and_stentch": "Hellfire and Stench",
                 "poison": "Poison",
-                "qurio": "Qurio",
+                "paralyze": "Paralyze",
                 "sleep": "Sleep",
                 "stun": "Stun",
-                "stun_tooltip": "The visual effect will still play",
-                "paralyze": "Paralyze",
-                "paralyze_tooltip": "The visual effect will still play",
+                "blast": "Blast",
+                "defence_down": "Defence Down",
+                "resistance_down": "Resistance Down",
+                "bubble": "Bubble",
+                "stentch": "Stentch",
+                "hellfire": "Hellfire",
                 "thread": "Thread",
-                "thread_tooltip": "The visual effect will still play",
+                "bleeding": "Bleeding",
+                "frenzy": "Frenzy",
+                "qurio": "Qurio",
                 "all": "All "
             }
         },

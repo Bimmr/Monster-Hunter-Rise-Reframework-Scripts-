@@ -25,21 +25,24 @@ local Module = ModuleBase:new("character", {
             ice = false,
             thunder = false,
             dragon = false,
-            bubble = false,
-            blast = false,
             all = false
         },
         conditions = {
-            bleeding = false,
-            stun = false,
-            poison = false,
+            poison = false, -- also inludes venom
+            paralyze = false,
             sleep = false,
+            stun = false,
+            blast = false,
+            defence_down = false,
+            resistance_down = false,
+            bubble = false,
+            stentch = false,
+            hellfire = false,
+            thread = false,
+            -- leeched?
+            bleeding = false,
             frenzy = false,
             qurio = false,
-            defence_and_resistance = false,
-            hellfire_and_stentch = false,
-            paralyze = false,
-            thread = false,
             all = false
         }
     },
@@ -57,68 +60,87 @@ local Module = ModuleBase:new("character", {
 })
 
 -- Lookup tables for blights and conditions
-local BLIGHTS_DATA = {
-    fire = {
-        fields = {"_FireLDurationTimer", "_FireDamageTimer"}
+local BLIGHTS_AND_CONDITIONS_DATA = {
+    blights = {
+        fire = {
+            check = "isFireLDamage()",
+            clear = "clearFireDamage(System.Boolean)"
+        },
+        water = {
+            check = "isWaterLDamage()",
+            clear = "clearWaterDamage(System.Boolean)"
+        },
+        ice = {
+            check = "isIceLDamage()",
+            clear = "clearIceDamage(System.Boolean)"
+        },
+        thunder = {
+            check = "isThunderLDamage()",
+            clear = "clearThunderDamage(System.Boolean)",
+        },
+        dragon = {
+            check = "isDragonLDamage()",
+            clear = "clearDragonDamage(System.Boolean)"
+        }
     },
-    water = {
-        fields = {"_WaterLDurationTimer"}
-    },
-    ice = {
-        fields = {"_IceLDurationTimer"}
-    },
-    thunder = {
-        fields = {"_ThunderLDurationTimer"}
-    },
-    dragon = {
-        fields = {"_DragonLDurationTimer"}
-    },
-    bubble = {
-        fields = {"_BubbleDamageTimer"}
-    },
-    blast = {
-        fields = {"_BombDurationTimer"}
+    conditions = {
+        poison = {
+            check = "isPoisonDuration()",
+            clear = "clearPoisonDamage(System.Boolean)"
+        },
+        paralyze = {
+            check = "isParalyzeDuration()",
+            clear = "clearParalyzeDamage(System.Boolean)"
+        },
+        sleep = {
+            check = "isSleepDuration()",
+            clear = "clearSleepDamage(System.Boolean)"
+        },
+        stun = {
+            check = "isStunDuration()",
+            clear = "clearStunDamage()"
+        },
+        blast = {
+            check = "isBombDamage()",
+            clear = "clearBombDamage(System.Boolean)"
+        },
+        defence_down = {
+            check = "isDefenceDownDuration()",
+            clear = "_DefenceDownDurationTimer"
+        },
+        resistance_down = {
+            check = "isResistanceDownDuration()",
+            clear = "_ResistanceDownDurationTimer" -- No method to clear resistance down, only timer field
+        },
+        bubble = {
+            check = "isBubbleLDamage()",
+            clear = "clearBubbleDamage(System.Boolean)"
+        },
+        stentch = {
+            check = "isStinkDamage()",
+            clear = "_StinkDurationTimer" -- No method to clear stench, only timer field
+        },
+        hellfire = {
+            check = "isOniBombDamage()",
+            clear = "clearOniBombDamage(System.Boolean)"
+        },
+        thread = {
+            check = "!countDownBetoDurationTimer()",
+            clear = "clearBetoDamage(System.Boolean)"
+        },
+        bleeding = {
+            check = "isBleedingDuration()",
+            clear = "clearBleedingDamage(System.Boolean)"
+        },
+        frenzy = {
+            check = "isVirusOnset()",
+            clear = "clearVirus(System.Boolean)"
+        },
+        qurio = {
+            check = "_MysteryDebuffTimer",
+            clear = "clearMysteryDebuff(System.Boolean)"
+        }
     }
-}
-
-local CONDITIONS_DATA = {
-    bleeding = {
-        fields = {"_BleedingDebuffTimer"}
-    },
-    poison = {
-        fields = {"_PoisonDurationTimer", "_PoisonDamageTimer"}
-    },
-    sleep = {
-        fields = {"_SleepDurationTimer", "<SleepMovableTimer>k__BackingField"}
-    },
-    paralyze = {
-        fields = {"_ParalyzeDurationTimer"}
-    },
-    qurio = {
-        fields = {"_MysteryDebuffTimer", "_MysteryDebuffDamageTimer"}
-    },
-    defence_and_resistance = {
-        fields = {"_ResistanceDownDurationTimer", "_DefenceDownDurationTimer"}
-    },
-    hellfire_and_stentch = {
-        fields = {"_OniBombDurationTimer", "_StinkDurationTimer"}
-    },
-    thread = {
-        fields = {"_BetoDurationTimer"}
-    }
-}
-
--- UI display order arrays
-local BLIGHT_KEYS = {
-    "fire", "water", "ice",
-    "thunder", "dragon", "bubble",
-    "blast", "all"
-}
-
-local CONDITION_KEYS = {
-    "bleeding", "stun", "poison", "sleep",
-    "frenzy", "qurio", "defence_and_resistance",
-    "hellfire_and_stentch", "paralyze", "thread", "all"
 }
 
 function Module.create_hooks()
@@ -216,40 +238,43 @@ function Module.create_hooks()
             end
         end
         
-
-        -- Blights
         if not is_in_lobby then
-            for blight_name, blight_data in pairs(BLIGHTS_DATA) do
-                if Module.data.blights_and_conditions.blights[blight_name] or Module.data.blights_and_conditions.blights.all then
-                    for _, field in ipairs(blight_data.fields) do
-                        playerBase:set_field(field, 0)
+            for name, data in pairs(BLIGHTS_AND_CONDITIONS_DATA.blights) do
+                local check_inverted = data.check:sub(1,1) == "!"
+                local has_method = data.clear:find("%(") ~= nil
+
+                if Module.data.blights_and_conditions.blights[name] or Module.data.blights_and_conditions.conditions[name] then
+                    local is_active = playerBase:call(check_inverted and data.check:sub(2) or data.check)
+                    if check_inverted then is_active = not is_active end
+
+                    if is_active then
+                        if has_method then
+                            playerBase:call(data.clear, true)
+                        else
+                            playerBase:set_field(data.clear, 0)
+                        end
+                    end
+                end
+            end
+            for name, data in pairs(BLIGHTS_AND_CONDITIONS_DATA.conditions) do
+                local check_inverted = data.check:sub(1,1) == "!"
+                local has_method = data.clear:find("%(") ~= nil
+
+                if Module.data.blights_and_conditions.conditions[name] or Module.data.blights_and_conditions.conditions.all then
+                    local is_active = playerBase:call(check_inverted and data.check:sub(2) or data.check)
+                    if check_inverted then is_active = not is_active end
+
+                    if is_active then
+                        if has_method then
+                            playerBase:call(data.clear, true)
+                        else
+                            playerBase:set_field(data.clear, 0)
+                        end
                     end
                 end
             end
         end
 
-        -- Conditions (using lookup table)
-        if not is_in_lobby then
-            for condition_name, condition_data in pairs(CONDITIONS_DATA) do
-                if Module.data.blights_and_conditions.conditions[condition_name] or Module.data.blights_and_conditions.conditions.all then
-                    for _, field in ipairs(condition_data.fields) do
-                        playerBase:set_field(field, 0)
-                    end
-                end
-            end
-        end
-
-        -- Special case: Stun - DOESN'T REMOVE ANIMATION TIME
-        if (Module.data.blights_and_conditions.conditions.stun or Module.data.blights_and_conditions.conditions.all) and not is_in_lobby then
-            playerBase:set_field("_StunDurationTimer", 0)
-        end
-
-        -- Special case: Frenzy - has unique fields
-        if (Module.data.blights_and_conditions.conditions.frenzy or Module.data.blights_and_conditions.conditions.all) and not is_in_lobby then
-            playerBase:set_field("_IsVirusLatency", false)
-            playerBase:set_field("_VirusTimer", 0)
-            playerBase:set_field("_VirusAccumulator", 0)
-        end
 
         local attack_mod = -1
         if Module.data.stats.attack > -1 then
@@ -390,14 +415,17 @@ function Module.add_ui()
         any_changed = any_changed or changed
         imgui.tree_pop()
     end
-    
-    -- Note: Language prefix uses "conditions_and_blights" for backward compatibility with language files
-    -- while the internal data structure uses "blights_and_conditions" to match MHWS-Buffer naming
-    languagePrefix = Module.title .. ".conditions_and_blights."
+   
+    languagePrefix = Module.title .. ".blights_and_conditions."
     if imgui.tree_node(Language.get(languagePrefix .. "title")) then
 
-        languagePrefix = Module.title .. ".conditions_and_blights.blights."
+        languagePrefix = Module.title .. ".blights_and_conditions.blights."
         if imgui.tree_node(Language.get(languagePrefix .. "title")) then
+
+            local BLIGHT_KEYS = {
+                "fire",     "water",    "ice",
+                "thunder",  "dragon",   "all"
+            }
 
             local max_width = 0
             for _, key in ipairs(BLIGHT_KEYS) do
@@ -422,11 +450,16 @@ function Module.add_ui()
             imgui.tree_pop()
         end
         
-        languagePrefix = Module.title .. ".conditions_and_blights.conditions."
+        languagePrefix = Module.title .. ".blights_and_conditions.conditions."
         if imgui.tree_node(Language.get(languagePrefix .. "title")) then
 
+            local CONDITIONS_KEYS = {
+                "poison",   "paralyze", "sleep",    "stun",     "blast",    "defence_down", "resistance_down", 
+                "bubble",   "stentch",  "hellfire", "thread",   "bleeding", "frenzy",       "qurio",                "all"
+            }
+
             local max_width = 0
-            for _, key in ipairs(CONDITION_KEYS) do
+            for _, key in ipairs(CONDITIONS_KEYS) do
                 local text = Language.get(languagePrefix .. key)
                 max_width = math.max(max_width, imgui.calc_text_size(text).x)
             end
@@ -438,15 +471,10 @@ function Module.add_ui()
             imgui.table_setup_column("2", 16 + 4096, col_width)
             imgui.table_next_row()
 
-            for i, key in ipairs(CONDITION_KEYS) do
-                if i == 1 or i == math.ceil(#CONDITION_KEYS / 2) + 1 then imgui.table_next_column() end
+            for i, key in ipairs(CONDITIONS_KEYS) do
+                if i == 1 or i == math.ceil(#CONDITIONS_KEYS / 2) + 1 then imgui.table_next_column() end
                 changed, Module.data.blights_and_conditions.conditions[key] = imgui.checkbox(Language.get(languagePrefix .. key), Module.data.blights_and_conditions.conditions[key])
                 any_changed = any_changed or changed
-                
-                -- Add tooltips for special conditions
-                if key == "stun" or key == "paralyze" or key == "thread" then
-                    Utils.tooltip(Language.get(languagePrefix .. key .. "_tooltip"))
-                end
             end
 
             imgui.end_table()
