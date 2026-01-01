@@ -13,13 +13,13 @@ function Module.create_hooks()
         local managed = sdk.to_managed_object(args[2])
         if managed:get_type_definition():is_a("snow.player.Hammer") == false then return end
 
-        if not Module:should_execute_staggered("hammer_update") then return end
-
         -- Charge level
         if Module.data.charge_level > -1 then 
             managed:set_field("<NowChargeLevel>k__BackingField", Module.data.charge_level) 
         end
         
+        if not Module:should_execute_staggered("hammer_update") then return end
+
         -- Impact burst
         if Module.data.impact_burst then
             managed:set_field("_ImpactPullsTimer", 3600)

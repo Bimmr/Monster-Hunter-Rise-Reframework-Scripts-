@@ -22,14 +22,14 @@ function Module.create_hooks()
         local managed = sdk.to_managed_object(args[2])
         if managed:get_type_definition():is_a("snow.player.HeavyBowgun") == false then return end
 
-        if not Module:should_execute_staggered("heavy_bowgun_update") then return end
-
         -- Charge level
         if Module.data.charge_level > -1 then
             managed:set_field("_ShotChargeLv", Module.data.charge_level)
             managed:set_field("_ShotChargeFrame", 30 * Module.data.charge_level)
         end
         
+        if not Module:should_execute_staggered("heavy_bowgun_update") then return end
+
         -- Counter charger
         if Module.data.counter_charger then
             managed:set_field("_ReduseChargeTimer", 3000)

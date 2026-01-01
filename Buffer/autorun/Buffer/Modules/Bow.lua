@@ -16,13 +16,13 @@ function Module.create_hooks()
         local managed = sdk.to_managed_object(args[2])
         if managed:get_type_definition():is_a("snow.player.Bow") == false then return end
 
-        if not Module:should_execute_staggered("bow_update") then return end
-
         -- Charge level
         if Module.data.charge_level > 0 then 
             managed:set_field("<ChargeLv>k__BackingField", Module.data.charge_level) 
         end
         
+        if not Module:should_execute_staggered("bow_update") then return end
+
         -- Herculean draw
         if Module.data.herculean_draw then 
             managed:set_field("_WireBuffAttackUpTimer", 1800) 

@@ -9,6 +9,7 @@ local Module = ModuleBase:new("great_sword", {
 
 function Module.create_hooks()
     
+    Module:init_stagger("great_sword_update", 10)
     sdk.hook(sdk.find_type_definition("snow.player.GreatSword"):get_method("update"), function(args)
         local managed = sdk.to_managed_object(args[2])
         if managed:get_type_definition():is_a("snow.player.GreatSword") == false then return end
@@ -18,6 +19,8 @@ function Module.create_hooks()
             managed:set_field("_TameLv", Module.data.charge_level)
         end
         
+        if not Module:should_execute_staggered("great_sword_update") then return end
+
         -- Power sheathe
         if Module.data.power_sheathe then 
             managed:set_field("MoveWpOffBuffGreatSwordTimer", 1200) 
