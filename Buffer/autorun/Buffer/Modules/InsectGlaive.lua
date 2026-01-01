@@ -59,14 +59,28 @@ function Module.add_ui()
     local changed, any_changed = false, false
     local languagePrefix = Module.title .. "."
 
-    changed, Module.data.red_extract = imgui.checkbox(Language.get(languagePrefix .. "red_extract"), Module.data.red_extract)
-    any_changed = changed or any_changed
-    
-    changed, Module.data.white_extract = imgui.checkbox(Language.get(languagePrefix .. "white_extract"), Module.data.white_extract)
-    any_changed = changed or any_changed
-    
-    changed, Module.data.orange_extract = imgui.checkbox(Language.get(languagePrefix .. "orange_extract"), Module.data.orange_extract)
-    any_changed = changed or any_changed
+    local EXTRACT_KEYS = {"red_extract", "white_extract", "orange_extract"}
+    local max_width = 0
+    local row_width = imgui.calc_item_width()
+    for _, key in ipairs(EXTRACT_KEYS) do
+        local text = Language.get(languagePrefix .. key)
+        max_width = math.max(max_width, imgui.calc_text_size(text).x)
+    end
+    local col_width = math.max(max_width + 24 + 20, row_width / 3)
+
+    imgui.begin_table(Module.title.."1", 3, 0)
+    imgui.table_setup_column("1", 16 + 4096, col_width)
+    imgui.table_setup_column("2", 16 + 4096, col_width)
+    imgui.table_setup_column("3", 16 + 4096, col_width)
+    imgui.table_next_row()
+
+    for _, key in ipairs(EXTRACT_KEYS) do
+        imgui.table_next_column()
+        changed, Module.data[key] = imgui.checkbox(Language.get(languagePrefix .. key), Module.data[key])
+        any_changed = any_changed or changed
+    end
+
+    imgui.end_table()
     
     changed, Module.data.aerials = imgui.checkbox(Language.get(languagePrefix .. "aerials"), Module.data.aerials)
     any_changed = changed or any_changed
