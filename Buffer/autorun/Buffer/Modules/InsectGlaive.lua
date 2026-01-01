@@ -48,9 +48,8 @@ function Module.create_hooks()
 
         if not Module:should_execute_staggered("ig_insect_update") then return end
 
-        -- Kinsect stamina (not working?)
         if Module.data.kinsect_stamina then 
-            managed:set_field("<_Stamina>k__BackingField", 100) 
+            managed:set_field("<_Stamina>k__BackingField", managed:get_field("StaminaMax")) 
         end
     end)
 end
