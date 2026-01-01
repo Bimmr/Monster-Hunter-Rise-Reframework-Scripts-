@@ -50,10 +50,8 @@ local Module = ModuleBase:new("character", {
         attack = -1,
         defence = -1,
         affinity = -1,
-        element = {
-            type = -1,
-            value = -1
-        }
+        element_type = -1,
+        element_value = -1
     },
     hidden = {
     }
@@ -335,33 +333,33 @@ function Module.create_hooks()
 
     -- snow.player.HeavyBowgun > RefWeaponData > > > LocalBaseData > > > _WeaponBaseData
     sdk.hook(sdk.find_type_definition("snow.data.ElementData"):get_method("get_Element"), function(args)
-        if Module.data.stats.element.type == -1 then return end
+        if Module.data.stats.element_type == -1 then return end
         local managed = sdk.to_managed_object(args[2])
         if not managed then return end
         if not managed:get_type_definition():is_a("snow.data.ElementData") then return end
-        if Module.data.stats.element.type > -1 then
+        if Module.data.stats.element_type > -1 then
             thread.get_hook_storage()["managed_element"] = true
         end
     end, function(retval)
         if thread.get_hook_storage()["managed_element"] then
-            return sdk.to_ptr(Module.data.stats.element.type)
+            return sdk.to_ptr(Module.data.stats.element_type)
         end
         return retval
     end)
 
     -- snow.player.HeavyBowgun > RefWeaponData > > > LocalBaseData > > > _WeaponBaseData
     sdk.hook(sdk.find_type_definition("snow.data.ElementData"):get_method("get_ElementVal"), function(args)
-        if Module.data.stats.element.value == -1 then return end
+        if Module.data.stats.element_value == -1 then return end
             local managed = sdk.to_managed_object(args[2])
             if not managed then return end
             if not managed:get_type_definition():is_a("snow.data.ElementData") then return end
 
-            if Module.data.stats.element.value > -1 then
+            if Module.data.stats.element_value > -1 then
                 thread.get_hook_storage()["managed_element_value"] = true
             end
     end, function(retval)
         if thread.get_hook_storage()["managed_element_value"] then
-            return sdk.to_ptr(Module.data.stats.element.value)
+            return sdk.to_ptr(Module.data.stats.element_value)
         end
         return retval
     end)
@@ -374,7 +372,7 @@ function Module.add_ui()
     local languagePrefix = Module.title .. "."
 
     languagePrefix = Module.title .. ".sharpness_levels."
-    local sharpness_display = {Language.get(languagePrefix .. "disabled"), Language.get(languagePrefix .. "red"), Language.get(languagePrefix .. "orange"),
+    local sharpness_display = {Language.get("base.disabled"), Language.get(languagePrefix .. "red"), Language.get(languagePrefix .. "orange"),
                                 Language.get(languagePrefix .. "yellow"), Language.get(languagePrefix .. "green"), Language.get(languagePrefix .. "blue"),
                                 Language.get(languagePrefix .. "white"), Language.get(languagePrefix .. "purple")}
 
@@ -383,12 +381,37 @@ function Module.add_ui()
         imgui.slider_int(Language.get(languagePrefix .. "sharpness_level"), Module.data.sharpness_level, -1, 6, sharpness_display[Module.data.sharpness_level + 2])
     Utils.tooltip(Language.get(languagePrefix .. "sharpness_level_tooltip"))
     any_changed = any_changed or changed
+
     changed, Module.data.unlimited_stamina = imgui.checkbox(Language.get(languagePrefix .. "unlimited_stamina"), Module.data.unlimited_stamina)
     any_changed = any_changed or changed
+
+    local ARMOR_KEYS = {
+        "super_armor", "hyper_armor"
+    }
+
+    local max_width = 0
+    for _, key in ipairs(ARMOR_KEYS) do
+        local text = Language.get(languagePrefix .. key)
+        max_width = math.max(max_width, imgui.calc_text_size(text).x)
+    end
+    local row_width = imgui.calc_item_width()
+    local col_width = math.max(max_width + 24 + 20, row_width / 2)
+
+    imgui.begin_table(Module.title .. "_armor", 2, 0)
+    imgui.table_setup_column("1", 16 + 4096, col_width)
+    imgui.table_setup_column("2", 16 + 4096, col_width)
+    imgui.table_next_row()
+    imgui.table_next_column()
+
     changed, Module.data.super_armor = imgui.checkbox(Language.get(languagePrefix .. "super_armor"), Module.data.super_armor)
     any_changed = any_changed or changed
+
+    imgui.table_next_column()
+
     changed, Module.data.hyper_armor = imgui.checkbox(Language.get(languagePrefix .. "hyper_armor"), Module.data.hyper_armor)
     any_changed = any_changed or changed
+
+    imgui.end_table()
     
     languagePrefix = Module.title .. ".skills."
     if imgui.tree_node(Language.get(languagePrefix .. "title")) then        
@@ -493,37 +516,35 @@ function Module.add_ui()
         if Module.data.stats.defence > -1 then stepped_defence_value = math.floor(Module.data.stats.defence / step) end
         local attack_slider, defence_slider
         changed, attack_slider = imgui.slider_int(Language.get(languagePrefix .. "attack"), stepped_attack_value, -1, stepped_attack_max,
-                                                    stepped_attack_value > -1 and stepped_attack_value * step or Language.get(languagePrefix .. "attack_disabled"))
+                                                    stepped_attack_value > -1 and stepped_attack_value * step or Language.get("base.disabled"))
         any_changed = any_changed or changed
         changed, defence_slider = imgui.slider_int(Language.get(languagePrefix .. "defence"), stepped_defence_value, -1, stepped_defence_max,
-                                                    stepped_defence_value > -1 and stepped_defence_value * step or Language.get(languagePrefix .. "attack_disabled"))
+                                                    stepped_defence_value > -1 and stepped_defence_value * step or Language.get("base.disabled"))
         any_changed = any_changed or changed
         Module.data.stats.attack = attack_slider > -1 and attack_slider * step or -1
         Module.data.stats.defence = defence_slider > -1 and defence_slider * step or -1
 
         changed, Module.data.stats.affinity = imgui.slider_int(Language.get(languagePrefix .. "affinity"), Module.data.stats.affinity, -1, 100,
-                                                        Module.data.stats.affinity > -1 and " %d" .. '%%' or Language.get(languagePrefix .. "affinity_disabled"))
+                                                        Module.data.stats.affinity > -1 and " %d" .. '%%' or Language.get("base.disabled"))
         any_changed = any_changed or changed
-
-        languagePrefix = languagePrefix .. "element."
-        if imgui.tree_node(Language.get(languagePrefix .. "title")) then
-            languagePrefix = languagePrefix .. "types."
-            local element_display = {Language.get(languagePrefix .. "disabled"), Language.get(languagePrefix .. "none"), Language.get(languagePrefix .. "fire"), Language.get(languagePrefix .. "water"),
+        
+        languagePrefix = Module.title .. ".stats.element_types."
+        local element_display = {Language.get("base.disabled"), Language.get(languagePrefix .. "none"), Language.get(languagePrefix .. "fire"), Language.get(languagePrefix .. "water"),
                                         Language.get(languagePrefix .. "thunder"), Language.get(languagePrefix .. "ice"), Language.get(languagePrefix .. "dragon"),
                                         Language.get(languagePrefix .. "poison"), Language.get(languagePrefix .. "sleep"), Language.get(languagePrefix .. "paralyze"),
                                         Language.get(languagePrefix .. "blast")}
 
             
-            languagePrefix = Module.title .. ".stats.element."
-            local elm_type = Module.data.stats.element.type + 2
-            changed, elm_type = imgui.combo(Language.get(languagePrefix .. "type"), elm_type, element_display)
-            Module.data.stats.element.type = elm_type - 2
-            any_changed = any_changed or changed
-            changed, Module.data.stats.element.value = imgui.slider_int(Language.get(languagePrefix .. "value"), Module.data.stats.element.value, -1, 560,
-            Module.data.stats.element.value > -1 and " %d" or Language.get(languagePrefix .. "disabled"))
-            any_changed = any_changed or changed
-            imgui.tree_pop()
-        end
+        languagePrefix = Module.title .. ".stats."
+        local elm_type = Module.data.stats.element_type + 2
+        changed, elm_type = imgui.combo(Language.get(languagePrefix .. "element_type"), elm_type, element_display)
+        Module.data.stats.element_type = elm_type - 2
+        any_changed = any_changed or changed
+
+        changed, Module.data.stats.element_value = imgui.slider_int(Language.get(languagePrefix .. "element_value"), Module.data.stats.element_value, -1, 560,
+        Module.data.stats.element_value > -1 and " %d" or Language.get("base.disabled"))
+        any_changed = any_changed or changed
+
         imgui.tree_pop()
     end
 
