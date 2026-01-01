@@ -51,6 +51,10 @@ function Module.create_hooks()
         if Module.data.kinsect_stamina then 
             managed:set_field("<_Stamina>k__BackingField", managed:get_field("StaminaMax")) 
         end
+
+        -- TODO: Set Kinsect attack using cached field <_Attack>k__BackingField
+        -- TODO: Set Kinsect speed using cached field <_Speed>k__BackingField (0.0 -> 1.0)
+        -- TODO: Kinsect charge?
     end)
 end
 
