@@ -1,8 +1,7 @@
 {
-    "_IMPORTANT_NOTE": "如同名項中的值也是相同的,必須添加空格來區分",
-    "_USE_FONT": "NotoSansSC-Bold.otf",
+    "_LANGUAGE_NAME": "繁體中文 (TW)",
     "_TRANSLATOR": "Chikaze",
-    "window":{
+    "window": {
         "toggle_button": "Buffer 切換介面顯示",
         "title": "Buffer 調節器",
         "settings": "設定",
@@ -27,58 +26,48 @@
             "save": "儲存",
             "cancel": "取消",
             "enabled": "已啟用",
-            "disabled": "已禁用"
-        }
+            "disabled": "已禁用",
+            "set_to": "已設置為 %d。"
+        },
+        "options": "選項",
+        "disable_all": "全部停用",
+        "enabled_buffs": "Enabled buffs (*)",
+        "nothing_enabled": "Nothing is enabled (*)",
+        "disable": "Disable (*)"
     },
-    "bow": {
-        "title": "弓",
-        "charge_level": "蓄力等級 ",
-        "charge_level_prefix": "等級",
-        "charge_level_disabled": "禁用",
-        "unlimited_arrows": "無限瓶",
-        "herculean_draw": "猛力拉弓",
-        "herculean_draw_tooltip": "武器上不會出現視覺特效",
-        "bolt_boost": "箭強化"
+    "base": {
+        "disabled": "禁用"
     },
     "character": {
         "title": "獵人狀態",
-        "ammo_and_coatings": {
-            "title": "彈藥與瓶",
-            "auto_reload": "自動裝填   ",
-            "no_deviation": "無偏移   ",
-            "no_recoil": "無後座力   ",
-            "unlimited_ammo": "無限彈藥   ",
-            "unlimited_coatings": "無限瓶"
-        },
-        "conditions_and_blights": {
+        "blights_and_conditions": {
             "title": "預防異常狀態",
             "blights": {
                 "title": "累計類異常",
-                "blast": "爆破",
-                "bubble": "泡沫",
                 "dragon": "龍屬性",
                 "fire": "火屬性",
                 "ice": "冰屬性",
                 "thunder": "雷屬性",
                 "water": "水屬性",
-                "all": "All"
+                "all": "全部"
             },
             "conditions": {
                 "title": "特殊類異常",
                 "bleeding": "裂傷",
-                "defence_and_resistance": "全耐性 防禦力下降",
                 "frenzy": "狂龍症",
-                "hellfire_and_stentch": "鬼火與異臭",
                 "poison": "毒",
                 "qurio": "劫血",
                 "sleep": "睡意",
                 "stun": "眩暈",
-                "stun_tooltip": "仍然有視覺效果",
                 "paralyze": "麻痹",
-                "paralyze_tooltip": "仍然有視覺效果",
                 "thread": "絲線束縛",
-                "thread_tooltip": "仍然有視覺效果",
-                "all": "All "
+                "all": "全部 ",
+                "blast": "爆破",
+                "defence_down": "防禦力下降",
+                "resistance_down": "Resistance Down (*)",
+                "bubble": "泡沫",
+                "stentch": "惡臭",
+                "hellfire": "Hellfire (*)"
             }
         },
         "health": {
@@ -96,110 +85,42 @@
             "title": "狀態",
             "tooltip": "如果失效 請拖動滑塊到最左邊後重新調節",
             "attack": "攻擊力",
-            "attack_disabled": "禁用",
             "defence": "防禦力",
-            "defence_disabled": "禁用",
             "affinity": "會心率",
-            "affinity_disabled": "禁用",
-            "element": {
-                "title": "Element Settings",
-                "type": "Element",
-                "types": {
-                    "disabled": "Off", 
-                    "none": "None", 
-                    "fire": "Fire", 
-                    "water": "Water", 
-                    "thunder": "Thunder", 
-                    "ice": "Ice", 
-                    "dragon": "Dragon", 
-                    "poison": "Poison", 
-                    "sleep": "Sleep", 
-                    "paralyze": "Paralyze", 
-                    "blast": "Blast"
-                },
-                "value": "Elemental Damage",
-                "disabled": "Off"
-            }
+            "element_types": {
+                "none": "None(*)",
+                "fire": "火",
+                "water": "水",
+                "thunder": "雷",
+                "ice": "冰",
+                "dragon": "龍",
+                "poison": "毒",
+                "sleep": "睡眠",
+                "paralyze": "麻痺",
+                "blast": "爆破"
+            },
+            "element_type": "Element (*)",
+            "element_value": "Elemental Damage (*)"
         },
         "sharpness_level": "鋒利度等級",
         "sharpness_level_tooltip": "鋒利度仍會變化,但鋒利度等級不會變化",
         "sharpness_levels": {
-            "disabled":"禁用", 
-            "red": "紅", 
-            "orange": "橙", 
-            "yellow": "黃", 
-            "green": "綠", 
-            "blue": "藍", 
-            "white": "白", 
+            "red": "紅",
+            "orange": "橙",
+            "yellow": "黃",
+            "green": "綠",
+            "blue": "藍",
+            "white": "白",
             "purple": "紫"
         },
         "unlimited_stamina": "無限耐力",
-        "hyper_armor": "Hyper Armor",
-        "super_armor": "Super Armor",
+        "hyper_armor": "Hyper Armor (*)",
+        "super_armor": "Super Armor (*)",
         "skills": {
-            "title": "Skills",
-            "intrepid_heart": "Intrepid Heart",
-            "frost_craft": "Frost Craft"
+            "title": "Skills (*)",
+            "intrepid_heart": "Intrepid Heart (*)",
+            "frost_craft": "Frost Craft (*)"
         }
-    },
-    "great_sword": {
-        "title": "大劍",
-        "charge_level": "蓄力等級  ",
-        "charge_level_prefix": "等級",
-        "charge_level_disabled": "禁用",
-        "power_sheathe": "強化納刀",
-        "power_sheathe_tooltip": "武器上不會出現視覺特效"
-    },
-    "hammer": {
-        "title": "大錘",
-        "charge_level": "蓄力等級   ",
-        "charge_level_prefix": "等級",
-        "charge_level_disabled": "禁用",
-        "impact_burst": "流星穿地擊"
-    },
-    "heavy_bowgun": {
-        "title": "重弩槍",
-        "charge_level": "蓄力等級    ",
-        "charge_level_prefix": "等級",
-        "charge_level_disabled": "禁用",
-        "unlimited_ammo": "無限彈藥 ",
-        "auto_reload": "自動裝填 ",
-        "overheat": "防止過熱",
-        "wyvern_machine_gun": "無限機關龍彈",
-        "wyvern_sniper": "無限狙擊龍彈",
-        "counter_charger": "Counter Charger",
-        "no_deviation": "無偏移 ",
-        "no_recoil": "無後座力 "
-    },
-    "insect_glaive": {
-        "title": "操蟲棍",
-        "aerials": "無限空中攻擊 ",
-        "kinsect_stamina": "無限獵蟲耐力",
-        "orange_extract": "橙 精華",
-        "red_extract": "紅 精華",
-        "white_extract": "白 精華"
-    },
-    "lance": {
-        "title": "長槍",
-        "anchor_rage": "錨泊蓄能",
-        "anchor_rage_prefix": "等級",
-        "anchor_rage_disabled": "禁用"
-    },
-    "light_bowgun": {
-        "title": "輕弩槍",
-        "unlimited_ammo": "無限彈藥  ",
-        "auto_reload": "自動裝填  ",
-        "fanning_maneuver": "迴旋移動",
-        "wyvern_blast": "無限起爆龍彈",
-        "no_deviation": "無偏移  ",
-        "no_recoil": "無後坐力  "
-    },
-    "long_sword": {
-        "title": "太刀",
-        "guage_level": "練氣槽等級",
-        "guage_level_prefix": "等級",
-        "guage_level_disabled": "禁用",
-        "guage_max": "填滿練氣槽"
     },
     "miscellaneous": {
         "title": "雜項",
@@ -208,8 +129,8 @@
             "dango_100_no_ticket": "無票必發動糰子技能",
             "dango_100_ticket": "有票必發動糰子技能",
             "level_4": "全糰子技能等級4",
-            "all_dangos": "Show all Dangos",
-            "all_dangos_tooltip": "You will need to turn off and then restart the game to disable this"
+            "all_dangos": "Show all Dangos (*)",
+            "all_dangos_tooltip": "You will need to turn off and then restart the game to disable this (*)"
         },
         "consumables": {
             "title": "消耗品",
@@ -224,32 +145,49 @@
             "unlimited_powerup": "無限變幻翔蟲",
             "unlimited_powerup_tooltip": "需要你持有紅或金變幻翔蟲"
         },
-        "unlimited_recon": "Unlimited Buddy Recon"
+        "unlimited_recon": "Unlimited Buddy Recon (*)"
     },
-    "charge_blade": {
-        "title": "充能斧",
-        "full_bottles": "填滿充能瓶",
-        "shield_charged": "盾屬性強化",
-        "sword_charged": "劍屬性強化",
-        "chainsaw_buff": "斧屬性強化"
+    "great_sword": {
+        "title": "大劍",
+        "charge_level": "蓄力等級  ",
+        "power_sheathe": "強化納刀",
+        "power_sheathe_tooltip": "武器上不會出現視覺特效"
+    },
+    "sword_and_shield": {
+        "title": "單手劍",
+        "destroyer_oil": "重擊刃藥"
     },
     "dual_blades": {
         "title": "雙劍",
         "archdemon_mode": "鬼人化",
         "ironshine_silk": "鐵蟲研絲"
     },
-    "gun_lance": {
+    "long_sword": {
+        "title": "太刀",
+        "guage_level": "練氣槽等級",
+        "guage_max": "填滿練氣槽"
+    },
+    "hammer": {
+        "title": "大錘",
+        "charge_level": "蓄力等級   ",
+        "impact_burst": "流星穿地擊"
+    },
+    "hunting_horn": {
+        "title": "狩獵笛",
+        "infernal_mode": "氣炎的旋律",
+        "skillbind_shockwave": "鐵蟲絲響打"
+    },
+    "lance": {
+        "title": "長槍",
+        "anchor_rage": "錨泊蓄能"
+    },
+    "gunlance": {
         "title": "銃槍",
         "aerials": "無限空中攻擊  ",
         "auto_reload": "自動裝填    ",
         "dragon_cannon": "龍杭炮",
         "errupting_cannon": "爆杭炮",
         "ground_splitter": "地裂斬"
-    },
-    "hunting_horn": {
-        "title": "狩獵笛",
-        "infernal_mode": "氣炎的旋律",
-        "skillbind_shockwave": "鐵蟲絲響打"
     },
     "switch_axe": {
         "title": "斬擊斧",
@@ -258,8 +196,48 @@
         "power_axe": "斧高輸出狀態",
         "switch_charger": "斬擊蓄力"
     },
-    "sword_and_shield": {
-        "title": "單手劍",
-        "destroyer_oil": "重擊刃藥"
+    "charge_blade": {
+        "title": "充能斧",
+        "full_bottles": "填滿充能瓶",
+        "shield_charged": "盾屬性強化",
+        "sword_charged": "劍屬性強化",
+        "chainsaw_buff": "斧屬性強化"
+    },
+    "insect_glaive": {
+        "title": "操蟲棍",
+        "aerials": "無限空中攻擊 ",
+        "kinsect_stamina": "無限獵蟲耐力",
+        "orange_extract": "橙 精華",
+        "red_extract": "紅 精華",
+        "white_extract": "白 精華"
+    },
+    "bow": {
+        "title": "弓",
+        "charge_level": "蓄力等級 ",
+        "herculean_draw": "猛力拉弓",
+        "herculean_draw_tooltip": "武器上不會出現視覺特效",
+        "bolt_boost": "箭強化",
+        "unlimited_coatings": "無限瓶"
+    },
+    "light_bowgun": {
+        "title": "輕弩槍",
+        "unlimited_ammo": "無限彈藥  ",
+        "auto_reload": "自動裝填  ",
+        "fanning_maneuver": "迴旋移動",
+        "wyvern_blast": "無限起爆龍彈",
+        "no_deviation": "無偏移  ",
+        "no_recoil": "無後坐力  "
+    },
+    "heavy_bowgun": {
+        "title": "重弩槍",
+        "charge_level": "蓄力等級    ",
+        "unlimited_ammo": "無限彈藥 ",
+        "auto_reload": "自動裝填 ",
+        "overheat": "防止過熱",
+        "wyvern_machine_gun": "無限機關龍彈",
+        "wyvern_sniper": "無限狙擊龍彈",
+        "counter_charger": "Counter Charger (*)",
+        "no_deviation": "無偏移 ",
+        "no_recoil": "無後座力 "
     }
 }

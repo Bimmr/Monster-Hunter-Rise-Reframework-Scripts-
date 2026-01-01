@@ -1,7 +1,6 @@
 {
     "_LANGUAGE_NAME": "English (US)",
-
-    "window":{
+    "window": {
         "toggle_button": "Toggle Buffer GUI",
         "title": "Modifiers & Settings",
         "settings": "Settings",
@@ -85,41 +84,32 @@
             "title": "Stats",
             "tooltip": "Drag slider to the left to reset if the stat breaks",
             "attack": "Attack",
-            "attack_disabled": "Off",
             "defence": "Defence",
-            "defence_disabled": "Off",
             "affinity": "Affinity",
-            "affinity_disabled": "Off",
-            "element": {
-                "title": "Element Settings",
-                "type": "Element",
-                "types": {
-                    "disabled": "Off", 
-                    "none": "None", 
-                    "fire": "Fire", 
-                    "water": "Water", 
-                    "thunder": "Thunder", 
-                    "ice": "Ice", 
-                    "dragon": "Dragon", 
-                    "poison": "Poison", 
-                    "sleep": "Sleep", 
-                    "paralyze": "Paralyze", 
-                    "blast": "Blast"
-                },
-                "value": "Elemental Damage",
-                "disabled": "Off"
+            "element_type": "Element Type",
+            "element_value": "Element Value",
+            "element_types": {
+                "none": "None",
+                "fire": "Fire",
+                "water": "Water",
+                "thunder": "Thunder",
+                "ice": "Ice",
+                "dragon": "Dragon",
+                "poison": "Poison",
+                "sleep": "Sleep",
+                "paralyze": "Paralyze",
+                "blast": "Blast"
             }
         },
         "sharpness_level": "Sharpness Level",
         "sharpness_level_tooltip": "The sharpness bar will still move, but the sharpness level won't change",
         "sharpness_levels": {
-            "disabled":"Off", 
-            "red": "Red", 
-            "orange": "Orange", 
-            "yellow": "Yellow", 
-            "green": "Green", 
-            "blue": "Blue", 
-            "white": "White", 
+            "red": "Red",
+            "orange": "Orange",
+            "yellow": "Yellow",
+            "green": "Green",
+            "blue": "Blue",
+            "white": "White",
             "purple": "Purple"
         },
         "unlimited_stamina": "Unlimited Stamina",
@@ -156,6 +146,70 @@
         },
         "unlimited_recon": "Unlimited Buddy Recon"
     },
+    "great_sword": {
+        "title": "Great Sword",
+        "charge_level": "Charge Level",
+        "power_sheathe": "Power Sheathe",
+        "power_sheathe_tooltip": "No effect will appear on the weapon"
+    },
+    "sword_and_shield": {
+        "title": "Sword & Shield",
+        "destroyer_oil": "Destroyer Oil"
+    },
+    "dual_blades": {
+        "title": "Dual Blades",
+        "archdemon_mode": "ArchDemon Mode",
+        "ironshine_silk": "Ironshine Silk"
+    },
+    "long_sword": {
+        "title": "Long Sword",
+        "guage_level": "Spirit Level",
+        "guage_max": "Spirit Guage Max"
+    },
+    "hammer": {
+        "title": "Hammer",
+        "charge_level": "Charge Level",
+        "impact_burst": "Impact Burst"
+    },
+    "hunting_horn": {
+        "title": "Hunting Horn",
+        "infernal_mode": "Infernal Mode",
+        "skillbind_shockwave": "Skillbind Shockwave"
+    },
+    "lance": {
+        "title": "Lance",
+        "anchor_rage": "Anchor Rage"
+    },
+    "gunlance": {
+        "title": "Gunlance",
+        "aerials": "Unlimited Aerials",
+        "auto_reload": "Auto Reload",
+        "dragon_cannon": "Unlimited Dragon Cannon",
+        "errupting_cannon": "Errupting Cannon",
+        "ground_splitter": "Ground Splitter"
+    },
+    "switch_axe": {
+        "title": "Switch Axe",
+        "max_charge": "Max Charge",
+        "max_sword_ammo": "Max Sword Ammo",
+        "power_axe": "Power Axe",
+        "switch_charger": "Switch Charger"
+    },
+    "charge_blade": {
+        "title": "Charge Blade",
+        "full_bottles": "Full Bottles",
+        "shield_charged": "Shield Charged",
+        "sword_charged": "Sword Charged",
+        "chainsaw_buff": "Chainsaw Buff"
+    },
+    "insect_glaive": {
+        "title": "Insect Glaive",
+        "aerials": "Unlimited Aerials ",
+        "kinsect_stamina": "Unlimited Kinsect Stamina",
+        "orange_extract": "Orange Extract",
+        "red_extract": "Red Extract",
+        "white_extract": "White Extract"
+    },
     "bow": {
         "title": "Bow",
         "charge_level": "Charge Level",
@@ -164,16 +218,14 @@
         "bolt_boost": "Bolt Boost",
         "unlimited_coatings": "Unlimited Coatings"
     },
-    "great_sword": {
-        "title": "Great Sword",
-        "charge_level": "Charge Level",
-        "power_sheathe": "Power Sheathe",
-        "power_sheathe_tooltip": "No effect will appear on the weapon"
-    },
-    "hammer": {
-        "title": "Hammer",
-        "charge_level": "Charge Level",
-        "impact_burst": "Impact Burst"
+    "light_bowgun": {
+        "title": "Light Bowgun",
+        "unlimited_ammo": "Unlimited Ammo",
+        "auto_reload": "Auto Reload",
+        "fanning_maneuver": "Fanning Maneuver",
+        "wyvern_blast": "Unlimited Wyvern Blast",
+        "no_deviation": "No Deviation",
+        "no_recoil": "No Recoil"
     },
     "heavy_bowgun": {
         "title": "Heavy Bowgun",
@@ -186,67 +238,5 @@
         "counter_charger": "Counter Charger",
         "no_deviation": "No Deviation  ",
         "no_recoil": "No Recoil  "
-    },
-    "insect_glaive": {
-        "title": "Insect Glaive",
-        "aerials": "Unlimited Aerials ",
-        "kinsect_stamina": "Unlimited Kinsect Stamina",
-        "orange_extract": "Orange Extract",
-        "red_extract": "Red Extract",
-        "white_extract": "White Extract"
-    },
-    "lance": {
-        "title": "Lance",
-        "anchor_rage": "Anchor Rage"
-    },
-    "light_bowgun": {
-        "title": "Light Bowgun",
-        "unlimited_ammo": "Unlimited Ammo",
-        "auto_reload": "Auto Reload",
-        "fanning_maneuver": "Fanning Maneuver",
-        "wyvern_blast": "Unlimited Wyvern Blast",
-        "no_deviation": "No Deviation",
-        "no_recoil": "No Recoil"
-    },
-    "long_sword": {
-        "title": "Long Sword",
-        "guage_level": "Spirit Level",
-        "guage_max": "Spirit Guage Max"
-    },
-    "charge_blade": {
-        "title": "Charge Blade",
-        "full_bottles": "Full Bottles",
-        "shield_charged": "Shield Charged",
-        "sword_charged": "Sword Charged",
-        "chainsaw_buff": "Chainsaw Buff"
-    },
-    "dual_blades": {
-        "title": "Dual Blades",
-        "archdemon_mode": "ArchDemon Mode",
-        "ironshine_silk": "Ironshine Silk"
-    },
-    "gunlance": {
-        "title": "Gunlance",
-        "aerials": "Unlimited Aerials",
-        "auto_reload": "Auto Reload",
-        "dragon_cannon": "Unlimited Dragon Cannon",
-        "errupting_cannon": "Errupting Cannon",
-        "ground_splitter": "Ground Splitter"
-    },
-    "hunting_horn": {
-        "title": "Hunting Horn",
-        "infernal_mode": "Infernal Mode",
-        "skillbind_shockwave": "Skillbind Shockwave"
-    },
-    "switch_axe": {
-        "title": "Switch Axe",
-        "max_charge": "Max Charge",
-        "max_sword_ammo": "Max Sword Ammo",
-        "power_axe": "Power Axe",
-        "switch_charger": "Switch Charger"
-    },
-    "sword_and_shield": {
-        "title": "Sword & Shield",
-        "destroyer_oil": "Destroyer Oil"
     }
 }
