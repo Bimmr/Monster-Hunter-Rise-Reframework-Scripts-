@@ -304,6 +304,7 @@ function Module.create_hooks()
     end)
 
     -- snow.player.HeavyBowgun > RefWeaponData > > > LocalBaseData > > > _WeaponBaseData
+    local managed_crit = nil
     sdk.hook(sdk.find_type_definition("snow.equip.MainWeaponBaseData"):get_method("get_CriticalRate"), function(args)
         local managed = sdk.to_managed_object(args[2])
         if not managed then return end
@@ -313,11 +314,10 @@ function Module.create_hooks()
             Module.data._last_crit_set = nil
             return 
         end
-        thread.get_hook_storage()["managed_crit"] = managed
+        managed_crit = managed
     end, 
     function(retval)
-        if thread.get_hook_storage()["managed_crit"] then
-            local managed_crit = thread.get_hook_storage()["managed_crit"]
+        if managed_crit then
             local player = Utils.getPlayerData():get_field("_CriticalRate") -- Overall player crit rate (This is what this function returns, so it will be different after being set)
             local weapon = managed_crit:get_field("_CriticalRate") -- Weapon's crit rate (this doesn't change)
             local target = Module.data.stats.affinity -- Target crit rate
@@ -326,28 +326,33 @@ function Module.create_hooks()
             local to_set = target - player + last_set
 
             Module.data._last_crit_set = to_set
+
+            managed_crit = nil
             return sdk.to_ptr(to_set) 
         end
         return retval
     end)
 
     -- snow.player.HeavyBowgun > RefWeaponData > > > LocalBaseData > > > _WeaponBaseData
+    local manage_element = nil
     sdk.hook(sdk.find_type_definition("snow.data.ElementData"):get_method("get_Element"), function(args)
         if Module.data.stats.element_type == -1 then return end
         local managed = sdk.to_managed_object(args[2])
         if not managed then return end
         if not managed:get_type_definition():is_a("snow.data.ElementData") then return end
         if Module.data.stats.element_type > -1 then
-            thread.get_hook_storage()["managed_element"] = true
+            manage_element = true
         end
     end, function(retval)
-        if thread.get_hook_storage()["managed_element"] then
+        if manage_element then
+            manage_element = nil
             return sdk.to_ptr(Module.data.stats.element_type)
         end
         return retval
     end)
 
     -- snow.player.HeavyBowgun > RefWeaponData > > > LocalBaseData > > > _WeaponBaseData
+    local manage_element_value = nil
     sdk.hook(sdk.find_type_definition("snow.data.ElementData"):get_method("get_ElementVal"), function(args)
         if Module.data.stats.element_value == -1 then return end
             local managed = sdk.to_managed_object(args[2])
@@ -355,10 +360,11 @@ function Module.create_hooks()
             if not managed:get_type_definition():is_a("snow.data.ElementData") then return end
 
             if Module.data.stats.element_value > -1 then
-                thread.get_hook_storage()["managed_element_value"] = true
+                manage_element_value = true
             end
     end, function(retval)
-        if thread.get_hook_storage()["managed_element_value"] then
+        if manage_element_value then
+            manage_element_value = nil
             return sdk.to_ptr(Module.data.stats.element_value)
         end
         return retval

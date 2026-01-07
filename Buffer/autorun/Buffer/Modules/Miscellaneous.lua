@@ -79,6 +79,7 @@ function Module.create_hooks()
         end
     end)
 
+    local skill_rate_override = nil
     sdk.hook(sdk.find_type_definition("snow.data.DangoData"):get_method("get_SkillActiveRate"), function(args)
         if Module.data.canteen.dango_100_no_ticket or Module.data.canteen.dango_100_ticket then
             local managed = sdk.to_managed_object(args[2])
@@ -88,11 +89,12 @@ function Module.create_hooks()
             local isUsingTicket = Utils.getMealFunc():call("getMealTicketFlag")
 
             if isUsingTicket or Module.data.canteen.dango_100_no_ticket then
-                thread.get_hook_storage()["dango_managed"] = true
+                skill_rate_override = true
             end
         end
     end, function(retval)
-        if thread.get_hook_storage()["dango_managed"] then
+        if skill_rate_override then
+            skill_rate_override = nil
             return sdk.to_ptr(200)
         end
         return retval
@@ -106,16 +108,12 @@ function Module.create_hooks()
     --- @return any The value to use (either target value or cached value)
     --- @return boolean Whether a value was restored from cache
     function Module.cache_and_return_value(cache_key, current_value, target_value, enabled)
-        log.debug("Cache check for " .. cache_key .. ": " .. tostring(current_value) .. " (enabled: " .. tostring(enabled) .. ")")
         if enabled then
             if Module.old[cache_key] == nil then
                 Module.old[cache_key] = current_value
-                log.debug("Caching old value: " .. tostring(current_value))
             end
-            log.debug("Returning target value: " .. tostring(target_value))
             return target_value, false
         elseif Module.old[cache_key] ~= nil then
-            log.debug("Restoring cached value: " .. tostring(Module.old[cache_key]))
             local cached_value = Module.old[cache_key]
             Module.old[cache_key] = nil
             return cached_value, true
@@ -183,15 +181,17 @@ function Module.create_hooks()
         end
     end)
 
+    local recon_managed = nil
     sdk.hook(sdk.find_type_definition("snow.otomo.OtomoReconCharaManager"):get_method("onCompleteReconOtomoAct"), function(args)
         if Module.data.unlimited_recon then
             local managed = sdk.to_managed_object(args[2])
             if not managed then return end
-                thread.get_hook_storage()["recon_managed"] = managed
+                recon_managed = managed
         end
     end, function(retval)
-        if thread.get_hook_storage()["recon_managed"] ~= nil then
-            thread.get_hook_storage()["recon_managed"]:set_field("_IsUseOtomoReconFastTravel", false)
+        if recon_managed ~= nil then
+            recon_managed:set_field("_IsUseOtomoReconFastTravel", false)
+            recon_managed = nil
         end
     end)
     

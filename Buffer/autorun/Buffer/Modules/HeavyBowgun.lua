@@ -81,28 +81,32 @@ function Module.create_hooks()
     end)
 
     -- No fluctuation
+    local prevent_fluctuation = nil
     sdk.hook(sdk.find_type_definition("snow.data.BulletWeaponData"):get_method("get_Fluctuation"), function(args)
         local managed = sdk.to_managed_object(args[2])
         if not managed:get_type_definition():is_a("snow.data.HeavyBowgunWeaponData") then return end
 
-        if Module.data.no_deviation then thread.get_hook_storage()["prevent_fluctuation"] = true end
+        if Module.data.no_deviation then prevent_fluctuation = true end
     end, 
     function(retval)
-        if thread.get_hook_storage()["prevent_fluctuation"] then
+        if prevent_fluctuation then
+            prevent_fluctuation = nil
             return 0
         end
         return retval
     end)
 
     -- No recoil
+    local prevent_recoil = nil
     sdk.hook(sdk.find_type_definition("snow.data.BulletWeaponData"):get_method("getRecoil"), function(args)
         local managed = sdk.to_managed_object(args[2])
         if not managed:get_type_definition():is_a("snow.data.HeavyBowgunWeaponData") then return end
         
-        if Module.data.no_recoil then thread.get_hook_storage()["prevent_recoil"] = true end
+        if Module.data.no_recoil then prevent_recoil = true end
     end, 
     function(retval)
-        if thread.get_hook_storage()["prevent_recoil"] then
+        if prevent_recoil then
+            prevent_recoil = nil
             return sdk.to_ptr(6)
         end
         return retval
