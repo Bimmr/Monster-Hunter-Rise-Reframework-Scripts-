@@ -10,13 +10,14 @@ function utils.getMasterPlayer()
     if not player_manager then
         player_manager = sdk.get_managed_singleton("snow.player.PlayerManager")
     end
-    return player_manager:findMasterPlayer()
+    if not player_manager then return nil end
+    return player_manager:call("findMasterPlayer")
 end
 
 -- Get Player Data from MasterPlayer
 function utils.getPlayerData()
     local playerBase = utils.getMasterPlayer()
-    if not playerBase then return end
+    if not playerBase then return nil end
     return playerBase:call("get_PlayerData")
 end
 
@@ -24,7 +25,7 @@ end
 function utils.getKitchenFacility()
     if not kitchenFacility then
         local facilityDataManager = sdk.get_managed_singleton("snow.data.FacilityDataManager")
-        if not facilityDataManager then return end
+        if not facilityDataManager then return nil end
         kitchenFacility = facilityDataManager:get_field("_Kitchen")
     end
     return kitchenFacility
@@ -34,7 +35,7 @@ end
 function utils.getMealFunc()
     if not mealFunc then
         local kitchenFacility = utils.getKitchenFacility()
-        if not kitchenFacility then return end
+        if not kitchenFacility then return nil end
         mealFunc = kitchenFacility:get_field("_MealFunc")
     end
     return mealFunc
