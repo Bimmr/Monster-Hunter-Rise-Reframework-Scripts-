@@ -14,7 +14,7 @@ function Module.create_hooks()
     Module:init_stagger("switch_axe_update", 10)
     sdk.hook(sdk.find_type_definition("snow.player.SlashAxe"):get_method("update"), function(args)
         local managed = sdk.to_managed_object(args[2])
-        if managed:get_type_definition():is_a("snow.player.SlashAxe") == false then return end
+        if not managed:get_type_definition():is_a("snow.player.SlashAxe") then return end
 
         if not Module:should_execute_staggered("switch_axe_update") then return end
 

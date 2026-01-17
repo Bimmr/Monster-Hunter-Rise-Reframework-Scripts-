@@ -14,7 +14,7 @@ function Module.create_hooks()
     Module:init_stagger("bow_update", 10)
     sdk.hook(sdk.find_type_definition("snow.player.Bow"):get_method("update"), function(args)
         local managed = sdk.to_managed_object(args[2])
-        if managed:get_type_definition():is_a("snow.player.Bow") == false then return end
+        if not managed:get_type_definition():is_a("snow.player.Bow") then return end
 
         -- Charge level
         if Module.data.charge_level > 0 then 

@@ -142,15 +142,16 @@ local BLIGHTS_AND_CONDITIONS_DATA = {
 }
 
 function Module.create_hooks()
-    sdk.hook(sdk.find_type_definition("snow.player.PlayerManager"):get_method("update"), function(args)
+    sdk.hook(sdk.find_type_definition("snow.player.PlayerBase"):get_method("update"), function(args)
         local managed = sdk.to_managed_object(args[2])
-        if not managed:get_type_definition():is_a("snow.player.PlayerManager") then return end
+        if not managed:get_type_definition():is_a("snow.player.PlayerBase") then return end
 
-        local playerBase = Utils.getMasterPlayer()
+        local playerBase = managed
         if not playerBase then return end
-        local playerData = Utils.getPlayerData()
-        if not playerData then return end
         local is_in_lobby = playerBase:get_field("<IsLobbyPlayer>k__BackingField")
+        
+        local playerData = playerBase:get_PlayerData()
+        if not playerData then return end
         
         -- | 0=Red | 1=Orange | 2=Yellow | 3=Green | 4=Blue | 5=White | 6=Purple |
         Module:cache_and_update_field("sharpness_level", playerBase, "<SharpnessLv>k__BackingField", Module.data.sharpness_level)
@@ -213,7 +214,6 @@ function Module.create_hooks()
                 end
             end
         end
-
         if Module.data.health.max_heroics then
             local max = playerData:get_field("_vitalMax")
             local currentHealth = playerData:get_field("_r_Vital")
@@ -272,7 +272,6 @@ function Module.create_hooks()
                 end
             end
         end
-
 
         local attack_mod = -1
         if Module.data.stats.attack > -1 then

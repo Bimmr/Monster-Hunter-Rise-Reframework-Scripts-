@@ -12,7 +12,7 @@ function Module.create_hooks()
     Module:init_stagger("great_sword_update", 10)
     sdk.hook(sdk.find_type_definition("snow.player.GreatSword"):get_method("update"), function(args)
         local managed = sdk.to_managed_object(args[2])
-        if managed:get_type_definition():is_a("snow.player.GreatSword") == false then return end
+        if not managed:get_type_definition():is_a("snow.player.GreatSword") then return end
 
         -- Charge level
         if Module.data.charge_level > -1 and managed:get_field("_tameTimer") > 0.0 then 

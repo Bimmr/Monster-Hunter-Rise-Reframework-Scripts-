@@ -11,7 +11,7 @@ function Module.create_hooks()
     Module:init_stagger("long_sword_update", 10)
     sdk.hook(sdk.find_type_definition("snow.player.LongSword"):get_method("update"), function(args)
         local managed = sdk.to_managed_object(args[2])
-        if managed:get_type_definition():is_a("snow.player.LongSword") == false then return end
+        if not managed:get_type_definition():is_a("snow.player.LongSword") then return end
 
         if not Module:should_execute_staggered("long_sword_update") then return end
 

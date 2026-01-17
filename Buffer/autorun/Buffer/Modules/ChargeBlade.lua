@@ -13,7 +13,7 @@ function Module.create_hooks()
     Module:init_stagger("charge_blade_update", 10)
     sdk.hook(sdk.find_type_definition("snow.player.ChargeAxe"):get_method("update"), function(args)
         local managed = sdk.to_managed_object(args[2])
-        if managed:get_type_definition():is_a("snow.player.ChargeAxe") == false then return end
+        if not managed:get_type_definition():is_a("snow.player.ChargeAxe") then return end
 
         if not Module:should_execute_staggered("charge_blade_update") then return end
 

@@ -43,12 +43,10 @@ function Module.create_hooks()
     end)
 
     Module:init_stagger("gunlance_player_manager_update", 10)
-    sdk.hook(sdk.find_type_definition("snow.player.PlayerManager"):get_method("update"), function(args)
+    sdk.hook(sdk.find_type_definition("snow.player.GunLance"):get_method("update"), function(args)
         local managed = sdk.to_managed_object(args[2])
-        local masterData = Utils.getMasterPlayer()
-        if not masterData then return end
-        if not masterData:get_type_definition():is_a("snow.player.GunLance") then return end
-        local playerData = Utils.getPlayerData()
+        if not managed:get_type_definition():is_a("snow.player.GunLance") then return end
+        local playerData = managed:get_PlayerData()
         if not playerData then return end
 
         if not Module:should_execute_staggered("gun_lance_player_manager_update") then return end
