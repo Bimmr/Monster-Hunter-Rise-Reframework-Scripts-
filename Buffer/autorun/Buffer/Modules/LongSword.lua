@@ -2,8 +2,8 @@ local ModuleBase = require("Buffer.Misc.ModuleBase")
 local Language = require("Buffer.Misc.Language")
 
 local Module = ModuleBase:new("long_sword", {
-    guage_max = false,
-    guage_level = -1
+    gauge_max = false,
+    gauge_level = -1
 })
 
 function Module.create_hooks()
@@ -16,13 +16,13 @@ function Module.create_hooks()
         if not Module:should_execute_staggered("long_sword_update") then return end
 
         -- Max gauge
-        if Module.data.guage_max then 
+        if Module.data.gauge_max then 
             managed:set_field("_LongSwordGauge", 100) 
         end
         
         -- Gauge level
-        if Module.data.guage_level > -1 then 
-            managed:set_field("_LongSwordGaugeLv", Module.data.guage_level) 
+        if Module.data.gauge_level > -1 then 
+            managed:set_field("_LongSwordGaugeLv", Module.data.gauge_level) 
         end
     end)
 end
@@ -31,10 +31,10 @@ function Module.add_ui()
     local changed, any_changed = false, false
     local languagePrefix = Module.title .. "."
 
-    changed, Module.data.guage_level    = imgui.slider_int(Language.get(languagePrefix .. "guage_level"), Module.data.guage_level, -1, 3, Module.data.guage_level == -1 and Language.get("base.disabled") or tostring(Module.data.guage_level + 1))
+    changed, Module.data.gauge_level    = imgui.slider_int(Language.get(languagePrefix .. "gauge_level"), Module.data.gauge_level, -1, 3, Module.data.gauge_level == -1 and Language.get("base.disabled") or tostring(Module.data.gauge_level + 1))
     any_changed = changed or any_changed
 
-    changed, Module.data.guage_max      = imgui.checkbox(Language.get(languagePrefix .. "guage_max"), Module.data.guage_max)
+    changed, Module.data.gauge_max      = imgui.checkbox(Language.get(languagePrefix .. "gauge_max"), Module.data.gauge_max)
     any_changed = changed or any_changed
     
     return any_changed

@@ -163,8 +163,8 @@
     },
     "long_sword": {
         "title": "Langschwert",
-        "guage_level": "Elan Level",
-        "guage_max": "Elan Balken voll"
+        "gauge_level": "Elan Level",
+        "gauge_max": "Elan Balken voll"
     },
     "hammer": {
         "title": "Hammer",

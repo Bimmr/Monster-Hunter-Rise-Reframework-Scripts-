@@ -162,8 +162,8 @@
     },
     "long_sword": {
         "title": "Long Sword",
-        "guage_level": "Spirit Level",
-        "guage_max": "Spirit Guage Max"
+        "gauge_level": "Spirit Level",
+        "gauge_max": "Spirit Gauge Max"
     },
     "hammer": {
         "title": "Hammer",

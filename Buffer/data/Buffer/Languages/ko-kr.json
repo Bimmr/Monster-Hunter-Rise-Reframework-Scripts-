@@ -163,8 +163,8 @@
     },
     "long_sword": {
         "title": "태도",
-        "guage_level": "연기 게이지 단계",
-        "guage_max": "연기 게이지 최대"
+        "gauge_level": "연기 게이지 단계",
+        "gauge_max": "연기 게이지 최대"
     },
     "hammer": {
         "title": "해머",

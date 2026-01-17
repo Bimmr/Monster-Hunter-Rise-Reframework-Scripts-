@@ -163,8 +163,8 @@
     },
     "long_sword": {
         "title": "太刀",
-        "guage_level": "练气槽等级",
-        "guage_max": "填满练气槽"
+        "gauge_level": "练气槽等级",
+        "gauge_max": "填满练气槽"
     },
     "hammer": {
         "title": "大锤",
