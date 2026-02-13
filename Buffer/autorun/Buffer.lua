@@ -180,7 +180,9 @@ re.on_draw_ui(function()
                 if imgui.begin_menu("   " .. Language.get(languagePrefix .. "language")) then
                     imgui.spacing()
                     for _, lang in pairs(Language.sorted) do
+                        Language.pushFont(lang)
                         if imgui.menu_item("   " .. Language.getLanguageName(lang) .. "   ", "", lang == Language.current, lang ~= Language.current) then Language.change(lang) end
+                        Language.popFont(lang)
                     end
                     imgui.spacing()
                     imgui.end_menu()

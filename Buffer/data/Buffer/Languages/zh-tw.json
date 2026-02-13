@@ -1,5 +1,6 @@
 {
     "_LANGUAGE_NAME": "繁體中文 (TW)",
+    "_USE_FONT": "NotoSansSC-Regular.otf",
     "_TRANSLATOR": "Chikaze",
     "window": {
         "toggle_button": "Buffer 切換介面顯示",

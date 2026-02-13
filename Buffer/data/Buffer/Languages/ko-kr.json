@@ -1,5 +1,6 @@
 {
     "_LANGUAGE_NAME": "한국어 (KR)",
+    "_USE_FONT": "NotoSansKR-Medium.otf",
     "_TRANSLATOR": "Calycekr & orge44",
     "window": {
         "toggle_button": "Buffer GUI 켜기",

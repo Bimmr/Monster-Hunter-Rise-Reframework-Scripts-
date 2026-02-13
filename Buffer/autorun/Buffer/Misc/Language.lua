@@ -12,7 +12,43 @@ local Language = {
     },
     languages = {},
     sorted = {},
+    fonts = {}
 }
+--- Get the font data for the passed language code, loading it if necessary
+--- @param code string The language code to get the font for (e.g., "en-us", "ja-jp")
+--- @return table The font data for the specified language, or a default font if not specified
+function Language.loadFont(code)
+    local font_name = Language.languages[code]["_USE_FONT"]
+    if font_name == nil then return imgui.load_font(nil, Language.font.size, {0x1, 0xFFFF, 0}) end
+
+    local font_size = Language.font.size
+    local font_key = font_name .. "_" .. font_size
+
+    if Language.fonts[font_key] == nil then
+        local font_data = imgui.load_font(font_name, Language.font.size, {0x1, 0xFFFF, 0})
+        Language.fonts[font_key] = font_data
+    end
+
+    return Language.fonts[font_key]
+end
+
+--- Pushes the appropriate font for the specified language onto the ImGui font stack
+--- @param languageCode string The language code to push the font for (e.g., "en-us", "ja-jp")
+function Language.pushFont(languageCode)
+    local font_name = Language.languages[languageCode]["_USE_FONT"]
+    if font_name == nil then return end
+
+    local font_data = Language.loadFont(languageCode)
+    imgui.push_font(font_data)
+end
+
+--- Pops the font for the specified language from the ImGui font stack if it was pushed
+--- @param languageCode string The language code to pop the font for (e.g., "en-us", "ja-jp")
+function Language.popFont(languageCode) 
+    local font_name = Language.languages[languageCode]["_USE_FONT"]
+    if font_name == nil then return end
+    imgui.pop_font()
+end
 
 --- Initializes the language system by loading all language files and applying saved settings
 --- Loads languages from JSON files, restores user's language preference, and sets up fonts
@@ -39,7 +75,8 @@ function Language.change(new_language, new_font_size)
         Language.font.size = new_font_size
     end
     Language.font.name = Language.languages[Language.current]["_USE_FONT"]
-    Language.font.data = imgui.load_font(Language.font.name, Language.font.size, {0x1, 0xFFFF, 0})
+    Language.font.data = Language.loadFont(Language.current)
+   
 end
 
 --- Loads all language JSON files from the Buffer\Languages\ directory
