@@ -70,6 +70,19 @@
                 "hellfire": "Hellfire (*)"
             }
         },
+         "item_buffs": {
+            "title": "아이템 강화",
+            "might_seed": "괴력의 씨앗",
+            "adamant_seed": "인내의 씨앗",
+            "demon_drug": "귀인약",
+            "demon_powder": "귀인의 가루",
+            "hardshell_powder": "경화의 가루",
+            "mega_demondrug": "그레이트 귀인약",
+            "armor_skin": "경화약",
+            "mega_armorskin": "그레이트 경화약",
+            "dash_juice": "강주약",
+            "imunizer": "활력제"
+        },
         "health": {
             "title": "체력",
             "healing": "지속적인 회복",

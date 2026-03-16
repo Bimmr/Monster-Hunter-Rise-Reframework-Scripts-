@@ -46,6 +46,20 @@ local Module = ModuleBase:new("character", {
             all = false
         }
     },
+    item_buffs = {
+        dash_juice = false, -- _StaminaUpBuffSecondTimer 180
+        imunizer = false, -- _VitalizerTimer 300
+        might_seed = false, -- _AtkUpBuffSecond 10 | _AtkUpBuffSecondTimer 180
+        adamant_seed = false, -- _DefUpBuffSecond 20 | _DefUpBuffSecondTimer 180
+
+        demon_drug = false, -- _AtkUpAlive 5
+        mega_demondrug = false, -- _AtkUpAlive 7
+        armor_skin = false, -- _DefUpAlive 15
+        mega_armorskin = false, -- _DefUpAlive 25
+
+        demon_powder = false, -- _AtkUpItemSecond 10   | _AtkUpItemSecondTimer 180
+        hardshell_powder = false -- _DefUpItemSecond 20 | _DefUpItemSecondTimer 180
+    },
     stats = {
         attack = -1,
         defence = -1,
@@ -139,6 +153,20 @@ local BLIGHTS_AND_CONDITIONS_DATA = {
             clear = "clearMysteryDebuff(System.Boolean)"
         }
     }
+}
+
+-- Item Buffs
+local ITEM_BUFFS_DATA = {
+    dash_juice = {field = "_StaminaUpBuffSecondTimer", duration = 180},
+    imunizer = {field = "_VitalizerTimer", duration = 300},
+    might_seed = {{field = "_AtkUpBuffSecondTimer", duration = 180}, {field = "_AtkUpBuffSecond", value = 10}},
+    adamant_seed = {{field = "_DefUpBuffSecondTimer", duration = 180}, {field = "_DefUpBuffSecond", value = 20}},
+    demon_drug = {field = "_AtkUpAlive", value = 5},
+    mega_demondrug = {field = "_AtkUpAlive", value = 7},
+    armor_skin = {field = "_DefUpAlive", value = 15},
+    mega_armorskin = {field = "_DefUpAlive", value = 25},
+    demon_powder = {{field = "_AtkUpItemSecondTimer", duration = 180}, {field = "_AtkUpItemSecond", value = 10}},
+    hardshell_powder = {{field = "_DefUpItemSecondTimer", duration = 180}, {field = "_DefUpItemSecond", value = 20}}
 }
 
 function Module.create_hooks()
@@ -271,6 +299,17 @@ function Module.create_hooks()
                     end
                 end
             end
+
+            -- Basic item buffs
+            for buff_name, buff_data in pairs(ITEM_BUFFS_DATA) do
+                if Module.data.item_buffs[buff_name] then
+                    local entries = type(buff_data[1]) == "table" and buff_data or {buff_data}
+                    for _, entry in ipairs(entries) do
+                        playerData:set_field(entry.field, entry.duration and entry.duration * 60 or entry.value)
+                    end
+                end
+            end
+
         end
 
         local attack_mod = -1
@@ -510,6 +549,41 @@ function Module.add_ui()
         end
         imgui.tree_pop()
     end
+
+    
+        languagePrefix = Module.title .. ".item_buffs."
+        if imgui.tree_node(Language.get(languagePrefix .. "title")) then
+
+            local ITEM_KEYS = {
+                "might_seed", "demon_drug", "mega_demondrug", "demon_powder", "dash_juice",
+                "adamant_seed", "armor_skin", "mega_armorskin", "hardshell_powder", "imunizer"
+            }
+
+            local max_width = 0
+            for _, key in ipairs(ITEM_KEYS) do
+                local text = Language.get(languagePrefix .. key)
+                max_width = math.max(max_width, imgui.calc_text_size(text).x)
+            end
+            local row_width = imgui.calc_item_width()
+            local col_width = math.max(max_width + 24 + 20, row_width / 2)
+
+            imgui.begin_table(Module.title .. "3", 2, 0)
+            imgui.table_setup_column("1", 16 + 4096, col_width)
+            imgui.table_setup_column("2", 16 + 4096, col_width)
+            imgui.table_next_row()
+
+            for i, key in ipairs(ITEM_KEYS) do
+                if i == 1 or i == math.ceil(#ITEM_KEYS / 2) + 1 then imgui.table_next_column() end
+               changed, Module.data.item_buffs[key] = imgui.checkbox(Language.get(languagePrefix .. key), Module.data.item_buffs[key])
+               any_changed = any_changed or changed
+            end
+
+            imgui.end_table()
+            imgui.tree_pop()
+        end
+
+
+
     languagePrefix = Module.title .. ".stats."
     if imgui.tree_node(Language.get(languagePrefix .. "title")) then
         Utils.tooltip(Language.get(languagePrefix .. "tooltip"))

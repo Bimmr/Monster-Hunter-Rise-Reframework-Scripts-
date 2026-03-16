@@ -70,6 +70,19 @@
                 "hellfire": "Hellfire (*)"
             }
         },
+        "item_buffs": {
+            "title": "Gegenstandsbuffs",
+            "might_seed": "Kraftsamen",
+            "adamant_seed": "Hartmachersamen",
+            "demon_drug": "Daemondroge",
+            "demon_powder": "Daemonenpulver",
+            "hardshell_powder": "Hartschalenpulver",
+            "mega_demondrug": "Megadaemonen-Droge",
+            "armor_skin": "Ruestungshaut",
+            "mega_armorskin": "Mega-Ruestungshaut",
+            "dash_juice": "Dash Saft",
+            "imunizer": "Imunizierer"
+        },
         "health": {
             "title": "Leben",
             "healing": "konstante Heilung",

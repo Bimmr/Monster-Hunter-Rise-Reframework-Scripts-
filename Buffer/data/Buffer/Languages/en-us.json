@@ -69,6 +69,19 @@
                 "all": "All "
             }
         },
+        "item_buffs": {
+            "title": "Item Buffs",
+            "might_seed": "Might seed",
+            "adamant_seed": "Adamant seed",
+            "demon_drug": "Demon drug",
+            "demon_powder": "Demon powder",
+            "hardshell_powder": "Hardshell powder",
+            "mega_demondrug": "Mega demondrug",
+            "armor_skin": "Armor skin",
+            "mega_armorskin": "Mega armorskin",
+            "dash_juice": "Dash juice",
+            "imunizer": "Imunizer"
+        },
         "health": {
             "title": "Health",
             "healing": "Constant Healing",

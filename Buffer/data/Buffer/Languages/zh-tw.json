@@ -70,6 +70,19 @@
                 "hellfire": "Hellfire (*)"
             }
         },
+        "item_buffs": {
+            "title": "物品增益",
+            "might_seed": "怪力種子",
+            "adamant_seed": "忍耐種子",
+            "demon_drug": "鬼人藥",
+            "demon_powder": "鬼人粉塵",
+            "hardshell_powder": "硬化粉塵",
+            "mega_demondrug": "鬼人藥·大",
+            "armor_skin": "硬化藥",
+            "mega_armorskin": "硬化藥·大",
+            "dash_juice": "強走藥",
+            "imunizer": "活力劑"
+        },
         "health": {
             "title": "體力",
             "healing": "持續回覆",

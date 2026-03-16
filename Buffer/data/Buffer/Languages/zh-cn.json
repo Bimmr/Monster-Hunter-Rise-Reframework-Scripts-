@@ -70,6 +70,19 @@
                 "hellfire": "Hellfire (*)"
             }
         },
+         "item_buffs": {
+            "title": "道具增益",
+            "might_seed": "怪力种子",
+            "adamant_seed": "忍耐种子",
+            "demon_drug": "鬼人药",
+            "demon_powder": "鬼人粉尘",
+            "hardshell_powder": "硬化粉尘",
+            "mega_demondrug": "鬼人药G",
+            "armor_skin": "硬化药",
+            "mega_armorskin": "硬化药G",
+            "dash_juice": "强走药",
+            "imunizer": "活力剂"
+        },
         "health": {
             "title": "体力",
             "healing": "持续回复",
