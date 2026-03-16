@@ -102,7 +102,7 @@ local BLIGHTS_AND_CONDITIONS_DATA = {
         },
         paralyze = {
             check = "isParalyzeDuration()",
-            clear = "clearParalyzeDamage(System.Boolean)"
+            clear = "clearParalyzeDamage(System.Boolean)" -- Doesn't stop animation
         },
         sleep = {
             check = "isSleepDuration()",
@@ -117,32 +117,33 @@ local BLIGHTS_AND_CONDITIONS_DATA = {
             clear = "clearBombDamage(System.Boolean)"
         },
         defence_down = {
-            check = "isDefenceDownDuration()",
+            check = "isDefenceDownDamage()",
             clear = "_DefenceDownDurationTimer"
         },
         resistance_down = {
-            check = "isResistanceDownDuration()",
-            clear = "_ResistanceDownDurationTimer" -- No method to clear resistance down, only timer field
+            check = "isResistanceDownDamage()",
+            clear = "_ResistanceDownDurationTimer"
         },
         bubble = {
-            check = "isBubbleLDamage()",
+            check = "isBubbleDuration()",
             clear = "clearBubbleDamage(System.Boolean)"
         },
         stentch = {
             check = "isStinkDamage()",
-            clear = "_StinkDurationTimer" -- No method to clear stench, only timer field
+            clear = "_StinkDurationTimer"
         },
         hellfire = {
             check = "isOniBombDamage()",
             clear = "clearOniBombDamage(System.Boolean)"
         },
         thread = {
-            check = "!countDownBetoDurationTimer()",
-            clear = "clearBetoDamage(System.Boolean)"
+            check = "!countDownBetoDurationTimer()", -- Partial animation still plays
+            clear = "clearBetoDamage(System.Boolean)",
         },
         bleeding = {
-            check = "isBleedingDuration()",
-            clear = "clearBleedingDamage(System.Boolean)"
+            check = "isBleeding()",
+            clear = "clearBleedingDamage(System.Boolean, System.Boolean)",
+            params = {true, true} 
         },
         frenzy = {
             check = "isVirusOnset()",
@@ -265,36 +266,71 @@ function Module.create_hooks()
         end
         
         if not is_in_lobby then
-            for name, data in pairs(BLIGHTS_AND_CONDITIONS_DATA.blights) do
-                local check_inverted = data.check:sub(1,1) == "!"
-                local has_method = data.clear:find("%(") ~= nil
+           for name, data in pairs(BLIGHTS_AND_CONDITIONS_DATA.blights) do
+                for name, data in pairs(BLIGHTS_AND_CONDITIONS_DATA.blights) do
+                    if Module.data.blights_and_conditions.blights[name] or Module.data.blights_and_conditions.blights.all then
+                        local check_inverted = data.check:sub(1, 1) == "!"
+                        local check_str = check_inverted and data.check:sub(2) or data.check
+                        local is_method_check = check_str:find("%(") ~= nil
+                        local is_method_clear = data.clear:find("%(") ~= nil
 
-                if Module.data.blights_and_conditions.blights[name] or Module.data.blights_and_conditions.conditions[name] then
-                    local is_active = playerBase:call(check_inverted and data.check:sub(2) or data.check)
-                    if check_inverted then is_active = not is_active end
-
-                    if is_active then
-                        if has_method then
-                            playerBase:call(data.clear, true)
+                        -- Check if effect is active
+                        local is_active
+                        if is_method_check then
+                            is_active = playerBase:call(check_str)
                         else
-                            playerBase:set_field(data.clear, 0)
+                            is_active = playerBase:get_field(check_str) > 0
+                        end
+                        
+                        if check_inverted then
+                            is_active = not is_active
+                        end
+
+                        -- Clear if active
+                        if is_active then
+                            if is_method_clear then
+                                if data.params then
+                                    playerBase:call(data.clear, table.unpack(data.params))
+                                else
+                                    playerBase:call(data.clear, true)
+                                end
+                            else
+                                playerBase:set_field(data.clear, 0)
+                            end
                         end
                     end
                 end
-            end
-            for name, data in pairs(BLIGHTS_AND_CONDITIONS_DATA.conditions) do
-                local check_inverted = data.check:sub(1,1) == "!"
-                local has_method = data.clear:find("%(") ~= nil
 
-                if Module.data.blights_and_conditions.conditions[name] or Module.data.blights_and_conditions.conditions.all then
-                    local is_active = playerBase:call(check_inverted and data.check:sub(2) or data.check)
-                    if check_inverted then is_active = not is_active end
+                for name, data in pairs(BLIGHTS_AND_CONDITIONS_DATA.conditions) do
+                    if Module.data.blights_and_conditions.conditions[name] or Module.data.blights_and_conditions.conditions.all then
+                        local check_inverted = data.check:sub(1, 1) == "!"
+                        local check_str = check_inverted and data.check:sub(2) or data.check
+                        local is_method_check = check_str:find("%(") ~= nil
+                        local is_method_clear = data.clear:find("%(") ~= nil
 
-                    if is_active then
-                        if has_method then
-                            playerBase:call(data.clear, true)
+                        -- Check if effect is active
+                        local is_active
+                        if is_method_check then
+                            is_active = playerBase:call(check_str)
                         else
-                            playerBase:set_field(data.clear, 0)
+                            is_active = playerBase:get_field(check_str) > 0
+                        end
+                        
+                        if check_inverted then
+                            is_active = not is_active
+                        end
+
+                        -- Clear if active
+                        if is_active then
+                            if is_method_clear then
+                                if data.params then
+                                    playerBase:call(data.clear, table.unpack(data.params))
+                                else
+                                    playerBase:call(data.clear, true)
+                                end
+                            else
+                                playerBase:set_field(data.clear, 0)
+                            end
                         end
                     end
                 end
