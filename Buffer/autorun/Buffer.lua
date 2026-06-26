@@ -189,7 +189,7 @@ re.on_draw_ui(function()
                     imgui.spacing()
                     Language.font.temp_size = Language.font.temp_size or Language.font.size
                     local changed = false
-                    changed, Language.font.temp_size = imgui.slider_int(Language.get(languagePrefix .. "font_size") .. " ", Language.font.temp_size, 8, 24)
+                    changed, Language.font.temp_size = imgui.slider_int(Language.get(languagePrefix .. "font_size") .. " ", Language.font.temp_size, 8, 48)
                     imgui.same_line()
                     if imgui.button(Language.get(languagePrefix .. "font_size_apply")) then
                         Language.change(Language.current, Language.font.temp_size)
