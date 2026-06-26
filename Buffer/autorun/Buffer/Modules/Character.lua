@@ -392,7 +392,10 @@ function Module.create_hooks()
     end, 
     function(retval)
         if managed_crit then
-            local player = Utils.getPlayerData():get_field("_CriticalRate") -- Overall player crit rate (This is what this function returns, so it will be different after being set)
+            local player = Utils.getPlayerData()
+            if not player then return retval end -- Confirm we have player data, if not return the original crit rate
+            player = player:get_field("_CriticalRate") -- Overall player crit rate (This is what this function returns, so it will be different after being set)
+
             local weapon = managed_crit:get_field("_CriticalRate") -- Weapon's crit rate (this doesn't change)
             local target = Module.data.stats.affinity -- Target crit rate
             
