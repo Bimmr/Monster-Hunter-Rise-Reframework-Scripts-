@@ -5,11 +5,12 @@ local character = require("Buffer.Modules.Character")
 
 
 local Module = ModuleBase:new("light_bowgun", {
-   unlimited_ammo,
-   auto_reload,
-   wyvern_blast,
-   fanning_maneuver,
-   no_deviation
+   unlimited_ammo = false,
+   auto_reload = false,
+   wyvern_blast = false,
+   fanning_maneuver = false,
+   no_deviation = false,
+   no_recoil = false
 })
 
 function Module.create_hooks()
